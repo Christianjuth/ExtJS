@@ -1,0 +1,13 @@
+@font-face{
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    src: url("../../assets/fonts/Oswald/Oswald-Regular.ttf");
+}
+
+@font-face{
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 300;
+    src: url("../../assets/fonts/Oswald/Oswald-Light.ttf");
+}

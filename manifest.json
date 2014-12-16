@@ -1,0 +1,35 @@
+{
+    "manifest_version": 2,
+
+    "name": "Hello World",
+    "description": "",
+    "version": "1.0",
+
+    "author": "Christian Juth",
+
+    "browser_action": {
+        "default_icon": {
+          "19": "icon-19.png",
+          "38": "icon-38.png"
+        }
+    },
+
+    "homepage_url": "http://calculatorextension.com",
+
+    "icons": {
+        "16": "icon-16.png",
+        "48": "icon-48.png",
+        "128": "icon-128.png"
+    },
+
+    "permissions": [
+      "tabs",
+      "notifications"
+    ],
+
+    "background" : {
+        "page": "pages/background/background.html"
+    },
+
+    "options_page": "pages/options/options.html"
+}

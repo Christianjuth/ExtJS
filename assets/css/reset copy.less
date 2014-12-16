@@ -1,0 +1,108 @@
+@import url("fonts.min.css");
+
+//remove border and fit to page
+html,
+body{
+  &:extend(.relative-inline-block);
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-family: oswald,ubuntu, arial;
+}
+
+//postition
+.relative-inline-block{
+  display: inline-block;
+  position: relative;
+}
+
+//.right{
+//  &:extend(.relative-inline-block);
+//  float: right;
+//}
+//
+//.left{
+//  &:extend(.relative-inline-block);
+//  float: left;
+//}
+
+.unselectable,
+body{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.selectable{
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+}
+
+//page
+.page_wrap{
+  &:extend(.relative-inline-block);
+  width: 100%;
+  padding: 100px 30%;
+}
+
+.page{
+  &:extend(.relative-inline-block);
+  width: 100%;
+}
+//
+////section
+//section{
+//  &:extend(.relative-inline-block);
+//}
+//
+////text
+//h1,h2,h3,h4,h5,p{
+//  &:extend(.relative-inline-block);
+//  &:extend(.selectable);
+//  font-weight: inherit;
+//  color: inherit;
+//  margin: 0 0 5px 0;
+//}
+//
+//*{
+//  font-weight: inherit;
+//  font-family: inherit;
+//  &.light, &.\33 00{
+//    font-weight: 300;
+//  }
+//  &.normal, &.\34 00{
+//    font-weight: 400;
+//  }
+//  &.bold{
+//    font-weight: bold;
+//  }
+//  &.black{
+//    color: #000;
+//  }
+//  &.gray,&.grey{
+//    color: #444;
+//  }
+//}
+//
+////remove underline from menu ancors
+//menu,
+//nav,
+//.button{
+//  &,& *{
+//    text-decoration: none;
+//  }
+//}
+//
+//header{
+//  margin: 0 0 5px 0;
+//}
+//
+//.link,
+//a{
+//  cursor: pointer;
+//  text-decoration: none;
+//  &:hover{
+//    text-decoration: underline;
+//  }
+//}
