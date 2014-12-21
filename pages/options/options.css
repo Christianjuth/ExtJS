@@ -5,3 +5,7 @@
 .page header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
+
+.page_wrap{
+  background-color: #eee;
+}

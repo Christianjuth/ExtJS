@@ -7,6 +7,7 @@ body{
   padding: 0;
   margin: 0;
   width: 100%;
+  height: 100%;
   font-family: oswald,ubuntu, arial;
 }
 
@@ -16,6 +17,17 @@ body{
   position: relative;
 }
 
+.left{
+  clear: right;
+  float: left;
+}
+
+.right{
+  clear: left;
+  float: right;
+}
+
+//test
 .unselectable,
 body{
   -moz-user-select: none;
@@ -55,6 +67,7 @@ h1,h2,h3,h4,h5,p,label{
 .page_wrap{
   &:extend(.relative-inline-block);
   width: 100%;
+  min-height: 100%;
   padding: 50px 30%;
 }
 

@@ -5,6 +5,7 @@ body {
   padding: 0;
   margin: 0;
   width: 100%;
+  height: 100%;
   font-family: oswald,ubuntu, arial;
 }
 .relative-inline-block,
@@ -15,6 +16,14 @@ body,
 .panel-body section {
   display: inline-block;
   position: relative;
+}
+.left {
+  clear: right;
+  float: left;
+}
+.right {
+  clear: left;
+  float: right;
 }
 .unselectable,
 body {
@@ -104,6 +113,7 @@ label.bold {
 }
 .page_wrap {
   width: 100%;
+  min-height: 100%;
   padding: 50px 30%;
 }
 .page {

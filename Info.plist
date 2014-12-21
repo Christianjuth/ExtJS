@@ -41,7 +41,7 @@
 				<key>Identifier</key>
 				<string>popupID</string>
 				<key>Image</key>
-				<string>icon-16.png</string>
+				<string>assets/icons/icon-16.png</string>
 				<key>Label</key>
 				<string>Popup</string>
 				<key>Popover</key>
