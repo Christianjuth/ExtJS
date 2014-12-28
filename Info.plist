@@ -19,12 +19,12 @@
 		<key>Database Quota</key>
 		<real>52428800</real>
 		<key>Global Page</key>
-		<string>pages/background/background.html</string>
+		<string>views/background/background.html</string>
 		<key>Popovers</key>
 		<array>
 			<dict>
 				<key>Filename</key>
-				<string>pages/popup/popup.html</string>
+				<string>views/popup/popup.html</string>
 				<key>Height</key>
 				<real>400</real>
 				<key>Identifier</key>
