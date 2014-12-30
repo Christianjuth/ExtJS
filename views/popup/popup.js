@@ -1,1 +1,1 @@
-(function(){require.config({paths:{jquery:"../../libs/jquery-min",framework:"../../assets/js/framework/framework",underscore:"../../libs/underscore-min"}}),require(["jquery","framework/js/framework","underscore"],function(a,b){return b.ini()})}).call(this);
+(function(){require(["jquery","underscore","ext"],function(a,b,c){return c.ini()})}).call(this);

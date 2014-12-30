@@ -1,35 +1,37 @@
 {
-    "manifest_version": 2,
+  "manifest_version": 2,
 
-    "name": "Hello World",
-    "description": "",
-    "version": "1.0",
+  "name": "Hello World",
+  "description": "",
+  "version": "1.0",
 
-    "author": "Christian Juth",
+  "author": "Christian Juth",
 
-    "browser_action": {
-        "default_icon": {
-          "19": "assets/icons/icon-19.png",
-          "38": "icon-38.png"
-        }
-    },
+  "browser_action": {
+    "default_icon": {
+      "19": "assets/icons/icon-19.png",
+      "38": "icon-38.png"
+    }
+  },
 
-    "homepage_url": "http://calculatorextension.com",
+  "homepage_url": "http://calculatorextension.com",
 
-    "icons": {
-        "16": "assets/icons/icon-16.png",
-        "48": "icon-48.png",
-        "128": "icon-128.png"
-    },
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
 
-    "permissions": [
-      "tabs",
-      "notifications"
-    ],
+  "permissions": [
+    "clipboardWrite",
+    "clipboardRead",
+    "tabs",
+    "notifications"
+  ],
 
-    "background" : {
-        "page": "views/background/background.html"
-    },
+  "background" : {
+    "page": "views/background/background.html"
+  },
 
-    "options_page": "views/options/options.html"
+  "options_page": "views/options/options.html"
 }

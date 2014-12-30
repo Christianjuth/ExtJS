@@ -1,27 +1,28 @@
 #Page: background.html
-
-#define library alialses
-require.config paths :
-  jquery : "../../libs/jquery-min"
-  framework : "../../assets/js/framework/framework"
-  underscore : "../../libs/underscore-min"
+window.message = "hey"
 
 #onload
 require [
   "jquery",
-  "framework",
   "underscore",
-  "storage"
-], ($,framework, _, storage) ->
-  framework.ini()
+  "storage",
+  "ext",
+
+  #Load framework plugins
+  "extPlugin/clipboard",
+  "extPlugin/storage",
+  "extPlugin/extension",
+  "extPlugin/notification",
+], ($, _, storage, ext) ->
+  ext.ini()
   storage.ini()
 
   #your code here
-  framework.menu.icon.setBadge localStorage.google
+  ext.menu.icon.setBadge localStorage.google
 
-  framework.menu.icon.click () ->
-    framework.tabs.indexOf "*.google.com", (data) ->
+  ext.menu.icon.click () ->
+    ext.tabs.indexOf "*.google.com", (data) ->
       if data.length is 0
-        localStorage.google = parseInt(localStorage.google) + 1
-        framework.menu.icon.setBadge localStorage.google
-        framework.tabs.create "https://www.google.com",true
+        localStorage.google = parseInt(localframewStorage.google) + 1
+        ext.menu.icon.setBadge localStorage.google
+        ext.tabs.create "https://www.google.com",true

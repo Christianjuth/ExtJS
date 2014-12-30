@@ -6,12 +6,12 @@ storage =
     dataType: 'json',
     async: false,
     success: (data) ->
-      if framework.browser is "chrome"
+      if ext.browser is "chrome"
         options = data.options
         storedOptions = $.parseJSON localStorage.options
         for option in options
           if typeof storedOptions[option.key] is "undefined"
-            framework.settings.set option.key,option.default
+            ext.options.set option.key,option.default
 
       storage = data.storage
       for item in storage

@@ -87,4 +87,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'debug', ['coffeelint']
 
   #fallback
-  grunt.registerTask 'default', ['less:default','coffee:default','uglify:default']
+  grunt.registerTask 'default', ['newer:less:default','newer:coffee:default','newer:uglify:default']
