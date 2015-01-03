@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Hello World",
+  "name": "One Click Google",
   "description": "",
   "version": "1.0",
 
@@ -17,7 +17,7 @@
   "homepage_url": "http://calculatorextension.com",
 
   "icons": {
-    "16": "assets/icons/icon-16.png",
+    "16": "icon-16.png",
     "48": "icon-48.png",
     "128": "icon-128.png"
   },

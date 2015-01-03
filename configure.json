@@ -1,10 +1,14 @@
 {
   "author" : "Christian Juth",
-  "version" : "0.1.0",
+  "version" : "0.1.2",
 
   "storage" : [
     {
       "key" : "google",
+      "default":"0"
+    },
+    {
+      "key" : "microsoft",
       "default":"0"
     }
   ],
