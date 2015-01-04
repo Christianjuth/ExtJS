@@ -53,7 +53,7 @@ module.exports = (grunt) ->
         files: ['package.json', 'configure.json'],
         commit: true,
         commitMessage: 'Release v%VERSION%',
-        commitFiles: ['**/*', '!**/builds/**'],
+        commitFiles: ['-a'],
         createTag: true,
         tagName: 'v%VERSION%',
         tagMessage: 'Version %VERSION%',
