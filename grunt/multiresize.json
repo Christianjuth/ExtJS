@@ -1,0 +1,24 @@
+{
+  "default" : {
+    "src" : "app/icons/icon.png",
+
+    "dest" : [
+      "builds/latest.safariextension/icon-128.png",
+      "builds/latest.safariextension/icon-96.png",
+      "builds/latest.safariextension/icon-64.png",
+      "builds/latest.safariextension/icon-48.png",
+      "builds/latest.safariextension/icon-38.png",
+      "builds/latest.safariextension/icon-32.png",
+      "builds/latest.safariextension/icon-16.png"],
+
+    "destSizes" : [
+      "128x128",
+      "96x96",
+      "64x64",
+      "48x48",
+      "38x38",
+      "32x32",
+      "16x16"
+    ]
+  }
+}

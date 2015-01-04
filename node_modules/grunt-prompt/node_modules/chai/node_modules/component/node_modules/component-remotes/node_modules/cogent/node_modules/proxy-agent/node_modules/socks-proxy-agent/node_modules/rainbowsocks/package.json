@@ -1,0 +1,30 @@
+{
+  "name": "rainbowsocks",
+  "version": "0.1.2",
+  "description": "SOCKS4a proxy client",
+  "main": "index.js",
+  "dependencies": {
+    "debug": "~1.0.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.14.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bencevans/node-rainbowsocks.git"
+  },
+  "keywords": [
+    "SOCKS",
+    "SOCKS4a",
+    "proxy",
+    "tor",
+    "client",
+    "tunnel"
+  ],
+  "author": "Ben Evans <ben@bensbit.co.uk> (http://bensbit.co.uk)",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}

@@ -1,0 +1,1 @@
+[![{%= name %}](http://img.shields.io/npm/dm/{%= name %}.svg?style=flat-square)](https://www.npmjs.org/package/{%= name %})

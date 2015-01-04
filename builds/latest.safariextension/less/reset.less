@@ -1,0 +1,104 @@
+//remove border and fit to page
+html,
+body{
+  &:extend(.relative-inline-block);
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: oswald,ubuntu, arial;
+}
+
+//postition
+.relative-inline-block{
+  display: inline-block;
+  position: relative;
+}
+
+.left{
+  clear: right;
+  float: left;
+}
+
+.right{
+  clear: left;
+  float: right;
+}
+
+//test
+.unselectable,
+body{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.selectable{
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+}
+
+h1,h2,h3,h4,h5,p,label{
+  &:extend(.selectable);
+  &.right{
+    text-align: right;
+  }
+  &.left{
+    text-align: left;
+  }
+  &.center{
+    text-align: center;
+  }
+  &.light, &.\33 00{
+    font-weight: 300;
+  }
+  &.normal, &.\34 00{
+    font-weight: 400;
+  }
+  &.bold{
+    font-weight: bold;
+  }
+}
+
+//page
+.page_wrap{
+  &:extend(.relative-inline-block);
+  width: 100%;
+  min-height: 100%;
+  padding: 50px 30%;
+}
+
+.page{
+  &:extend(.relative-inline-block);
+  width: 100%;
+}
+
+.panel-body section{
+  &:extend(.relative-inline-block);
+  &:not(:last-child){
+    margin-bottom: 15px;
+  }
+
+  & > *{
+    &:not(:last-child){
+      margin-bottom: 15px;
+    }
+  }
+}
+
+input[type=checkbox]{
+  height:  30px;
+}
+
+@media only screen and (min-width:500px) and (max-width: 900px) {
+  .page_wrap{
+    padding: 50px 15%;
+  }
+}
+
+@media only screen and (min-width:0px) and (max-width: 500px) {
+  .page_wrap{
+    padding: 20px 20px;
+  }
+}
