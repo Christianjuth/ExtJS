@@ -82,6 +82,13 @@ module.exports = (grunt) ->
     'archive'
   ]
 
+  #update
+  grunt.registerTask 'update:minor', [
+    'package',
+    'bump:minor',
+    'archive'
+  ]
+
   #update new script and style files only
   grunt.registerTask 'default', [
     'package'
