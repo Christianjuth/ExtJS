@@ -1,6 +1,7 @@
 {
   "author" : "Christian Juth",
-  "version" : "0.1.2",
+  "name":"extension_framework",
+  "version" : "0.1.4",
 
   "storage" : [
     {
