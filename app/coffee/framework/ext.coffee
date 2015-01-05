@@ -170,16 +170,23 @@ ext =
 
   parse :
     url : (str,test) ->
+      #vars
+      output
+      #logic
+      negate = test.indexOf("!") != -1
       test = test.replace(/\?/g,'.')
       test = test.replace(/\*/g,'.*?')
-      test = test.replace(/\!/g,'?!')
+      test = test.replace(/\!/g,'')
       test = test.replace(/\./g,'\.')
       test = test.replace(/\//g,'\\/')
-      if test.indexOf("!") > -1
-        test = new RegExp('^(' + test + ').+$', 'g')
+      #parse regex
+      test = new RegExp('^(' + test + ')$', 'g')
+      if negate
+        output = ! test.test str.replace(/\ /g, '')
       else
-        test = new RegExp('^(' + test + ')$', 'g')
-      test.test str.replace(/\ /g, '')
+        output = test.test str.replace(/\ /g, '')
+      return output
+
 
     id : (id) ->
       id.toLowerCase().replace(/\ /g,"_")
