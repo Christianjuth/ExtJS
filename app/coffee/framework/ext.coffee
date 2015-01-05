@@ -169,7 +169,19 @@ ext =
 
 
   parse :
-    url : (str,test) ->
+    array : () ->
+      #vars
+      output = []
+      array = arguments
+      #parse array
+      for item in array
+        if typeof item is "string"
+          output.push item
+        else
+          output = output.concat item
+      return output
+
+    url : (urls,test) ->
       #vars
       output
       #logic
@@ -179,18 +191,30 @@ ext =
       test = test.replace(/\!/g,'')
       test = test.replace(/\./g,'\.')
       test = test.replace(/\//g,'\\/')
+
       #parse regex
       test = new RegExp('^(' + test + ')$', 'g')
       if negate
-        output = ! test.test str.replace(/\ /g, '')
+        output = ! test.test urls.replace(/\ /g, '')
       else
-        output = test.test str.replace(/\ /g, '')
+        output = test.test urls.replace(/\ /g, '')
+
       return output
 
 
     id : (id) ->
       id.toLowerCase().replace(/\ /g,"_")
 
+#global functions
+Array.prototype.compress = ->
+  #vars
+  array = this
+  output = []
+  #logic
+  $.each array, (i, e) ->
+    if $.inArray(e, output) is -1
+      output.push(e)
+  return output
 
 #expose globally
 window.ext = ext
