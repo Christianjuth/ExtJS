@@ -37,7 +37,7 @@ window.ext.notification = {
   basic : (title,content,icon) ->
     if ext.browser is "chrome"
       chrome.notifications.create "", {
-          iconUrl : icon
+        iconUrl : icon
         type: "basic"
         title: title
         message: content
