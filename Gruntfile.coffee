@@ -51,14 +51,8 @@ module.exports = (grunt) ->
     bump :
       options :
         files: ['package.json', 'configure.json'],
-        commit: true,
-        commitMessage: 'Release v%VERSION%',
-        commitFiles: ['-a'],
-        createTag: true,
-        tagName: 'v%VERSION%',
-        tagMessage: 'Version %VERSION%',
-        push: true,
-        pushTo: 'origin master',
+        commit: false,
+        push: false
   }
 
   #register tasks
@@ -67,6 +61,12 @@ module.exports = (grunt) ->
   grunt.registerTask 'img', ['multiresize', 'rsync:icons', 'imagemin']
   grunt.registerTask 'archive', ['copy:archive', 'clean:builds']
   grunt.registerTask 'package-chrome', ['compress:chrome']
+
+  grunt.registerTask 'update-config', ->
+    config = grunt.file.readJSON("configure.json")
+    grunt.config.set 'compress.chrome.options.archive', 'builds/' + config.version + '-chrome.zip'
+    grunt.config.set 'copy.archive.src', ['*.zip', '!' + config.version + '*']
+    grunt.config.set 'clean.builds', ['builds/*.zip', '!builds/archive', '!builds/' + config.version + '*']
 
   #update scripts, styles, images, and new files
   grunt.registerTask 'compile', [
@@ -83,16 +83,18 @@ module.exports = (grunt) ->
   ]
 
   #update
+  grunt.registerTask 'update', ['update:minor']
+
   grunt.registerTask 'update:minor', [
-    'bump-only:minor',
-    'package',
-    'bump-commit'
+    'bump-only',
+    'update-config'
+    'package'
   ]
 
   grunt.registerTask 'update:major', [
     'bump-only:major',
-    'package',
-    'bump-commit'
+    'update-config',
+    'package'
   ]
 
   #update new script and style files only
