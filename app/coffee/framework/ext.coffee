@@ -170,8 +170,15 @@ ext =
 
   parse :
     url : (str,test) ->
-      test = test.replace(/\*/g,'.+')
-      test = new RegExp('^' + test + '$', 'g')
+      test = test.replace(/\?/g,'.')
+      test = test.replace(/\*/g,'.*?')
+      test = test.replace(/\!/g,'?!')
+      test = test.replace(/\./g,'\.')
+      test = test.replace(/\//g,'\\/')
+      if test.indexOf("!") > -1
+        test = new RegExp('^(' + test + ').+$', 'g')
+      else
+        test = new RegExp('^(' + test + ')$', 'g')
       test.test str.replace(/\ /g, '')
 
     id : (id) ->

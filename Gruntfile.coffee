@@ -5,7 +5,7 @@ module.exports = (grunt) ->
   require('load-grunt-tasks')(grunt)
 
   #Load extension config file
-  config = grunt.file.readJSON("configure.json")
+  config = grunt.file.readJSON("app/configure.json")
 
   #Project functions
   grunt.initConfig {
@@ -33,7 +33,6 @@ module.exports = (grunt) ->
         cwd: 'builds/',
         dest: 'builds/archive/'
 
-
     #package
     imagemin : grunt.file.readJSON('grunt/imagemin.json')
     compress :
@@ -50,20 +49,21 @@ module.exports = (grunt) ->
 
     bump :
       options :
-        files: ['package.json', 'configure.json'],
+        files: ['package.json', 'app/configure.json'],
         commit: false,
         push: false
   }
 
   #register tasks
   grunt.registerTask 'debug', ['coffeelint','lesslint']
-  grunt.registerTask 'assets', ['newer:less:default','newer:coffee:default','newer:uglify:default']
+  grunt.registerTask 'assets', ['less:default','coffee:default','uglify:default']
   grunt.registerTask 'img', ['multiresize', 'rsync:icons', 'imagemin']
   grunt.registerTask 'archive', ['copy:archive', 'clean:builds']
   grunt.registerTask 'package-chrome', ['compress:chrome']
 
+  #refresh config
   grunt.registerTask 'update-config', ->
-    config = grunt.file.readJSON("configure.json")
+    config = grunt.file.readJSON("app/configure.json")
     grunt.config.set 'compress.chrome.options.archive', 'builds/' + config.version + '-chrome.zip'
     grunt.config.set 'copy.archive.src', ['*.zip', '!' + config.version + '*']
     grunt.config.set 'clean.builds', ['builds/*.zip', '!builds/archive', '!builds/' + config.version + '*']
@@ -82,9 +82,10 @@ module.exports = (grunt) ->
     'archive'
   ]
 
-  #update
+  #default update
   grunt.registerTask 'update', ['update:minor']
 
+  #default minot
   grunt.registerTask 'update:minor', [
     'bump-only',
     'update-config'

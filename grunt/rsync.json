@@ -1,20 +1,21 @@
 {
   "options" : {
     "args" : ["--verbose"],
-    "exclude" : [
-      ".DS_Store",
-      "icons",
-      "*.png",
-      "**/*.coffee",
-      "**/*.less",
-      "**/assets/css/**",
-      "**/assets/js/**"
-    ],
     "recursive" : true
   },
 
   "package" : {
     "options" : {
+      "exclude" : [
+        "**/icons/**",
+        "*.png",
+        "**/coffee/**",
+        "**/less/**",
+        "**/*.coffee",
+        "**/*.less",
+        "**/assets/css/**",
+        "**/assets/js/**"
+      ],
       "src" : "app/",
       "dest" : "builds/latest.safariextension",
       "delete" : true
@@ -24,7 +25,7 @@
   "icons" : {
     "options" : {
       "src" : "app/icons/menu-icons/",
-      "dest" : "builds/latest.safariextension/icons",
+      "dest" : "builds/latest.safariextension/assets/icons",
       "delete" : true
     }
   }
