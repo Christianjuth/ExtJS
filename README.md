@@ -19,7 +19,7 @@ Plugins
 We know we can not do everything so we leave what we missed up to you. Creating **plugins** for ExtJS is as easy as defining a JSON element.
 
 ```coffeescript
-window.ext.notification = {
+notification = {
 
   #_info is some basic info for ExtJS to read
   _info :
@@ -46,6 +46,10 @@ window.ext.notification = {
       new Notification(title,{body : content})
       
 }
+
+if typeof window.define is 'function' && window.define.amd
+  window.define ['ext'], ->
+    window.ext.notification = notification
 ```
 
 Url Search Syntax
