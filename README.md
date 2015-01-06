@@ -19,32 +19,39 @@ Plugins
 We know we can not do everything so we leave what we missed up to you. Creating **plugins** for ExtJS is as easy as defining a JSON element.
 
 ```coffeescript
-window.ext.notification = {
+#define local copy of plugin
+notification = {
 
-#_info is some basic info for ExtJS to read
-_info :
-  authors : ['Christian Juth']
-  name : 'Notification'
-  version : '0.1.0'
-  compatibility :
-    chrome : 'full'
-    safari : 'full'
-
-#_aliases will be defined if element is not taken
-_aliases : ["noti"]
-
-#functions
-basic : (title,content,icon) ->
-  if ext.browser is "chrome"
-    chrome.notifications.create "", {
+  #_info is some basic info for ExtJS to read
+  _info :
+    authors : ['Christian Juth']
+    name : 'Notification'
+    version : '0.1.0'
+    compatibility :
+      chrome : 'full'
+      safari : 'full'
+  
+  #_aliases will be defined if ext.noti is not in use
+  _aliases : ["noti"]
+  
+  #functions
+  basic : (title,content,icon) ->
+    if ext.browser is "chrome"
+      chrome.notifications.create "", {
         iconUrl : icon
-      type: "basic"
-      title: title
-      message: content
-    }, () ->
-  else if ext.browser is "safari"
-    new Notification(title,{body : content})
+        type: "basic"
+        title: title
+        message: content
+      }, () ->
+    else if ext.browser is "safari"
+      new Notification(title,{body : content})
+      
 }
+
+#wait for ext library and expose globally
+if typeof window.define is 'function' && window.define.amd
+  window.define ['ext'], ->
+    window.ext.notification = notification
 ```
 
 Url Search Syntax
@@ -61,7 +68,7 @@ We offer a method of searching URLs very similar to Grunts file syntax.
 #if url does not contain google
 "!*google*"
 
-#corrently something like this is NOT Valid
+#curently something like this is NOT Valid
 #this will not look for a url that contains google
 #but not apple rather it will negate the whole
 #expression and look for a url that does not contain either
