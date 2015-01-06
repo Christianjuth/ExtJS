@@ -1,10 +1,9 @@
-uuid = {
+plugin = {
 
   _info :
     authors : ['Christian Juth']
     name : 'UUID'
     version : '0.1.0'
-    min : '0.1.0'
     compatibility :
       chrome : 'full'
       safari : 'full'
@@ -54,5 +53,11 @@ uuid = {
 #setup AMD support
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->
-    if !uuid._info.min? or uuid._info.min >= window.ext.version
-      window.ext.uuid = uuid
+    #vars
+    name = plugin._info.name
+    id = ext.parse.id(name)
+    #load plugin if valid
+    if !plugin._info.min? or plugin._info.min <= window.ext.version
+      window.ext[id] = plugin
+    else
+      console.error 'Ext plugin (' + name + ') required a minimum of ExtJS v' + plugin._info.min

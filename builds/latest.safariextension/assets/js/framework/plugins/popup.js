@@ -1,1 +1,1 @@
-(function(){var a;a={},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(){return null==a._info.min||a._info.min>=window.ext.version?window.ext.popup=a:void 0})}).call(this);
+(function(){var a;a={},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(){var b,c;return c=a._info.name,b=ext.parse.id(c),null==a._info.min||a._info.min<=window.ext.version?window.ext[b]=a:console.error("Ext plugin ("+c+") required a minimum of ExtJS v"+a._info.min)})}).call(this);

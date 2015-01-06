@@ -18,12 +18,12 @@ ext =
 
   #functions
   ini : (userOptions) ->
-    #define global options
-    window.ext._config = userOptions
-
     #set vars
     options = $.extend defultOptions, userOptions
     this.browser = this.getBrowser()
+
+    #define global options
+    window.ext._config = userOptions
 
     #set required storage items
     if !localStorage.options? and this.browser is 'chrome'
@@ -161,6 +161,7 @@ ext =
         else if ext.browser is 'safari'
           iconUrl = safari.extension.baseURI + 'icons/' + url
           safari.extension.toolbarItems[0].image = iconUrl
+
       click: (callback) ->
         if ext.browser is 'chrome'
           chrome.browserAction.onClicked.addListener -> callback()

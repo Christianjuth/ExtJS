@@ -1,8 +1,8 @@
-extension = {
+plugin = {
 
   _info :
     authors : ['Christian Juth']
-    name : 'Extension Utilities'
+    name : 'Utilities'
     version : '0.1.0'
     min : '0.1.0'
     compatibility :
@@ -39,5 +39,11 @@ extension = {
 #setup AMD support
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->
-    if !extension._info.min? or extension._info.min >= window.ext.version
-      window.ext.extension = extension
+    #vars
+    name = plugin._info.name
+    id = ext.parse.id(name)
+    #load plugin if valid
+    if !plugin._info.min? or plugin._info.min <= window.ext.version
+      window.ext[id] = plugin
+    else
+      console.error 'Ext plugin (' + name + ') required a minimum of ExtJS v' + plugin._info.min

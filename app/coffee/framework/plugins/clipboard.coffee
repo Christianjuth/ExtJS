@@ -1,9 +1,9 @@
-clipboard = {
+plugin = {
 
   _info :
     authors : ['Christian Juth']
-    name : 'Clippy'
-    version : '0.1.0'
+    name : 'Clipboard'
+    version : '0.5.0'
     min : '0.1.0'
     compatibility :
       chrome : 'full'
@@ -41,5 +41,11 @@ clipboard = {
 #setup AMD support
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->
-    if !clipboard._info.min? or clipboard._info.min >= window.ext.version
-      window.ext.clipboard = clipboard
+    #vars
+    name = plugin._info.name
+    id = ext.parse.id(name)
+    #load plugin if valid
+    if !plugin._info.min? or plugin._info.min <= window.ext.version
+      window.ext[id] = plugin
+    else
+      console.error 'Ext plugin (' + name + ') required a minimum of ExtJS v' + plugin._info.min
