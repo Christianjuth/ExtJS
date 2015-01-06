@@ -12,6 +12,5 @@ window.require  = {
     js : ''
 
   shim :
-    "bootstrap" :   { "deps" :['jquery'] }
-    "extPlugin/*" :    { "deps" :['ext'] }
+    "bootstrap" : { "deps" :['jquery'] }
 }

@@ -1,4 +1,4 @@
-window.ext.extension = {
+extension = {
 
   _info :
     authors : ['Christian Juth']
@@ -34,3 +34,8 @@ window.ext.extension = {
     if ext.browser is 'chrome'
       chrome.runtime.requestUpdateCheck()
 }
+
+#setup AMD support
+if typeof window.define is 'function' && window.define.amd
+  window.define ['ext'], ->
+    window.ext.extension = extension

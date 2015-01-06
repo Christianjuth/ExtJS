@@ -5,6 +5,7 @@ window.message = "hey"
 require [
   "jquery",
   "underscore",
+  "extPlugin/uuid",
   "ext",
 
   #Load framework plugins
@@ -13,7 +14,7 @@ require [
   "extPlugin/extension",
   "extPlugin/notification",
   "extPlugin/tabs",
-], ($, _, ext) ->
+], ($, _, yolo, ext) ->
   ext.ini({
     silent : false
   })

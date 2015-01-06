@@ -14,10 +14,13 @@ defultOptions = {
 ext =
   #set vars
   browser : ''
-
+  version : '0.1.0'
 
   #functions
   ini : (userOptions) ->
+    #define global options
+    window.ext._config = userOptions
+
     #set vars
     options = $.extend defultOptions, userOptions
     this.browser = this.getBrowser()
@@ -28,44 +31,46 @@ ext =
 
     #check plugins for _ APIs
     $.each ext, (item) ->
-      if window.ext[item]['_info']?
-        #set vars
-        item = window.ext[item]
+      #set vars
+      item = window.ext[item]
+      if item._info?
         name = item._info.name
+      else
+        name = item
+
+      #call load function
+      if item._load?
+        item._load(userOptions)
+        delete item._load
+
+      #check if aliases exsist
+      if item._aliases?
+        #set aliases
+        for alias in item._aliases
+          if !window.ext[alias]?
+            window.ext[alias] = item
+
+          #alias warning
+          else if options.silent isnt true
+            console.warn 'Ext plugin "' + name + '" can not define alias "' + alias + '" becuase it is taken'
+        delete item._aliases
+
+      #check compatibility
+      if item._info? and options.silent isnt true
         compatibility = item._info.compatibility
+        #chrome compatibility
+        if compatibility.chrome is 'none'
+          console.warn 'Ext plugin "' + name + '" is Safari only'
+        else if compatibility.chrome isnt 'full'
+          console.warn 'Ext plugin "' + name + '" may contain some Safari only functions'
 
-        #call load function
-        if item._load?
-          item._load()
-          delete item._load
+        #safari compatibility
+        if compatibility.safari is 'none'
+          console.warn 'Ext plugin "' + name + '" is Chrome only'
+        else if compatibility.safari isnt 'full'
+          console.warn 'Ext plugin "' + name + '" may contain some Chrome only functions'
 
-        #check if aliases exsist
-        if item._aliases?
-          #set aliases
-          for alias in item._aliases
-            if !window.ext[alias]?
-              window.ext[alias] = window.ext[item]
-
-            #alias warning
-            else if options.silent isnt true
-              console.warn 'Ext plugin "' + name + '" can not define alias "' + alias + '" becuase it is taken'
-          delete item._aliases
-
-        #check compatibility
-        if item._info? and options.silent isnt true
-          #chrome compatibility
-          if compatibility.chrome is 'none'
-            console.warn 'Ext plugin "' + name + '" is Safari only'
-          else if compatibility.chrome isnt 'full'
-            console.warn 'Ext plugin "' + name + '" may contain some Safari only functions'
-
-          #safari compatibility
-          if compatibility.safari is 'none'
-            console.warn 'Ext plugin "' + name + '" is Chrome only'
-          else if compatibility.safari isnt 'full'
-            console.warn 'Ext plugin "' + name + '" may contain some Chrome only functions'
-
-        delete item._info
+      delete item._info
     return window.ext
 
 
@@ -86,7 +91,20 @@ ext =
 
 
   options :
+
     _aliases : ['ops', 'opts']
+
+    _load : ->
+      if ext.browser is 'chrome'
+        $.ajax {
+        url: '../../configure.json',
+        dataType: 'json',
+        async: false,
+        success: (data) ->
+          for option in data.options
+            if typeof ext.options.get(option.key) is 'undefined'
+              ext.options.set(option.key, option.default)
+        }
 
     #functions
     set : (key, value) ->
@@ -183,24 +201,24 @@ ext =
 
     url : (urls,test) ->
       #vars
-      output
+      output = false
       #logic
-      negate = test.indexOf("!") != -1
-      test = test.replace(/\?/g,'.')
-      test = test.replace(/\*/g,'.*?')
-      test = test.replace(/\!/g,'')
-      test = test.replace(/\./g,'\.')
-      test = test.replace(/\//g,'\\/')
+      if urls?
+        negate = test.indexOf("!") != -1
+        test = test.replace(/\?/g,'.')
+        test = test.replace(/\*/g,'.*?')
+        test = test.replace(/\!/g,'')
+        test = test.replace(/\./g,'\.')
+        test = test.replace(/\//g,'\\/')
 
-      #parse regex
-      test = new RegExp('^(' + test + ')$', 'g')
-      if negate
-        output = ! test.test urls.replace(/\ /g, '')
-      else
-        output = test.test urls.replace(/\ /g, '')
+        #parse regex
+        test = new RegExp('^(' + test + ')$', 'g')
+        if negate
+          output = ! test.test urls.replace(/\ /g, '')
+        else
+          output = test.test urls.replace(/\ /g, '')
 
       return output
-
 
     id : (id) ->
       id.toLowerCase().replace(/\ /g,"_")

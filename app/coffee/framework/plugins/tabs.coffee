@@ -1,4 +1,4 @@
-window.ext.tabs = {
+tabs = {
 
   _info :
     authors : ['Christian Juth']
@@ -54,10 +54,15 @@ window.ext.tabs = {
         tabs = tabs.concat window.tabs
       for tab in tabs
         #prevent undefined error
-        if tab.url?
+        if !tab.url?
         else if ext.parse.url(tab.url, url) isnt false
           outputTabs.push(tab)
       callback(outputTabs)
     return url
 
 }
+
+#setup AMD support
+if typeof window.define is 'function' && window.define.amd
+  window.define ['ext'], ->
+    window.ext.tabs = tabs

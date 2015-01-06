@@ -1,4 +1,4 @@
-window.ext.storage = {
+storage = {
 
   _info :
     authors : ['Christian Juth']
@@ -19,18 +19,10 @@ window.ext.storage = {
       dataType: 'json',
       async: false,
       success: (data) ->
-        if ext.browser is 'chrome'
-          options = data.options
-          storedOptions = $.parseJSON localStorage.options
-          for option in options
-            if !storedOptions[option.key]?
-              ext.options.set option.key,option.default
-
-        storage = data.storage
-        for item in storage
-          if !ext.storage.get(item.key)?
+        for item in data.storage
+          if typeof ext.storage.get(item.key) is 'undefined'
             ext.storage.set(item.key, item.default)
-      }
+    }
 
 
   #functions
@@ -65,3 +57,8 @@ window.ext.storage = {
     output
 
 }
+
+#setup AMD support
+if typeof window.define is 'function' && window.define.amd
+  window.define ['ext'], ->
+    window.ext.storage = storage

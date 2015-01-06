@@ -1,4 +1,4 @@
-window.ext.notification = {
+notification = {
 
   _info :
     authors : ['Christian Juth']
@@ -8,20 +8,25 @@ window.ext.notification = {
       chrome : 'full'
       safari : 'full'
 
-  _aliases : ["noti"]
+  _aliases : ['noti']
 
 
   #functions
-  basic : (title,content,icon) ->
-    if ext.browser is "chrome"
-      chrome.notifications.create "", {
-        iconUrl : icon
-        type: "basic"
+  basic : (title,content) ->
+    if ext.browser is 'chrome'
+      chrome.notifications.create '', {
+        iconUrl : chrome.extension.getURL('icon-128.png')
+        type: 'basic'
         title:title
         message: content
       }, () ->
 
-    else if ext.browser is "safari"
+    else if ext.browser is 'safari'
       new Notification(title,{body : content})
 
 }
+
+#setup AMD support
+if typeof window.define is 'function' && window.define.amd
+  window.define ['ext'], ->
+    window.ext.notification = notification

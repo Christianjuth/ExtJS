@@ -1,4 +1,4 @@
-window.ext.clipboard = {
+clipboard = {
 
   _info :
     authors : ['Christian Juth']
@@ -36,3 +36,8 @@ window.ext.clipboard = {
     pasteTo.remove()
     output
 }
+
+#setup AMD support
+if typeof window.define is 'function' && window.define.amd
+  window.define ['ext'], ->
+    window.ext.clipboard = clipboard
