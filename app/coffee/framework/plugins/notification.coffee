@@ -21,7 +21,6 @@ plugin = {
         title:title
         message: content
       }, () ->
-
     else if ext.browser is 'safari'
       new Notification(title,{body : content})
 

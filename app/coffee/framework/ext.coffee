@@ -187,19 +187,7 @@ ext =
           return chrome.browserAction.getBadgeText({},callback)
 
 
-  parse :
-    array : () ->
-      #vars
-      output = []
-      array = arguments
-      #parse array
-      for item in array
-        if typeof item is "string"
-          output.push item
-        else
-          output = output.concat item
-      return output
-
+  match :
     url : (urls,test) ->
       #vars
       output = false
@@ -211,14 +199,26 @@ ext =
         test = test.replace(/\!/g,'')
         test = test.replace(/\./g,'\.')
         test = test.replace(/\//g,'\\/')
-
         #parse regex
         test = new RegExp('^(' + test + ')$', 'g')
         if negate
           output = ! test.test urls.replace(/\ /g, '')
         else
           output = test.test urls.replace(/\ /g, '')
+      return output
 
+
+  parse :
+    array : () ->
+      #vars
+      output = []
+      array = arguments
+      #parse array
+      for item in array
+        if typeof item is "string"
+          output.push item
+        else
+          output = output.concat item
       return output
 
     id : (id) ->

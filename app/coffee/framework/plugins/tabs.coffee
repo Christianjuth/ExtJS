@@ -46,7 +46,7 @@ plugin = {
     if ext.browser is 'chrome'
       chrome.tabs.query {}, (tabs) ->
         for tab in tabs
-          if ext.parse.url(tab.url, url) isnt false
+          if ext.match.url(tab.url, url) isnt false
             outputTabs.push(tab)
         callback(outputTabs)
 
@@ -56,7 +56,7 @@ plugin = {
       for tab in tabs
         #prevent undefined error
         if !tab.url?
-        else if ext.parse.url(tab.url, url) isnt false
+        else if ext.match.url(tab.url, url) isnt false
           outputTabs.push(tab)
       callback(outputTabs)
     return url

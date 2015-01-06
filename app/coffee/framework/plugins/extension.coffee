@@ -23,9 +23,9 @@ plugin = {
   reload : () ->
     if ext.browser is 'chrome'
       chrome.runtime.reload()
-
     else if ext.browser is 'safari'
       safari.extension.globalPage.contentWindow.reload = () ->
+        window.console.clear()
         location.reload()
       safari.extension.globalPage.contentWindow.reload()
 
