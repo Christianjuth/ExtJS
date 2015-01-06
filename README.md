@@ -19,6 +19,7 @@ Plugins
 We know we can not do everything so we leave what we missed up to you. Creating **plugins** for ExtJS is as easy as defining a JSON element.
 
 ```coffeescript
+#define local copy of plugin
 notification = {
 
   #_info is some basic info for ExtJS to read
@@ -30,7 +31,7 @@ notification = {
       chrome : 'full'
       safari : 'full'
   
-  #_aliases will be defined if element is not taken
+  #_aliases will be defined if ext.noti is not in use
   _aliases : ["noti"]
   
   #functions
@@ -47,6 +48,7 @@ notification = {
       
 }
 
+#wait for ext library and expose globally
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->
     window.ext.notification = notification
