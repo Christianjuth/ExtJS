@@ -1,0 +1,1 @@
+(function(){var a;a={},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(){return null==a._info.min||a._info.min>=window.ext.version?window.ext.popup=a:void 0})}).call(this);
