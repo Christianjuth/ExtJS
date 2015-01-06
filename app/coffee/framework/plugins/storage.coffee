@@ -4,6 +4,7 @@ storage = {
     authors : ['Christian Juth']
     name : 'Storage'
     version : '0.1.0'
+    min : '0.1.0'
     compatibility :
       chrome : 'full'
       safari : 'full'
@@ -61,4 +62,5 @@ storage = {
 #setup AMD support
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->
-    window.ext.storage = storage
+    if !storage._info.min? or storage._info.min >= window.ext.version
+      window.ext.storage = storage

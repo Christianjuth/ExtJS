@@ -4,6 +4,7 @@ notification = {
     authors : ['Christian Juth']
     name : 'Notification'
     version : '0.1.0'
+    min : '0.1.0'
     compatibility :
       chrome : 'full'
       safari : 'full'
@@ -29,4 +30,5 @@ notification = {
 #setup AMD support
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->
-    window.ext.notification = notification
+    if !notification._info.min? or notification._info.min >= window.ext.version
+      window.ext.notification = notification

@@ -4,6 +4,7 @@ tabs = {
     authors : ['Christian Juth']
     name : 'Tabs'
     version : '0.1.0'
+    min : '0.1.0'
     compatibility :
       chrome : 'full'
       safari : 'full'
@@ -65,4 +66,5 @@ tabs = {
 #setup AMD support
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->
-    window.ext.tabs = tabs
+    if !tabs._info.min? or tabs._info.min >= window.ext.version
+      window.ext.tabs = tabs

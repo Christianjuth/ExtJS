@@ -4,6 +4,7 @@ extension = {
     authors : ['Christian Juth']
     name : 'Extension Utilities'
     version : '0.1.0'
+    min : '0.1.0'
     compatibility :
       chrome : 'full'
       safari : 'partial'
@@ -38,4 +39,5 @@ extension = {
 #setup AMD support
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->
-    window.ext.extension = extension
+    if !extension._info.min? or extension._info.min >= window.ext.version
+      window.ext.extension = extension
