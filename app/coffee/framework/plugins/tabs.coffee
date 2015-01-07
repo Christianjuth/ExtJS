@@ -38,7 +38,7 @@ plugin = {
     return true
 
 
-  indexOf : (url, callback) ->
+  indexOf : (urlSearchSyntax, callback) ->
     #vars
     tabs = []
     outputTabs = []
@@ -46,7 +46,10 @@ plugin = {
     if ext.browser is 'chrome'
       chrome.tabs.query {}, (tabs) ->
         for tab in tabs
-          if ext.match.url(tab.url, url) isnt false
+          #strip trailing "/" from url
+          url = tab.url.replace /\/$/,''
+          #check if url matches urlSearchSyntax
+          if ext.match.url(url, urlSearchSyntax) isnt false
             outputTabs.push(tab)
         callback(outputTabs)
 
@@ -55,11 +58,15 @@ plugin = {
         tabs = tabs.concat window.tabs
       for tab in tabs
         #prevent undefined error
-        if !tab.url?
-        else if ext.match.url(tab.url, url) isnt false
-          outputTabs.push(tab)
+        if tab.url?
+          #strip trailing "/" from url
+          url = tab.url.replace /\/$/,''
+          #check if url matches urlSearchSyntax
+          if ext.match.url(url, urlSearchSyntax) isnt false
+            outputTabs.push(tab)
       callback(outputTabs)
-    return url
+
+    return urlSearchSyntax
 
 }
 

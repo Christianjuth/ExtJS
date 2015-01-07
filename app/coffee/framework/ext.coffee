@@ -188,23 +188,35 @@ ext =
 
 
   match :
-    url : (urls,test) ->
+    url : (url,test) ->
       #vars
       output = false
       #logic
-      if urls?
-        negate = test.indexOf("!") != -1
-        test = test.replace(/\?/g,'.')
-        test = test.replace(/\*/g,'.*?')
-        test = test.replace(/\!/g,'')
+      if url?
+        #--------------vars----------------
+        #check if expression is negated
+        negate = /^\!/.test(test)
+
+        #--------------logic---------------
+        #replace remove "!" after negate is defined
+        test = test.replace(/^\!/g,'')
+        #match "?" with anything but "/"
+        test = test.replace(/\?/g,'[^/]')
+        #replace "*" but not "**" with "([^/]+)*"
+        test = test.replace /(\*)?\*/g, ($0, $1) ->
+          if $1 then $0 else "([^/]+)*"
+        #replace "**" with ".*?"
+        test = test.replace(/\*\*/g,'.*?')
+        #replace "." with escaped "\."
         test = test.replace(/\./g,'\.')
+        #replace "/" with escaped "\\/"
         test = test.replace(/\//g,'\\/')
-        #parse regex
+        #-----------parse regex-------------
         test = new RegExp('^(' + test + ')$', 'g')
         if negate
-          output = ! test.test urls.replace(/\ /g, '')
+          output = ! test.test url.replace(/\ /i, '')
         else
-          output = test.test urls.replace(/\ /g, '')
+          output = test.test url.replace(/\ /i, '')
       return output
 
 

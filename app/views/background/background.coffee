@@ -26,7 +26,7 @@ require [
 
   #set icon click function
   ext.menu.icon.click () ->
-    ext.tabs.indexOf "*(//plus.google.com|plus.google).*", (data) ->
+    ext.tabs.indexOf "htt*//plus.google.com**", (data) ->
       if data.length is 0
         ext.storage.set("google", parseInt(ext.storage.get("google")) + 1)
         ext.menu.icon.setBadge ext.storage.get("google")
