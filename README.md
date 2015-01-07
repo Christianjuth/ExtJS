@@ -66,7 +66,16 @@ Url Search Syntax
 ============
 We offer a method of searching URLs very similar to Grunts file syntax.
 
+* `*`  Matches zero or more characters but not `/`
+* `?`  Matches one character but not `/`
+* `**` Matches all characters including `/`
+* `{}` Allows for a comma-separated list of "or" expressions
+* `!`  At the beginning of a pattern will negate the match
+
 ```coffeescript
+#if url is google.com or google.co.uk but not google.com/fonts
+"**google.*"
+
 #if url contains the word google
 "**google**"
 
