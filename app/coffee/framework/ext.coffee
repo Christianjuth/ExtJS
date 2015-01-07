@@ -1,9 +1,10 @@
-#----------------------------------------------------------------
-# ExtJS
-# v0.1.0
-#
-# ExtJS is a framework for building Chrome and Safari extensions
-#----------------------------------------------------------------
+###!
+Copyright 2015 by Christian Juth
+
+ExtJS v0.1.0
+-------------------------------------------------------------
+This is a framework for building Chrome and Safari extensions
+###
 
 #set default options
 defultOptions = {
