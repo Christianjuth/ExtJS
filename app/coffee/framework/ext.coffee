@@ -188,8 +188,9 @@ ext =
 
 
   match :
-    url : (url,test) ->
+    url : (url,urlSearchSyntax) ->
       #vars
+      test = urlSearchSyntax
       output = false
       #logic
       if url?
@@ -211,6 +212,10 @@ ext =
         test = test.replace(/\./g,'\.')
         #replace "/" with escaped "\\/"
         test = test.replace(/\//g,'\\/')
+        #replace "{ | }" with "( | )"
+        test = test.replace(/{/g,'(')
+        test = test.replace(/}/g,')')
+        test = test.replace(/,/g,'|')
         #-----------parse regex-------------
         test = new RegExp('^(' + test + ')$', 'g')
         if negate
