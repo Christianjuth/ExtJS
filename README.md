@@ -68,17 +68,19 @@ We offer a method of searching URLs very similar to Grunts file syntax.
 
 ```coffeescript
 #if url contains the word google
-"*google*"
+"**google**"
 
-#if url contains google or apple
-"*(google|apple)*"
+#if url contains google, apple, or microsoft
+"**{google,apple,microsoft}**"
+
+#or inception
+"{cake,apple{pie,tart}}"
 
 #if url does not contain google
-"!*google*"
+"!**google**"
 
-#curently something like this is NOT Valid
-#this will not look for a url that contains google
-#but not apple rather it will negate the whole
-#expression and look for a url that does not contain either
-"*(google|!apple)*"
+#! must come at the beginning of the
+#statement or it will be taken literally
+"x!y" #url is x!y
+"!xy" #url is not xy
 ```
