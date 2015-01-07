@@ -74,7 +74,7 @@ We offer a method of searching URLs very similar to Grunts file syntax.
 
 ```coffeescript
 #if url is google.com or google.co.uk but not google.com/fonts
-**google.*
+"**google.*"
 
 #if url contains the word google
 "**google**"
