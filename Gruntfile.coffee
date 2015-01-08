@@ -53,8 +53,8 @@ module.exports = (grunt) ->
     browserDependencies :
       define :
         dir : 'plugin',
-        files: [{84
-          'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/ExtJS/plugin/plugin/define.coffee'
+        files: [{
+          'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/ExtJS_Library/plugin/plugin/define.coffee'
         }]
 
     clean :
