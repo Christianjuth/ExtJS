@@ -4,111 +4,47 @@ module.exports = (grunt) ->
   require('time-grunt')(grunt)
   require('load-grunt-tasks')(grunt)
 
-  #Load extension config file
-  config = grunt.file.readJSON("app/configure.json")
-
   #Project functions
   grunt.initConfig {
-    pkg: grunt.file.readJSON('package.json'),
+
+    pkg: grunt.file.readJSON('package.json')
 
     #lint functions
-    coffeelint : default: ['app/coffee/**/*.coffee']
-    lesslint : src: ['app/less/**/*.less']
+    coffeelint : default: ['plugin/**/*.coffee']
 
     #scripts and styles
-    less : grunt.file.readJSON('grunt/less.json')
-    coffee : grunt.file.readJSON('grunt/coffee.json')
-    uglify : grunt.file.readJSON('grunt/uglify.json')
+    coffee :
+      default :
+        files :
+          'dist/plugin.js' : [
+            'plugin/licence.coffee',
+            'plugin/plugin.coffee',
+            'plugin/define.coffee'
+          ]
 
-    #icons
-    multiresize : grunt.file.readJSON('grunt/multiresize.json')
-
-    #manage files
-    clean : builds : ['builds/*.zip', '!builds/archive', '!builds/' + config.version + '*']
-    rsync : grunt.file.readJSON('grunt/rsync.json')
-    copy :
-      archive :
-        src: ['*.zip', '!' + config.version + '*'],
-        expand: true,
-        cwd: 'builds/',
-        dest: 'builds/archive/'
-
-    #package
-    imagemin : grunt.file.readJSON('grunt/imagemin.json')
-    compress :
-      chrome :
-        options :
-          archive : 'builds/' + config.version + '-chrome.zip'
-        src: ['**/*', '!Settings.plist', '!Info.plist', '!assets/icons/**/*-16.png', '!icon-96.png', '!icon-64.png', '!icon-32.png'],
-        expand: true,
-        cwd: 'builds/latest.safariextension/',
+    uglify :
+      options :
+        preserveComments : 'some'
+      default :
+        files :
+          'dist/plugin.min.js' : 'dist/plugin.js'
 
 
     #other
-    notify_hooks : grunt.file.readJSON('grunt/notify_hooks.json')
-
-    bump :
+    notify_hooks :
       options :
-        files: ['package.json', 'app/configure.json'],
-        commit: false,
-        push: false
+        enabled : true,
+        max_jshint_notifications : 5,
+        title : 'ExtJS Plugin Builder',
+        success : true,
+        duration : 3
+
   }
 
   #register tasks
-  grunt.registerTask 'debug', ['coffeelint','lesslint']
-  grunt.registerTask 'assets', ['less:default','coffee:default','uglify:default']
-  grunt.registerTask 'assets-debug', ['less:default','coffee:default']
-  grunt.registerTask 'img', ['multiresize', 'rsync:icons', 'imagemin']
-  grunt.registerTask 'archive', ['copy:archive', 'clean:builds']
-  grunt.registerTask 'package-chrome', ['compress:chrome']
-
-  #refresh config
-  grunt.registerTask 'update-config', ->
-    config = grunt.file.readJSON("app/configure.json")
-    grunt.config.set 'compress.chrome.options.archive', 'builds/' + config.version + '-chrome.zip'
-    grunt.config.set 'copy.archive.src', ['*.zip', '!' + config.version + '*']
-    grunt.config.set 'clean.builds', ['builds/*.zip', '!builds/archive', '!builds/' + config.version + '*']
-
-  #debug
-  grunt.registerTask 'debug', [
-    'rsync:package',
-    'img',
-    'assets-debug'
-  ]
-
-  #update scripts, styles, images, and new files
-  grunt.registerTask 'compile', [
-    'rsync:package',
-    'img',
-    'assets'
-  ]
-
-  #clean all old files, rebuild, and package for store
-  grunt.registerTask 'package', [
-    'compile'
-    'package-chrome',
-    'archive'
-  ]
-
-  #default update
-  grunt.registerTask 'update', ['update:minor']
-
-  #default minot
-  grunt.registerTask 'update:minor', [
-    'bump-only',
-    'update-config'
-    'package'
-  ]
-
-  grunt.registerTask 'update:major', [
-    'bump-only:major',
-    'update-config',
-    'package'
-  ]
-
-  #update new script and style files only
   grunt.registerTask 'default', [
-    'package'
+    'coffee'
+    'uglify'
   ]
 
   grunt.task.run('notify_hooks')
