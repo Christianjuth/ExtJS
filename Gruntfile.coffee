@@ -32,6 +32,14 @@ module.exports = (grunt) ->
         files :
           'dist/plugin.min.js' : 'dist/plugin.js'
 
+    copy :
+      default :
+        expand: true,
+        cwd: 'dist/'
+        src: '**'
+        dest: 'test/js/'
+
+
     #notify on task finish
     notify_hooks :
       options :
@@ -41,11 +49,12 @@ module.exports = (grunt) ->
         success : true,
         duration : 3
 
+
     browserDependencies :
       define :
         dir : 'plugin',
-        files: [{
-          'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/extension_framework/plugin/plugin/define.coffee'
+        files: [{84
+          'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/ExtJS/plugin/plugin/define.coffee'
         }]
 
     clean :
@@ -59,6 +68,7 @@ module.exports = (grunt) ->
     'browserDependencies'
     'coffee'
     'uglify'
+    'copy'
   ]
 
   grunt.task.run('notify_hooks')

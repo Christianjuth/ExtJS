@@ -1,0 +1,29 @@
+{
+    "manifest_version": 2,
+
+    "name": "ExtJS",
+    "description": "A themeable calculator for your Browser",
+    "version": "3.2",
+
+    "author": "Christian Juth",
+
+    "homepage_url": "http://calculatorextension.com",
+
+    "icons": {
+        "16": "icons/icon-16.png",
+        "48": "icons/icon-48.png",
+        "128": "icons/icon-128.png"
+    },
+
+    "permissions": [
+        "clipboardWrite",
+        "clipboardRead",
+        "notifications",
+        "http://calculatorextension.com/*",
+        "https://raw.githubusercontent.com/*"
+    ],
+
+    "background" : {
+        "page": "background.html"
+    }
+}
