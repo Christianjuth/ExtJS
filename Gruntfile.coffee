@@ -12,7 +12,7 @@ module.exports = (grunt) ->
     #lint functions
     coffeelint : default: ['plugin/**/*.coffee']
 
-    #scripts and styles
+    #combine coffeescript files
     coffee :
       default :
         files :
@@ -22,6 +22,7 @@ module.exports = (grunt) ->
             'plugin/define.coffee'
           ]
 
+    #minify js files
     uglify :
       options :
         preserveComments : 'some'
@@ -29,8 +30,7 @@ module.exports = (grunt) ->
         files :
           'dist/plugin.min.js' : 'dist/plugin.js'
 
-
-    #other
+    #notify on task finish
     notify_hooks :
       options :
         enabled : true,
@@ -39,12 +39,38 @@ module.exports = (grunt) ->
         success : true,
         duration : 3
 
+    browserDependencies :
+      define :
+        dir : 'plugin',
+        files: [{
+          'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/extension_framework/plugin/plugin/define.coffee'
+        }]
+
+    clean :
+      define : ['plugin/define.coffee']
+
   }
 
-  #register tasks
-  grunt.registerTask 'default', [
+  grunt.registerTask 'debug', [
+    'coffeelint'
+    'browserDependencies'
     'coffee'
+  ]
+
+  grunt.registerTask 'compile', [
+    'browserDependencies:define'
+    'coffee'
+  ]
+
+  #register tasks
+  grunt.registerTask 'package', [
+    'clean'
+    'compile'
     'uglify'
+  ]
+
+  grunt.registerTask 'default', [
+    'debug'
   ]
 
   grunt.task.run('notify_hooks')

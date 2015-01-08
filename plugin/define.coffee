@@ -29,4 +29,5 @@ if typeof window.define is 'function' && window.define.amd
     if !plugin._info.min? or plugin._info.min <= window.ext.version
       window.ext[id] = plugin
     else
-      console.error 'Ext plugin ('+name+') requires ExtJS v'+plugin._info.min+'+'
+      version = plugin._info.min
+      console.error 'Ext plugin (' + name + ') requires ExtJS v' + version + '+'

@@ -29,7 +29,9 @@ SOFTWARE.
 }).call(this);
 
 (function() {
-  plugin({});
+  var plugin;
+
+  plugin = {};
 
 }).call(this);
 
@@ -72,10 +74,12 @@ https://github.com/Christianjuth/extension_framework/tree/plugin
 
   if (typeof window.define === 'function' && window.define.amd) {
     window.define(['ext'], function() {
+      var version;
       if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
         return window.ext[id] = plugin;
       } else {
-        return console.error('Ext plugin (' + name + ') requires ExtJS v' + plugin._info.min + '+');
+        version = plugin._info.min;
+        return console.error('Ext plugin (' + name + ') requires ExtJS v' + version + '+');
       }
     });
   }
