@@ -57,6 +57,7 @@ module.exports = (grunt) ->
   #register tasks
   grunt.registerTask 'debug', ['coffeelint','lesslint']
   grunt.registerTask 'assets', ['less:default','coffee:default','uglify:default']
+  grunt.registerTask 'assets-debug', ['less:default','coffee:default']
   grunt.registerTask 'img', ['multiresize', 'rsync:icons', 'imagemin']
   grunt.registerTask 'archive', ['copy:archive', 'clean:builds']
   grunt.registerTask 'package-chrome', ['compress:chrome']
@@ -67,6 +68,13 @@ module.exports = (grunt) ->
     grunt.config.set 'compress.chrome.options.archive', 'builds/' + config.version + '-chrome.zip'
     grunt.config.set 'copy.archive.src', ['*.zip', '!' + config.version + '*']
     grunt.config.set 'clean.builds', ['builds/*.zip', '!builds/archive', '!builds/' + config.version + '*']
+
+  #debug
+  grunt.registerTask 'debug', [
+    'rsync:package',
+    'img',
+    'assets-debug'
+  ]
 
   #update scripts, styles, images, and new files
   grunt.registerTask 'compile', [
