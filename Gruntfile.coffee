@@ -8,6 +8,13 @@ module.exports = (grunt) ->
 
     pkg: grunt.file.readJSON('package.json')
 
+    coffeelint :
+      framework : [
+        'coffee/framework/**/*.coffee',
+        '!coffee/framework/header.coffee',
+        '!coffee/framework/footer.coffee',
+      ]
+
     #combine coffeescript files
     coffee :
       options :
@@ -17,6 +24,7 @@ module.exports = (grunt) ->
           'ext.js' : [
             'coffee/framework/options.coffee',
             'coffee/framework/header.coffee',
+            'coffee/framework/vars.coffee',
             'coffee/framework/functions/*.coffee',
             'coffee/framework/footer.coffee',
             'coffee/framework/global.coffee',
@@ -27,15 +35,16 @@ module.exports = (grunt) ->
     uglify :
       options :
         preserveComments : 'some'
-      default :
+      framework :
         files :
           'ext.min.js' : 'ext.js'
 
   }
 
   grunt.registerTask 'default', [
+    'coffeelint:framework'
     'coffee:framework'
-    'uglify'
+    'uglify:framework'
   ]
 
   grunt.task.run('notify_hooks')
