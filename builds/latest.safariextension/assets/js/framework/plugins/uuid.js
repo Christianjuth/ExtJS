@@ -1,1 +1,118 @@
-(function(){var a;a={_info:{authors:["Christian Juth"],name:"UUID",version:"0.1.0",compatibility:{chrome:"full",safari:"full"}},_aliases:["UUID"],_load:function(a){var b,c,d,e;if(null==localStorage.uuid){for(d=[],b="0123456789abcdef",c=0;36>=c;)c++,d[c]=b.substr(Math.floor(16*Math.random()),1);return d[14]="4",d[19]=b.substr(3&d[19]|8,1),d[9]=d[14]=d[19]=d[23]="-",e=d.join(""),a.silent!==!0&&console.info('UUID "'+e+'" was created'),localStorage.uuid=e}},reset:function(){var a,b,c,d,e;for(c=window.ext._config,d=[],a="0123456789abcdef",b=0;36>=b;)b++,d[b]=a.substr(Math.floor(16*Math.random()),1);return d[14]="4",d[19]=a.substr(3&d[19]|8,1),d[9]=d[14]=d[19]=d[23]="-",e=d.join(""),c.silent!==!0&&console.info('UUID was reset to "'+e+'"'),localStorage.uuid=e},get:function(){return localStorage.uuid}},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(){var b,c;return c=a._info.name,b=ext.parse.id(c),null==a._info.min||a._info.min<=window.ext.version?window.ext[b]=a:console.error("Ext plugin ("+c+") required a minimum of ExtJS v"+a._info.min)})}).call(this);
+
+/*!
+Licence - 2015
+--------------------------------
+This plugin is protected by the MIT licence and is open source.
+I ask you do not remove and/or modify this copyright in any way.
+This plugin is built separately from the ExtJS framework/library
+and therefor falls under its own licence (MIT).  ExtJS and other
+contributors can not claim ownership.  All contributors agree their
+work is open source and falls under this plugins licence (MIT).
+
+https://github.com/Christianjuth/
+ */
+
+(function() {
+  var id, log, name, plugin;
+
+  plugin = {
+    _info: {
+      authors: ['Christian Juth'],
+      name: 'UUID',
+      version: '0.1.0',
+      compatibility: {
+        chrome: 'full',
+        safari: 'full'
+      }
+    },
+    _aliases: ['UUID'],
+    _load: function(options) {
+      var hexDigits, i, s, uuid;
+      if (localStorage.uuid == null) {
+        s = [];
+        hexDigits = '0123456789abcdef';
+        i = 0;
+        while (i <= 36) {
+          i++;
+          s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = '4';
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+        s[9] = s[14] = s[19] = s[23] = '-';
+        uuid = s.join('');
+        if (options.silent !== true) {
+          console.info('UUID "' + uuid + '" was created');
+        }
+        return localStorage.uuid = uuid;
+      }
+    },
+    reset: function() {
+      var hexDigits, i, options, s, uuid;
+      options = window.ext._config;
+      s = [];
+      hexDigits = '0123456789abcdef';
+      i = 0;
+      while (i <= 36) {
+        i++;
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+      }
+      s[14] = '4';
+      s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+      s[9] = s[14] = s[19] = s[23] = '-';
+      uuid = s.join('');
+      if (options.silent !== true) {
+        console.info('UUID was reset to "' + uuid + '"');
+      }
+      return localStorage.uuid = uuid;
+    },
+    get: function() {
+      return localStorage.uuid;
+    }
+  };
+
+
+  /*
+  From the ExtJS team
+  -------------------
+  The code below was designed by the ExtJS team to provide useful info to the
+  developers. We ask you do not change this code unless necessary. By keeping
+  this standard on all plugins, we hope to make development easy by providing
+  useful info to developers.  In addition to logging, the code below also
+  contains the AMD function for defining the plugin.  This waits for the ExtJS
+  AMD module to define the library itself, and then your plugin is defined
+  which prevents any undefined errors.  Although not suggested, plugins can be
+  loaded before the ExtJS library.  The functionality below assures ease of
+  use. We also ask you keep this code up to date with any changes that may
+  occur in the future.  Please refer to the sample plugin on the GitHub repo
+  where this code is updated.
+  
+  https://github.com/Christianjuth/extension_framework/tree/plugin
+   */
+
+  name = plugin._info.name;
+
+  id = name.toLowerCase().replace(/\ /g, "_");
+
+  log = {
+    error: function(msg) {
+      return console.error('Ext plugin (' + name + ') says: ' + msg);
+    },
+    warn: function(msg) {
+      return console.warn('Ext plugin (' + name + ') says: ' + msg);
+    },
+    info: function(msg) {
+      return console.warn('Ext plugin (' + name + ') says: ' + msg);
+    }
+  };
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(['ext'], function() {
+      if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
+        return window.ext[id] = plugin;
+      } else {
+        return console.error('Ext plugin (' + name + ') requires ExtJS v' + plugin._info.min + '+');
+      }
+    });
+  }
+
+}).call(this);

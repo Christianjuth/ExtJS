@@ -193,36 +193,76 @@ ext =
       #vars
       test = urlSearchSyntax
       output = false
-      #logic
-      if url?
-        #--------------vars----------------
-        #check if expression is negated
-        negate = /^\!/.test(test)
+      #check if expression is negated
+      negate = /^\!/.test(test)
+      #these charactes will be reset
+      regexEscChars = '
+        \\(
+        \\)
+        \\|
+        \\.
+        \\/
+        \\^
+        \\+
+        \\[
+        \\]
+        \\-
+        \\!
+      '
+      #if these chracters have "$" in from of them
+      #is will be removed at the end of the function
+      escChars = '
+        {
+        ,
+        }
+      '
 
-        #--------------logic---------------
-        #replace remove "!" after negate is defined
-        test = test.replace(/^\!/g,'')
-        #match "?" with anything but "/"
-        test = test.replace(/\?/g,'[^/]')
-        #replace "*" but not "**" with "([^/]+)*"
-        test = test.replace /(\*)?\*/g, ($0, $1) ->
-          if $1 then $0 else "([^/]+)*"
-        #replace "**" with ".*?"
-        test = test.replace(/\*\*/g,'.*?')
-        #replace "." with escaped "\."
-        test = test.replace(/\./g,'\.')
-        #replace "/" with escaped "\\/"
-        test = test.replace(/\//g,'\\/')
-        #replace "{ | }" with "( | )"
-        test = test.replace(/{/g,'(')
-        test = test.replace(/}/g,')')
-        test = test.replace(/,/g,'|')
-        #-----------parse regex-------------
-        test = new RegExp('^(' + test + ')$', 'g')
-        if negate
-          output = ! test.test url.replace(/\ /i, '')
-        else
-          output = test.test url.replace(/\ /i, '')
+      #replace remove "!" after negate variable is defined
+      test = test.replace(/^\!/g,'')
+
+      #reset normal regex characters defined in regexEscChars
+      regexEscChars = regexEscChars.replace(/\ /g, '|')
+      regexEscChars = new RegExp('(?=(' + regexEscChars + '))' , 'g')
+      test = test.replace(regexEscChars,'\\')
+
+      #isolate escaped escape
+      test = test.replace(/\$\$/g,'(\\$)')
+
+      #match "?" with anything but "/"
+      test = test.replace(/\?/g,'[^/]')
+
+      #replace "*" but not "**" with "([^/]+)*"
+      test = test.replace /(\*|\$)?\*/g, ($0, $1) ->
+        if $1 then $0 else "([^/]+)*"
+
+      #replace "**" with ".*?"
+      test = test.replace(/\*\*/g,'.*?')
+
+      #replace "$*" with "\*"
+      test = test.replace(/\$\*/g,'\\*')
+
+      #replace "{ | }" with "( | )"
+      test = test.replace /(\$)?{/g, ($0, $1) ->
+        if $1 then $0 else "("
+      test = test.replace /(\$)?}/g, ($0, $1) ->
+        if $1 then $0 else ")"
+      test = test.replace /(\$)?,/g, ($0, $1) ->
+        if $1 then $0 else "|"
+
+      #remove "$" from character in escChars
+      escChars = escChars.replace(/\ /g, '|')
+      escChars = new RegExp('\\$(?=(' + escChars + '))' , 'g')
+      test = test.replace(escChars,'')
+
+      #parse as regex expression
+      test = new RegExp('^(' + test + ')$', 'g')
+
+      #test the url against regex expression
+      if negate
+        output = ! test.test url.replace(/\ /i, '')
+      else
+        output = test.test url.replace(/\ /i, '')
+
       return output
 
 
@@ -239,10 +279,22 @@ ext =
           output = output.concat item
       return output
 
+    #This function will make the input text all
+    #lowercase and replace spaces with "_". This
+    #can be useful for tasks where spaces are not.
+    #allowed
     id : (id) ->
       id.toLowerCase().replace(/\ /g,"_")
 
-#global functions
+
+
+#These functions below are defined global
+#on the page and are part of the window
+#object
+
+#This function will combine alike elements of an
+#array. If you have "[1,1,2,2,3,3]" it will output
+#"[1,2,3]"
 Array.prototype.compress = ->
   #vars
   array = this
@@ -253,10 +305,20 @@ Array.prototype.compress = ->
       output.push(e)
   return output
 
-#expose globally
-window.ext = ext
-window.extJS = ext
+#This function simply remove spaces from a string.
+String.prototype.compress = ->
+  return this.replace(/\ /,'')
 
-#setup AMD support
+
+
+#Defing a global copy of the library.
+#This is important because this is where
+#ExtJS becomes accecable to the user in
+#the window object
+window.ext = ext
+
+#This function defines the "ext" AMD module.
+#Without this ExtJS would not be compatable
+#with things like requirejs.
 if typeof window.define is 'function' && window.define.amd
   window.define 'ext', ['jquery'], -> window.ext

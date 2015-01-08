@@ -31,10 +31,10 @@ plugin = {
     compatibility :
       chrome : 'full'
       safari : 'full'
-  
+
   #_aliases will be defined if ext.noti is not in use
   _aliases : ["noti"]
-  
+
   #functions
   basic : (title,content) ->
     if ext.browser is 'chrome'
@@ -46,7 +46,7 @@ plugin = {
       }, () ->
     else if ext.browser is 'safari'
       new Notification(title,{body : content})
-      
+
 }
 
 #setup AMD support

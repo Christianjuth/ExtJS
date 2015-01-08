@@ -56,7 +56,8 @@ module.exports = (grunt) ->
 
   #register tasks
   grunt.registerTask 'debug', ['coffeelint','lesslint']
-  grunt.registerTask 'assets', ['less:default','coffee:default','uglify:default']
+#  grunt.registerTask 'assets', ['less:default','coffee:default','uglify:default']
+  grunt.registerTask 'assets', ['less:default','coffee:default']
   grunt.registerTask 'img', ['multiresize', 'rsync:icons', 'imagemin']
   grunt.registerTask 'archive', ['copy:archive', 'clean:builds']
   grunt.registerTask 'package-chrome', ['compress:chrome']

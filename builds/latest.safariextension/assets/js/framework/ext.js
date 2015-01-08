@@ -1,3 +1,4 @@
+
 /*!
 Copyright 2015 by Christian Juth
 
@@ -5,4 +6,318 @@ ExtJS v0.1.0
 -------------------------------------------------------------
 This is a framework for building Chrome and Safari extensions
  */
-(function(){var a,b;a={silent:!1},b={browser:"",version:"0.1.0",ini:function(c){var d;return d=$.extend(a,c),this.browser=this.getBrowser(),window.ext._config=c,null==localStorage.options&&"chrome"===this.browser&&(localStorage.options=JSON.stringify({})),$.each(b,function(a){var b,e,f,g,h,i;if(a=window.ext[a],f=null!=a._info?a._info.name:a,null!=a._load&&(a._load(c),delete a._load),null!=a._aliases){for(i=a._aliases,g=0,h=i.length;h>g;g++)b=i[g],null==window.ext[b]?window.ext[b]=a:d.silent!==!0&&console.warn('Ext plugin "'+f+'" can not define alias "'+b+'" becuase it is taken');delete a._aliases}return null!=a._info&&d.silent!==!0&&(e=a._info.compatibility,"none"===e.chrome?console.warn('Ext plugin "'+f+'" is Safari only'):"full"!==e.chrome&&console.warn('Ext plugin "'+f+'" may contain some Safari only functions'),"none"===e.safari?console.warn('Ext plugin "'+f+'" is Chrome only'):"full"!==e.safari&&console.warn('Ext plugin "'+f+'" may contain some Chrome only functions')),delete a._info}),window.ext},getBrowser:function(){var a,b,c;return b=navigator.userAgent,c=navigator.vendor,/Chrome/.test(b)&&/Google Inc/.test(c)?a="chrome":/Safari/.test(b)&&/Apple Computer/.test(c)?a="safari":/OPR/.test(b)&&/Opera Software/.test(c)&&(a="chrome"),a},options:{_aliases:["ops","opts"],_load:function(){return"chrome"===b.browser?$.ajax({url:"../../configure.json",dataType:"json",async:!1,success:function(a){var c,d,e,f,g;for(f=a.options,g=[],d=0,e=f.length;e>d;d++)c=f[d],g.push("undefined"==typeof b.options.get(c.key)?b.options.set(c.key,c["default"]):void 0);return g}}):void 0},set:function(a,c){var d;return"chrome"===b.browser?(d=$.parseJSON(localStorage.options),d[a]=c,localStorage.options=JSON.stringify(d)):"safari"===b.browser&&(safari.extension.settings[a]=c),d[a]},get:function(a){var c,d;return"chrome"===b.browser?(c=$.parseJSON(localStorage.options),d=c[a]):"safari"===b.browser&&(d=safari.extension.settings[a]),d},reset:function(a){var c,d;return"chrome"===b.browser?(d=$.parseJSON(localStorage.options),$.ajax({url:"../../configure.json",dataType:"json",async:!1,success:function(b){return d[a]=_.filter(b.options,{key:a})[0]["default"],localStorage.options=JSON.stringify(d)}}),c=d[a]):"safari"===b.browser&&(c=safari.extension.settings.removeItem(a)),c},resetAll:function(){return $.ajax({url:"../../configure.json",dataType:"json",async:!1,success:function(a){var c,d,e,f,g;for(f=a.options,g=[],d=0,e=f.length;e>d;d++)c=f[d],g.push(b.options.reset(c.key));return g}}),localStorage.options}},menu:{icon:{setIcon:function(a){var c,d;return"chrome"===b.browser?(c={path:chrome.extension.getURL("assets/icons/"+a)},chrome.browserAction.setIcon(c)):"safari"===b.browser?(d=safari.extension.baseURI+"icons/"+a,safari.extension.toolbarItems[0].image=d):void 0},click:function(a){return"chrome"===b.browser?chrome.browserAction.onClicked.addListener(function(){return a()}):"safari"===b.browser?safari.application.addEventListener("command",function(b){return"icon-clicked"===b.command?a():void 0},!1):void 0},setBadge:function(a){return a=parseInt(a),"chrome"===b.browser?(0===a&&(a=""),chrome.browserAction.setBadgeText({text:String(a)}),chrome.browserAction.setBadgeBackgroundColor({color:"#8E8E91"})):"safari"===b.browser&&(safari.extension.toolbarItems[0].badge=a),""===a&&(a=0),a},getBadge:function(a){return"chrome"===b.browser?chrome.browserAction.getBadgeText({},a):void 0}}},match:{url:function(a,b){var c,d,e;return e=b,d=!1,null!=a&&(c=/^\!/.test(e),e=e.replace(/^\!/g,""),e=e.replace(/\?/g,"[^/]"),e=e.replace(/(\*)?\*/g,function(a,b){return b?a:"([^/]+)*"}),e=e.replace(/\*\*/g,".*?"),e=e.replace(/\./g,"."),e=e.replace(/\//g,"\\/"),e=e.replace(/{/g,"("),e=e.replace(/}/g,")"),e=e.replace(/,/g,"|"),e=new RegExp("^("+e+")$","g"),d=c?!e.test(a.replace(/\ /i,"")):e.test(a.replace(/\ /i,""))),d}},parse:{array:function(){var a,b,c,d,e;for(c=[],a=arguments,d=0,e=a.length;e>d;d++)b=a[d],"string"==typeof b?c.push(b):c=c.concat(b);return c},id:function(a){return a.toLowerCase().replace(/\ /g,"_")}}},Array.prototype.compress=function(){var a,b;return a=this,b=[],$.each(a,function(a,c){return-1===$.inArray(c,b)?b.push(c):void 0}),b},window.ext=b,window.extJS=b,"function"==typeof window.define&&window.define.amd&&window.define("ext",["jquery"],function(){return window.ext})}).call(this);
+
+(function() {
+  var defultOptions, ext;
+
+  defultOptions = {
+    silent: false
+  };
+
+  ext = {
+    browser: '',
+    version: '0.1.0',
+    ini: function(userOptions) {
+      var options;
+      options = $.extend(defultOptions, userOptions);
+      this.browser = this.getBrowser();
+      window.ext._config = userOptions;
+      if ((localStorage.options == null) && this.browser === 'chrome') {
+        localStorage.options = JSON.stringify({});
+      }
+      $.each(ext, function(item) {
+        var alias, compatibility, name, _i, _len, _ref;
+        item = window.ext[item];
+        if (item._info != null) {
+          name = item._info.name;
+        } else {
+          name = item;
+        }
+        if (item._load != null) {
+          item._load(userOptions);
+          delete item._load;
+        }
+        if (item._aliases != null) {
+          _ref = item._aliases;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            alias = _ref[_i];
+            if (window.ext[alias] == null) {
+              window.ext[alias] = item;
+            } else if (options.silent !== true) {
+              console.warn('Ext plugin "' + name + '" can not define alias "' + alias + '" becuase it is taken');
+            }
+          }
+          delete item._aliases;
+        }
+        if ((item._info != null) && options.silent !== true) {
+          compatibility = item._info.compatibility;
+          if (compatibility.chrome === 'none') {
+            console.warn('Ext plugin "' + name + '" is Safari only');
+          } else if (compatibility.chrome !== 'full') {
+            console.warn('Ext plugin "' + name + '" may contain some Safari only functions');
+          }
+          if (compatibility.safari === 'none') {
+            console.warn('Ext plugin "' + name + '" is Chrome only');
+          } else if (compatibility.safari !== 'full') {
+            console.warn('Ext plugin "' + name + '" may contain some Chrome only functions');
+          }
+        }
+        return delete item._info;
+      });
+      return window.ext;
+    },
+    getBrowser: function() {
+      var browser, userAgent, vendor;
+      userAgent = navigator.userAgent;
+      vendor = navigator.vendor;
+      if (/Chrome/.test(userAgent) && /Google Inc/.test(vendor)) {
+        browser = 'chrome';
+      } else if (/Safari/.test(userAgent) && /Apple Computer/.test(vendor)) {
+        browser = 'safari';
+      } else if (/OPR/.test(userAgent) && /Opera Software/.test(vendor)) {
+        browser = 'chrome';
+      }
+      return browser;
+    },
+    options: {
+      _aliases: ['ops', 'opts'],
+      _load: function() {
+        if (ext.browser === 'chrome') {
+          return $.ajax({
+            url: '../../configure.json',
+            dataType: 'json',
+            async: false,
+            success: function(data) {
+              var option, _i, _len, _ref, _results;
+              _ref = data.options;
+              _results = [];
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                option = _ref[_i];
+                if (typeof ext.options.get(option.key) === 'undefined') {
+                  _results.push(ext.options.set(option.key, option["default"]));
+                } else {
+                  _results.push(void 0);
+                }
+              }
+              return _results;
+            }
+          });
+        }
+      },
+      set: function(key, value) {
+        var options;
+        if (ext.browser === 'chrome') {
+          options = $.parseJSON(localStorage.options);
+          options[key] = value;
+          localStorage.options = JSON.stringify(options);
+        } else if (ext.browser === 'safari') {
+          safari.extension.settings[key] = value;
+        }
+        return options[key];
+      },
+      get: function(key) {
+        var options, requestedOption;
+        if (ext.browser === 'chrome') {
+          options = $.parseJSON(localStorage.options);
+          requestedOption = options[key];
+        } else if (ext.browser === 'safari') {
+          requestedOption = safari.extension.settings[key];
+        }
+        return requestedOption;
+      },
+      reset: function(key) {
+        var optionReset, options;
+        if (ext.browser === 'chrome') {
+          options = $.parseJSON(localStorage.options);
+          $.ajax({
+            url: '../../configure.json',
+            dataType: 'json',
+            async: false,
+            success: function(data) {
+              options[key] = _.filter(data.options, {
+                'key': key
+              })[0]["default"];
+              return localStorage.options = JSON.stringify(options);
+            }
+          });
+          optionReset = options[key];
+        } else if (ext.browser === 'safari') {
+          optionReset = safari.extension.settings.removeItem(key);
+        }
+        return optionReset;
+      },
+      resetAll: function(exceptions) {
+        $.ajax({
+          url: '../../configure.json',
+          dataType: 'json',
+          async: false,
+          success: function(data) {
+            var item, _i, _len, _ref, _results;
+            _ref = data.options;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              item = _ref[_i];
+              _results.push(ext.options.reset(item.key));
+            }
+            return _results;
+          }
+        });
+        return localStorage.options;
+      }
+    },
+    menu: {
+      icon: {
+        setIcon: function(url) {
+          var icon, iconUrl;
+          if (ext.browser === 'chrome') {
+            icon = {
+              path: chrome.extension.getURL('assets/icons/' + url)
+            };
+            return chrome.browserAction.setIcon(icon);
+          } else if (ext.browser === 'safari') {
+            iconUrl = safari.extension.baseURI + 'icons/' + url;
+            return safari.extension.toolbarItems[0].image = iconUrl;
+          }
+        },
+        click: function(callback) {
+          if (ext.browser === 'chrome') {
+            return chrome.browserAction.onClicked.addListener(function() {
+              return callback();
+            });
+          } else if (ext.browser === 'safari') {
+            return safari.application.addEventListener('command', function(event) {
+              if (event.command === 'icon-clicked') {
+                return callback();
+              }
+            }, false);
+          }
+        },
+        setBadge: function(number) {
+          number = parseInt(number);
+          if (ext.browser === 'chrome') {
+            if (number === 0) {
+              number = '';
+            }
+            chrome.browserAction.setBadgeText({
+              text: String(number)
+            });
+            chrome.browserAction.setBadgeBackgroundColor({
+              color: '#8E8E91'
+            });
+          } else if (ext.browser === 'safari') {
+            safari.extension.toolbarItems[0].badge = number;
+          }
+          if (number === '') {
+            number = 0;
+          }
+          return number;
+        },
+        getBadge: function(callback) {
+          if (ext.browser === 'chrome') {
+            return chrome.browserAction.getBadgeText({}, callback);
+          }
+        }
+      }
+    },
+    match: {
+      url: function(url, urlSearchSyntax) {
+        var escChars, negate, output, regexEscChars, test;
+        test = urlSearchSyntax;
+        output = false;
+        negate = /^\!/.test(test);
+        regexEscChars = '\\( \\) \\| \\. \\/ \\^ \\+ \\[ \\] \\- \\!';
+        escChars = '{ , }';
+        test = test.replace(/^\!/g, '');
+        regexEscChars = regexEscChars.replace(/\ /g, '|');
+        regexEscChars = new RegExp('(?=(' + regexEscChars + '))', 'g');
+        test = test.replace(regexEscChars, '\\');
+        test = test.replace(/\$\$/g, '(\\$)');
+        test = test.replace(/\?/g, '[^/]');
+        test = test.replace(/(\*|\$)?\*/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return "([^/]+)*";
+          }
+        });
+        test = test.replace(/\*\*/g, '.*?');
+        test = test.replace(/\$\*/g, '\\*');
+        test = test.replace(/(\$)?{/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return "(";
+          }
+        });
+        test = test.replace(/(\$)?}/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return ")";
+          }
+        });
+        test = test.replace(/(\$)?,/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return "|";
+          }
+        });
+        escChars = escChars.replace(/\ /g, '|');
+        escChars = new RegExp('\\$(?=(' + escChars + '))', 'g');
+        test = test.replace(escChars, '');
+        test = new RegExp('^(' + test + ')$', 'g');
+        if (negate) {
+          output = !test.test(url.replace(/\ /i, ''));
+        } else {
+          output = test.test(url.replace(/\ /i, ''));
+        }
+        return output;
+      }
+    },
+    parse: {
+      array: function() {
+        var array, item, output, _i, _len;
+        output = [];
+        array = arguments;
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          item = array[_i];
+          if (typeof item === "string") {
+            output.push(item);
+          } else {
+            output = output.concat(item);
+          }
+        }
+        return output;
+      },
+      id: function(id) {
+        return id.toLowerCase().replace(/\ /g, "_");
+      }
+    }
+  };
+
+  Array.prototype.compress = function() {
+    var array, output;
+    array = this;
+    output = [];
+    $.each(array, function(i, e) {
+      if ($.inArray(e, output) === -1) {
+        return output.push(e);
+      }
+    });
+    return output;
+  };
+
+  String.prototype.compress = function() {
+    return this.replace(/\ /, '');
+  };
+
+  window.ext = ext;
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define('ext', ['jquery'], function() {
+      return window.ext;
+    });
+  }
+
+}).call(this);

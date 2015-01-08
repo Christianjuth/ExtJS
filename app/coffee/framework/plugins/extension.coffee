@@ -68,7 +68,7 @@ where this code is updated.
 https://github.com/Christianjuth/extension_framework/tree/plugin
 ###
 name = plugin._info.name
-id = ext.parse.id(name)
+id = name.toLowerCase().replace(/\ /g,"_")
 #console logging
 log = {
   error : (msg) -> console.error 'Ext plugin (' + name + ') says: ' + msg

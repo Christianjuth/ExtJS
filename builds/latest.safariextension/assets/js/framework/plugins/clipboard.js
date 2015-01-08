@@ -1,1 +1,101 @@
-(function(){var a;a={_info:{authors:["Christian Juth"],name:"Clipboard",version:"0.5.0",min:"0.1.0",compatibility:{chrome:"full",safari:"none"}},_aliases:["clippy"],write:function(a){var b,c,d;return c=a,d=c,b=$("<input/>"),b.val(c),$("body").append(b),b.select(),document.execCommand("copy"),b.remove(),d},read:function(){var a,b,c;return a="",b="",c=$("<input/>"),$("body").append(c),c.select(),document.execCommand("paste"),b=c.val(),c.remove(),b}},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(){var b,c;return c=a._info.name,b=ext.parse.id(c),null==a._info.min||a._info.min<=window.ext.version?window.ext[b]=a:console.error("Ext plugin ("+c+") required a minimum of ExtJS v"+a._info.min)})}).call(this);
+
+/*!
+Licence - 2015
+--------------------------------
+This plugin is protected by the MIT licence and is open source.
+I ask you do not remove and/or modify this copyright in any way.
+This plugin is built separately from the ExtJS framework/library
+and therefor falls under its own licence (MIT).  ExtJS and other
+contributors can not claim ownership.  All contributors agree their
+work is open source and falls under this plugins licence (MIT).
+
+https://github.com/Christianjuth/
+ */
+
+(function() {
+  var id, log, name, plugin;
+
+  plugin = {
+    _info: {
+      authors: ['Christian Juth'],
+      name: 'Clipboard',
+      version: '0.5.0',
+      min: '0.1.0',
+      compatibility: {
+        chrome: 'full',
+        safari: 'none'
+      }
+    },
+    _aliases: ['clippy'],
+    write: function(text) {
+      var copyFrom, input, output;
+      input = text;
+      output = input;
+      copyFrom = $('<input/>');
+      copyFrom.val(input);
+      $('body').append(copyFrom);
+      copyFrom.select();
+      document.execCommand('copy');
+      copyFrom.remove();
+      return output;
+    },
+    read: function() {
+      var input, output, pasteTo;
+      input = "";
+      output = "";
+      pasteTo = $('<input/>');
+      $('body').append(pasteTo);
+      pasteTo.select();
+      document.execCommand('paste');
+      output = pasteTo.val();
+      pasteTo.remove();
+      return output;
+    }
+  };
+
+
+  /*
+  From the ExtJS team
+  -------------------
+  The code below was designed by the ExtJS team to provide useful info to the
+  developers. We ask you do not change this code unless necessary. By keeping
+  this standard on all plugins, we hope to make development easy by providing
+  useful info to developers.  In addition to logging, the code below also
+  contains the AMD function for defining the plugin.  This waits for the ExtJS
+  AMD module to define the library itself, and then your plugin is defined
+  which prevents any undefined errors.  Although not suggested, plugins can be
+  loaded before the ExtJS library.  The functionality below assures ease of
+  use. We also ask you keep this code up to date with any changes that may
+  occur in the future.  Please refer to the sample plugin on the GitHub repo
+  where this code is updated.
+  
+  https://github.com/Christianjuth/extension_framework/tree/plugin
+   */
+
+  name = plugin._info.name;
+
+  id = name.toLowerCase().replace(/\ /g, "_");
+
+  log = {
+    error: function(msg) {
+      return console.error('Ext plugin (' + name + ') says: ' + msg);
+    },
+    warn: function(msg) {
+      return console.warn('Ext plugin (' + name + ') says: ' + msg);
+    },
+    info: function(msg) {
+      return console.warn('Ext plugin (' + name + ') says: ' + msg);
+    }
+  };
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(['ext'], function() {
+      if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
+        return window.ext[id] = plugin;
+      } else {
+        return console.error('Ext plugin (' + name + ') requires ExtJS v' + plugin._info.min + '+');
+      }
+    });
+  }
+
+}).call(this);

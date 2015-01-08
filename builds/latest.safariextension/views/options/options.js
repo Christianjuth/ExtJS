@@ -1,1 +1,65 @@
-(function(){require(["jquery","underscore","bootstrap","ext","extPlugin/extension"],function(a,b,c,d){var e;return d.ini(),e={create:function(b){var c;return c='<div class="row"><label class="col-sm-4 control-label right 400">'+b.title+'</label><div class="col-sm-8">'+this.types[b.type](b)+"</div></div>",c=a(c).appendTo("#settings"),c.find("input").change(function(){return d.options.set(b.key,a(this).val())})},types:{text:function(a){var b;return b='<input type="text" class="form-control" value="'+d.options.get(a.key)+'">'},number:function(a){var b;return b='<input type="text" class="form-control" value="'+d.options.get(a.key)+'">'},textArea:function(a){var b;return b='<textarea class="form-control" rows="4">'+d.options.get(a.key)+"</textarea>"},checkbox:function(a){var b;return b="true"===String(d.options.get(a.key))?'<input type="checkbox" checked>':'<input type="checkbox">'},select:function(b){var c,d,e,f,g;for(c='<select id="disabledSelect" class="form-control"></select>',g=b.options,e=0,f=g.length;f>e;e++)d=g[e],c=a(c).append("<option>"+d+"</option>");return c.prop("outerHTML")}}},a.getJSON("../../configure.json",function(a){var b,c,d,f,g;for(f=a.options,g=[],c=0,d=f.length;d>c;c++)b=f[c],g.push(e.create({title:b.title,key:b.key,type:b.type,options:b.options}));return g})})}).call(this);
+(function() {
+  require(["jquery", "underscore", "bootstrap", "ext", "extPlugin/extension"], function($, _, bootstrap, ext) {
+    var option;
+    ext.ini();
+    option = {
+      create: function(json) {
+        var elm;
+        elm = '<div class="row"><label class="col-sm-4 control-label right 400">' + json.title + '</label><div class="col-sm-8">' + this.types[json.type](json) + '</div></div>';
+        elm = $(elm).appendTo("#settings");
+        return elm.find("input").change(function() {
+          return ext.options.set(json.key, $(this).val());
+        });
+      },
+      types: {
+        text: function(json) {
+          var elm;
+          return elm = '<input type="text" class="form-control" value="' + ext.options.get(json.key) + '">';
+        },
+        number: function(json) {
+          var elm;
+          return elm = '<input type="text" class="form-control" value="' + ext.options.get(json.key) + '">';
+        },
+        textArea: function(json) {
+          var elm;
+          return elm = '<textarea class="form-control" rows="4">' + ext.options.get(json.key) + '</textarea>';
+        },
+        checkbox: function(json) {
+          var elm;
+          if (String(ext.options.get(json.key)) === "true") {
+            elm = '<input type="checkbox" checked>';
+          } else {
+            elm = '<input type="checkbox">';
+          }
+          return elm;
+        },
+        select: function(json) {
+          var elm, item, _i, _len, _ref;
+          elm = '<select id="disabledSelect" class="form-control"></select>';
+          _ref = json.options;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            item = _ref[_i];
+            elm = $(elm).append('<option>' + item + '</option>');
+          }
+          return elm.prop('outerHTML');
+        }
+      }
+    };
+    return $.getJSON("../../configure.json", function(data) {
+      var item, _i, _len, _ref, _results;
+      _ref = data.options;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        _results.push(option.create({
+          title: item.title,
+          key: item.key,
+          type: item.type,
+          options: item.options
+        }));
+      }
+      return _results;
+    });
+  });
+
+}).call(this);
