@@ -51,26 +51,12 @@ module.exports = (grunt) ->
 
   }
 
-  grunt.registerTask 'debug', [
+  grunt.registerTask 'default', [
     'coffeelint'
+    'clean'
     'browserDependencies'
     'coffee'
-  ]
-
-  grunt.registerTask 'compile', [
-    'browserDependencies:define'
-    'coffee'
-  ]
-
-  #register tasks
-  grunt.registerTask 'package', [
-    'clean'
-    'compile'
     'uglify'
-  ]
-
-  grunt.registerTask 'default', [
-    'debug'
   ]
 
   grunt.task.run('notify_hooks')
