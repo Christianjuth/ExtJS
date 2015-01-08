@@ -14,6 +14,8 @@ module.exports = (grunt) ->
 
     #combine coffeescript files
     coffee :
+      options :
+        join: true
       default :
         files :
           'dist/plugin.js' : [
