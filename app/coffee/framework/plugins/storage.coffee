@@ -1,74 +1,87 @@
 ###!
-Licence - 2015
---------------------------------
-This plugin is protected by the MIT licence and is open source.
-I ask you do not remove and/or modify this copyright in any way.
-This plugin is built separately from the ExtJS framework/library
-and therefor falls under its own licence (MIT).  ExtJS and other
-contributors can not claim ownership.  All contributors agree their
-work is open source and falls under this plugins licence (MIT).
+The MIT License (MIT)
+
+Copyright (c) 2014 Christian Juth
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 https://github.com/Christianjuth/
 ###
 
 plugin = {
 
-  _info :
-    authors : ['Christian Juth']
-    name : 'Storage'
-    version : '0.1.0'
-    min : '0.1.0'
-    compatibility :
-      chrome : 'full'
-      safari : 'full'
+_info :
+  authors : ['Christian Juth']
+  name : 'Storage'
+  version : '0.1.0'
+  min : '0.1.0'
+  compatibility :
+    chrome : 'full'
+    safari : 'full'
 
-  _aliases : ['localStorage','local']
+_aliases : ['localStorage','local']
 
-  _load : ->
-    if !localStorage.storage?
-      localStorage.storage = JSON.stringify({})
+_load : ->
+  if !localStorage.storage?
+    localStorage.storage = JSON.stringify({})
 
-    $.ajax {
-      url: '../../configure.json',
-      dataType: 'json',
-      async: false,
-      success: (data) ->
-        for item in data.storage
-          if typeof ext.storage.get(item.key) is 'undefined'
-            ext.storage.set(item.key, item.default)
-    }
-
-
-  #functions
-  set : (key, value) ->
-    storage = $.parseJSON localStorage.storage
-    storage[key] = value
-    localStorage.storage = JSON.stringify storage
+  $.ajax {
+    url: '../../configure.json',
+    dataType: 'json',
+    async: false,
+    success: (data) ->
+      for item in data.storage
+        if typeof ext.storage.get(item.key) is 'undefined'
+          ext.storage.set(item.key, item.default)
+  }
 
 
-  get : (key) ->
-    storage = $.parseJSON localStorage.storage
-    storage[key]
+#functions
+set : (key, value) ->
+  storage = $.parseJSON localStorage.storage
+  storage[key] = value
+  localStorage.storage = JSON.stringify storage
 
 
-  remove : (key) ->
-    storage = $.parseJSON localStorage.storage
-    delete storage[key]
-    localStorage.storage = JSON.stringify storage
+get : (key) ->
+  storage = $.parseJSON localStorage.storage
+  storage[key]
 
 
-  removeAll : (exceptions) ->
-    for item in ext.storage.dump()
-      if item not in exceptions
-        ext.storage.remove(item)
-    ext.storage.dump()
+remove : (key) ->
+  storage = $.parseJSON localStorage.storage
+  delete storage[key]
+  localStorage.storage = JSON.stringify storage
 
 
-  dump : ->
-    output = []
-    $.each $.parseJSON(localStorage.storage), (key,val) ->
-      output.push key
-    output
+removeAll : (exceptions) ->
+  for item in ext.storage.dump()
+    if item not in exceptions
+      ext.storage.remove(item)
+  ext.storage.dump()
+
+
+dump : ->
+  output = []
+  $.each $.parseJSON(localStorage.storage), (key,val) ->
+    output.push key
+  output
 
 }
 
