@@ -25,7 +25,7 @@
       var options;
       options = $.extend(defultOptions, userOptions);
       this.browser = this.getBrowser();
-      window.ext._config = userOptions;
+      window.ext._config = options;
       if ((localStorage.options == null) && this.browser === 'chrome') {
         localStorage.options = JSON.stringify({});
       }
