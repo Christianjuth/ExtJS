@@ -7,14 +7,9 @@
   "package" : {
     "options" : {
       "exclude" : [
-        "**/icons/**",
         "*.png",
-        "**/coffee/**",
-        "**/less/**",
         "**/*.coffee",
-        "**/*.less",
-        "**/assets/css/**",
-        "**/assets/js/**"
+        "**/*.less"
       ],
       "src" : "app/",
       "dest" : "builds/latest.safariextension",
@@ -24,8 +19,8 @@
 
   "icons" : {
     "options" : {
-      "src" : "app/icons/menu-icons/",
-      "dest" : "builds/latest.safariextension/assets/icons",
+      "src" : "app/menu-icons/",
+      "dest" : "builds/latest.safariextension/menu-icons",
       "delete" : true
     }
   }

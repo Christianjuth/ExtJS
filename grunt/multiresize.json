@@ -1,6 +1,6 @@
 {
   "default" : {
-    "src" : "app/icons/icon.png",
+    "src" : "app/icon.png",
 
     "dest" : [
       "builds/latest.safariextension/icon-128.png",

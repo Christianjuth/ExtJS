@@ -9,7 +9,7 @@
 
   "browser_action": {
     "default_icon": {
-      "19": "assets/icons/icon-19.png",
+      "19": "menu-icons/icon-19.png",
       "38": "icon-38.png"
     }
   },
@@ -30,8 +30,8 @@
   ],
 
   "background" : {
-    "page": "views/background/background.html"
+    "page": "pages/background/background.html"
   },
 
-  "options_page": "views/options/options.html"
+  "options_page": "pages/options/options.html"
 }

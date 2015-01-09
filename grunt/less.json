@@ -6,16 +6,9 @@
     "files" : [
       {
         "expand" : true,
-        "cwd" : "app/less",
+        "cwd" : "app",
         "src" : ["**/*.less"],
-        "dest" : "builds/latest.safariextension/assets/css/<%= srcDir %>/",
-        "ext" : ".css"
-      },
-      {
-        "expand" : true,
-        "cwd" : "app/views",
-        "src" : ["**/*.less"],
-        "dest" : "builds/latest.safariextension/views/<%= srcDir %>/",
+        "dest" : "builds/latest.safariextension/<%= srcDir %>/",
         "ext" : ".css"
       }
     ]

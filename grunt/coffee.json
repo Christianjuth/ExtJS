@@ -3,16 +3,9 @@
     "files" : [
       {
         "expand" : true,
-        "cwd" : "app/coffee",
+        "cwd" : "app",
         "src" : ["**/*.coffee"],
-        "dest" : "builds/latest.safariextension/assets/js/<%= srcDir %>/",
-        "ext" : ".js"
-      },
-      {
-        "expand" : true,
-        "cwd" : "app/views",
-        "src" : ["**/*.coffee"],
-        "dest" : "builds/latest.safariextension/views/<%= srcDir %>/",
+        "dest" : "builds/latest.safariextension/<%= srcDir %>/",
         "ext" : ".js"
       }
     ]
