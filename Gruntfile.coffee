@@ -1,4 +1,5 @@
 module.exports = (grunt) ->
+
   #require it at the top and pass in the grunt instance
   require('time-grunt')(grunt)
   require('load-grunt-tasks')(grunt)
@@ -19,6 +20,8 @@ module.exports = (grunt) ->
     coffee :
       options :
         join: true
+        sourceMap : true
+        joinExt : '.coffee'
       framework :
         files :
           'ext.js' : [

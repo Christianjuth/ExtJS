@@ -1,2 +1,2 @@
-#define local framework object
+#top of extjs object container
 ext = {

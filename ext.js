@@ -130,57 +130,77 @@
       }
     },
     menu: {
-      icon: {
-        setIcon: function(url) {
-          var icon, iconUrl;
-          if (ext.browser === 'chrome') {
-            icon = {
-              path: chrome.extension.getURL('assets/icons/' + url)
-            };
-            return chrome.browserAction.setIcon(icon);
-          } else if (ext.browser === 'safari') {
-            iconUrl = safari.extension.baseURI + 'icons/' + url;
-            return safari.extension.toolbarItems[0].image = iconUrl;
-          }
-        },
-        click: function(callback) {
-          if (ext.browser === 'chrome') {
-            return chrome.browserAction.onClicked.addListener(function() {
-              return callback();
-            });
-          } else if (ext.browser === 'safari') {
-            return safari.application.addEventListener('command', function(event) {
-              if (event.command === 'icon-clicked') {
-                return callback();
-              }
-            }, false);
-          }
-        },
-        setBadge: function(number) {
-          number = parseInt(number);
-          if (ext.browser === 'chrome') {
-            if (number === 0) {
-              number = '';
-            }
-            chrome.browserAction.setBadgeText({
-              text: String(number)
-            });
-            chrome.browserAction.setBadgeBackgroundColor({
-              color: '#8E8E91'
-            });
-          } else if (ext.browser === 'safari') {
-            safari.extension.toolbarItems[0].badge = number;
-          }
-          if (number === '') {
-            number = 0;
-          }
-          return number;
-        },
-        getBadge: function(callback) {
-          if (ext.browser === 'chrome') {
-            return chrome.browserAction.getBadgeText({}, callback);
-          }
+      setIcon: function(url) {
+        icon;
+        var icon, iconUrl;
+        if (ext.browser === 'chrome') {
+          icon = {
+            path: chrome.extension.getURL('menu-icons/' + url + '-16.png')
+          };
+          chrome.browserAction.setIcon(icon);
+        } else if (ext.browser === 'safari') {
+          iconUrl = safari.extension.baseURI + 'menu-icons/' + url + '-19.png';
+          safari.extension.toolbarItems[0].image = iconUrl;
         }
+        return icon;
+      },
+      resetIcon: function() {
+        icon;
+        var icon, iconUrl;
+        if (ext.browser === 'chrome') {
+          icon = {
+            path: chrome.extension.getURL('menu-icons/icon-16.png')
+          };
+          chrome.browserAction.setIcon(icon);
+        } else if (ext.browser === 'safari') {
+          iconUrl = safari.extension.baseURI + 'menu-icons/icon-19.png';
+          safari.extension.toolbarItems[0].image = iconUrl;
+        }
+        return icon;
+      },
+      click: function(callback) {
+        if (ext.browser === 'chrome') {
+          return chrome.browserAction.onClicked.addListener(function() {
+            return callback();
+          });
+        } else if (ext.browser === 'safari') {
+          return safari.application.addEventListener('command', function(event) {
+            if (event.command === 'icon-clicked') {
+              return callback();
+            }
+          }, false);
+        }
+      },
+      setBadge: function(number) {
+        number = parseInt(number);
+        if (ext.browser === 'chrome') {
+          if (number === 0) {
+            number = '';
+          }
+          chrome.browserAction.setBadgeText({
+            text: String(number)
+          });
+          chrome.browserAction.setBadgeBackgroundColor({
+            color: '#8E8E91'
+          });
+        } else if (ext.browser === 'safari') {
+          safari.extension.toolbarItems[0].badge = number;
+        }
+        if (number === '') {
+          number = 0;
+        }
+        return number;
+      },
+      getBadge: function(callback) {
+        output;
+        var output;
+        if (ext.browser === 'chrome') {
+          output = chrome.browserAction.getBadgeText({}, callback);
+        }
+        if (ext.browser === 'safari') {
+          output = safari.extension.toolbarItems[0].badge;
+        }
+        return output;
       }
     },
     options: {
@@ -315,3 +335,5 @@
   }
 
 }).call(this);
+
+//# sourceMappingURL=ext.js.map
