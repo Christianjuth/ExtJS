@@ -6,6 +6,8 @@
   };
 
   ext = {
+    browser: '',
+    version: '0.1.0',
     getBrowser: function() {
       var browser, userAgent, vendor;
       userAgent = navigator.userAgent;
@@ -28,7 +30,7 @@
         localStorage.options = JSON.stringify({});
       }
       $.each(ext, function(item) {
-        var alias, compatibility, name, _i, _len, _ref;
+        var alias, compatibility, msg, name, _i, _len, _ref;
         item = window.ext[item];
         if (item._info != null) {
           name = item._info.name;
@@ -46,7 +48,8 @@
             if (window.ext[alias] == null) {
               window.ext[alias] = item;
             } else if (options.silent !== true) {
-              console.warn('Ext plugin "' + name + '" can not define alias "' + alias + '" becuase it is taken');
+              msg = 'Ext plugin "' + name + '" can\'t define alias "' + alias + '"';
+              console.warn(msg);
             }
           }
           delete item._aliases;
@@ -56,12 +59,14 @@
           if (compatibility.chrome === 'none') {
             console.warn('Ext plugin "' + name + '" is Safari only');
           } else if (compatibility.chrome !== 'full') {
-            console.warn('Ext plugin "' + name + '" may contain some Safari only functions');
+            msg = 'Ext plugin "' + name + '" may contain some Safari only functions';
+            console.warn(msg);
           }
           if (compatibility.safari === 'none') {
             console.warn('Ext plugin "' + name + '" is Chrome only');
           } else if (compatibility.safari !== 'full') {
-            console.warn('Ext plugin "' + name + '" may contain some Chrome only functions');
+            msg = 'Ext plugin "' + name + '" may contain some Chrome only functions';
+            console.warn(msg);
           }
         }
         return delete item._info;

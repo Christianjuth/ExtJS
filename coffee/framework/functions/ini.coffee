@@ -34,7 +34,9 @@ ini : (userOptions) ->
 
         #alias warning
         else if options.silent isnt true
-          console.warn 'Ext plugin "' + name + '" can not define alias "' + alias + '" becuase it is taken'
+          msg = 'Ext plugin "'+name+'" can\'t define alias "'+alias+'"'
+          console.warn msg
+
       delete item._aliases
 
     #check compatibility
@@ -44,13 +46,15 @@ ini : (userOptions) ->
       if compatibility.chrome is 'none'
         console.warn 'Ext plugin "' + name + '" is Safari only'
       else if compatibility.chrome isnt 'full'
-        console.warn 'Ext plugin "' + name + '" may contain some Safari only functions'
+        msg = 'Ext plugin "' + name + '" may contain some Safari only functions'
+        console.warn msg
 
       #safari compatibility
       if compatibility.safari is 'none'
         console.warn 'Ext plugin "' + name + '" is Chrome only'
       else if compatibility.safari isnt 'full'
-        console.warn 'Ext plugin "' + name + '" may contain some Chrome only functions'
+        msg = 'Ext plugin "' + name + '" may contain some Chrome only functions'
+        console.warn msg
 
     delete item._info
   return window.ext
