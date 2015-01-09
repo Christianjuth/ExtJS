@@ -53,19 +53,30 @@ module.exports = (grunt) ->
     browserDependencies :
       define :
         dir : 'plugin',
-        files: [{
-          'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/ExtJS_Library/plugin/plugin/define.coffee'
-        }]
+        files: [
+          {'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/ExtJS_Library/plugin/plugin/define.coffee'}
+        ]
+      assets :
+        dir : 'test/js',
+        files: [
+          {'jquery.js': 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'}
+          {'require.js': 'http://requirejs.org/docs/release/2.1.15/minified/require.js'}
+          {'ext.js': 'https://raw.githubusercontent.com/Christianjuth/ExtJS_Library/master/ext.js'}
+          {'underscore.js': 'http://underscorejs.org/underscore-min.js'}
+        ]
 
     clean :
-      define : ['plugin/define.coffee']
+      default : [
+        'plugin/define.coffee'
+        'test/js/ext.js'
+      ]
 
   }
 
   grunt.registerTask 'default', [
     'coffeelint'
-    'clean'
-    'browserDependencies'
+#    'clean'
+#    'browserDependencies'
     'coffee'
     'uglify'
     'copy'

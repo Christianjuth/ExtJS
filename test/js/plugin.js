@@ -26,7 +26,22 @@ SOFTWARE.
 (function() {
   var ID, NAME, log, plugin;
 
-  plugin = {};
+  plugin = {
+    _info: {
+      authors: ['Your Name'],
+      name: 'Hello World',
+      version: '0.1.0',
+      min: '0.1.0',
+      compatibility: {
+        chrome: 'full',
+        safari: 'full'
+      }
+    },
+    _aliases: ['hello'],
+    helloWorld: function() {
+      return alert('hello world');
+    }
+  };
 
 
   /*
@@ -45,7 +60,7 @@ SOFTWARE.
   https://github.com/Christianjuth/extension_framework/tree/plugin
    */
 
-  NAME = plugin._info.NAME;
+  NAME = plugin._info.name;
 
   ID = NAME.toLowerCase().replace(/\ /g, "_");
 
@@ -60,7 +75,7 @@ SOFTWARE.
     },
     info: function(msg) {
       if (ext._config.silent !== true) {
-        return console.warn('Ext plugin (' + NAME + ') says: ' + msg);
+        return console.log('Ext plugin (' + NAME + ') says: ' + msg);
       }
     }
   };
@@ -68,7 +83,7 @@ SOFTWARE.
   if (typeof window.define === 'function' && window.define.amd) {
     window.define(['ext'], function() {
       var VERSION;
-      if ((plugin._info.min == null) || plugin._info.min <= window.ext.VERSION) {
+      if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
         return window.ext[ID] = plugin;
       } else {
         VERSION = plugin._info.min;

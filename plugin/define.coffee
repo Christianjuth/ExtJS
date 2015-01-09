@@ -13,7 +13,7 @@ use.
 
 https://github.com/Christianjuth/extension_framework/tree/plugin
 ###
-NAME = plugin._info.NAME
+NAME = plugin._info.name
 ID = NAME.toLowerCase().replace(/\ /g,"_")
 #console logging
 log = {
@@ -23,13 +23,13 @@ warn : (msg) ->
     console.warn 'Ext plugin (' + NAME + ') says: ' + msg
 info : (msg) ->
   if ext._config.silent isnt true
-    console.warn 'Ext plugin (' + NAME + ') says: ' + msg
+    console.log 'Ext plugin (' + NAME + ') says: ' + msg
 }
 #setup AMD support if browser supports the AMD define function
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->
     #load ExtJS meets VERSION requirements
-    if !plugin._info.min? or plugin._info.min <= window.ext.VERSION
+    if !plugin._info.min? or plugin._info.min <= window.ext.version
       window.ext[ID] = plugin
     else
       VERSION = plugin._info.min
