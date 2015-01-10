@@ -271,6 +271,8 @@
         return optionReset;
       },
       resetAll: function(exceptions) {
+        var output;
+        output = [];
         $.ajax({
           url: '../../configure.json',
           dataType: 'json',
@@ -281,21 +283,45 @@
             _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               item = _ref[_i];
-              _results.push(ext.options.reset(item.key));
+              if (exceptions.indexOf(item === -1)) {
+                _results.push(output.push(ext.options.reset(item.key)));
+              } else {
+                _results.push(void 0);
+              }
             }
             return _results;
           }
         });
-        return localStorage.options;
+        return output;
+      },
+      dump: function() {
+        var output;
+        output = [];
+        $.ajax({
+          url: '../../configure.json',
+          dataType: 'json',
+          async: false,
+          success: function(data) {
+            var item, _i, _len, _ref, _results;
+            _ref = data.options;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              item = _ref[_i];
+              _results.push(output.push(item));
+            }
+            return _results;
+          }
+        });
+        return output;
       }
     },
     parse: {
       array: function() {
-        var array, item, output, _i, _len;
+        var input, item, output, _i, _len;
         output = [];
-        array = arguments;
-        for (_i = 0, _len = array.length; _i < _len; _i++) {
-          item = array[_i];
+        input = arguments;
+        for (_i = 0, _len = input.length; _i < _len; _i++) {
+          item = input[_i];
           if (typeof item === "string") {
             output.push(item);
           } else {

@@ -1,11 +1,11 @@
 #This is a group of functions that allow you
-#to manupulate and ger data from your extension's
-#toobal icon. You can make your icon responsive
+#to manipulate and get data from your extension's
+#toolbar icon. You can make your icon responsive
 #and change it based on the weather, the time, etc.
 
 menu :
 
-  #This functions allows you to change the manu
+  #This functions allows you to change the menu
   #icon through javascript. This is good for
   #something like a weather extension where you
   #might update the icon based on the weather.
@@ -22,7 +22,7 @@ menu :
     return icon
 
 
-  #This function will reset the meny icon to
+  #This function will reset the menu icon to
   #the default img.
   resetIcon : ->
     #vars

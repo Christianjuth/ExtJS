@@ -51,7 +51,7 @@ ini : (userOptions) ->
       item._load(userOptions)
       delete item._load
 
-    #check if aliases exsist
+    #check if aliases exists
     if item._aliases?
       #set aliases
       for alias in item._aliases
@@ -85,14 +85,22 @@ ini : (userOptions) ->
     delete item._info
   return window.ext
 
+#This is a group of functions that will
+#search strings using a defined syntax.
+#This works by compiling down to regex.
+#By adding this extra layer it becomes
+#less confusing to the user while still
+#retaining all the power of regex.
+
 match :
+
   url : (url,urlSearchSyntax) ->
     #vars
     test = urlSearchSyntax
     output = false
     #check if expression is negated
     negate = /^\!/.test(test)
-    #these charactes will be reset
+    #these characters will be escaped
     regexEscChars = '
       \\(
       \\)
@@ -106,7 +114,7 @@ match :
       \\-
       \\!
     '
-    #if these chracters have "$" in from of them
+    #if these characters have "$" in from of them
     #is will be removed at the end of the function
     escChars = '
       {
@@ -114,15 +122,15 @@ match :
       }
     '
 
-    #replace remove "!" after negate variable is defined
+    #remove "!" after negate variable is defined
     test = test.replace(/^\!/g,'')
 
-    #reset normal regex characters defined in regexEscChars
+    #normal regex characters defined in regexEscChars
     regexEscChars = regexEscChars.replace(/\ /g, '|')
     regexEscChars = new RegExp('(?=(' + regexEscChars + '))' , 'g')
     test = test.replace(regexEscChars,'\\')
 
-    #isolate escaped escape
+    #isolate escaped "$"
     test = test.replace(/\$\$/g,'(\\$)')
 
     #match "?" with anything but "/"
@@ -163,13 +171,13 @@ match :
     return output
 
 #This is a group of functions that allow you
-#to manupulate and ger data from your extension's
-#toobal icon. You can make your icon responsive
+#to manipulate and get data from your extension's
+#toolbar icon. You can make your icon responsive
 #and change it based on the weather, the time, etc.
 
 menu :
 
-  #This functions allows you to change the manu
+  #This functions allows you to change the menu
   #icon through javascript. This is good for
   #something like a weather extension where you
   #might update the icon based on the weather.
@@ -186,7 +194,7 @@ menu :
     return icon
 
 
-  #This function will reset the meny icon to
+  #This function will reset the menu icon to
   #the default img.
   resetIcon : ->
     #vars
@@ -244,10 +252,22 @@ menu :
       output = safari.extension.toolbarItems[0].badge
     return output
 
+#This is a group of functions that allow you to
+#create options that the user can change.  What sets
+#this apart from the Storage plugin is it is only
+#for storing data the user can update.  This group
+#of function will allow you to set, get, reset, and
+#dump all the options.
+
 options :
 
+  #These are some simple aliases I have defined to
+  #help keep things short and tidy.
   _aliases : ['ops', 'opts']
 
+
+  #This function will set up undefined options when
+  #the library is loaded.
   _load : ->
     if ext.browser is 'chrome'
       $.ajax {
@@ -260,7 +280,11 @@ options :
             ext.options.set(option.key, option.default)
       }
 
-  #functions
+
+  #This function will set a storage item.  It pulls
+  #the value of localStorage.options, parses them as
+  #a object, sets the option based on the key you
+  #input, and last updates localStorage.options.
   set : (key, value) ->
     if ext.browser is 'chrome'
       options = $.parseJSON localStorage.options
@@ -270,6 +294,10 @@ options :
       safari.extension.settings[key] = value
     return options[key]
 
+
+  #This function will gram localStorage.options, parse
+  #it as a object, retrieve the value of the key you
+  #requested, and return the value.
   get : (key) ->
     if ext.browser is 'chrome'
       options = $.parseJSON localStorage.options
@@ -278,6 +306,10 @@ options :
       requestedOption = safari.extension.settings[key]
     return requestedOption
 
+
+  #This function wil grab localStorage.options, parse
+  #it as a object, delete the key you input, and update
+  #localStorage.options with the object
   reset : (key) ->
     if ext.browser is 'chrome'
       options = $.parseJSON localStorage.options
@@ -294,29 +326,64 @@ options :
       optionReset = safari.extension.settings.removeItem(key)
     return optionReset
 
+
+  #This function will find al the defined options in
+  #configure.json, get all the keys for those options,
+  #and loop through them resetting them to their defaults.
   resetAll : (exceptions) ->
+    #vars
+    output = []
+    #logic
     $.ajax({
       url: '../../configure.json',
       dataType: 'json',
       async: false,
       success: (data) ->
         for item in data.options
-          ext.options.reset(item.key)
+          if exceptions.indexOf item is -1
+            output.push ext.options.reset(item.key)
     })
-    return localStorage.options
+    return output
 
-parse :
-  array : () ->
+
+  #This function will return a array of option keys
+  dump : ->
     #vars
     output = []
-    array = arguments
+    #logic
+    $.ajax({
+      url: '../../configure.json',
+      dataType: 'json',
+      async: false,
+      success: (data) ->
+        for item in data.options
+          output.push item
+    })
+    return output
+
+
+
+parse :
+
+  #This function will take an unlimited amount
+  #of parameters that are strings, Ints, floats,
+  #or arrays. Object will work as well but are
+  #not recommended. This function takes all of
+  #these parameters and combines them into one
+  #array.  This function currently does not
+  #support arrays in arrays (or array inception).
+  array : ->
+    #vars
+    output = []
+    input = arguments
     #parse array
-    for item in array
+    for item in input
       if typeof item is "string"
         output.push item
       else
         output = output.concat item
     return output
+
 
   #This function will make the input text all
   #lowercase and replace spaces with "_". This
@@ -351,14 +418,14 @@ Array.prototype.compress = ->
 String.prototype.compress = ->
   return this.replace(/\ /,'')
 
-#Defing a global copy of the library.
+#Define a global copy of the library.
 #This is important because this is where
-#ExtJS becomes accecable to the user in
+#ExtJS becomes accessible to the user in
 #the window object
 window.ext = ext
 
 #This function defines the "ext" AMD module.
-#Without this ExtJS would not be compatable
+#Without this ExtJS would not be compatible
 #with things like requirejs.
 if typeof window.define is 'function' && window.define.amd
   window.define 'ext', ['jquery'], -> window.ext

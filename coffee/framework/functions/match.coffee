@@ -1,11 +1,19 @@
+#This is a group of functions that will
+#search strings using a defined syntax.
+#This works by compiling down to regex.
+#By adding this extra layer it becomes
+#less confusing to the user while still
+#retaining all the power of regex.
+
 match :
+
   url : (url,urlSearchSyntax) ->
     #vars
     test = urlSearchSyntax
     output = false
     #check if expression is negated
     negate = /^\!/.test(test)
-    #these charactes will be reset
+    #these characters will be escaped
     regexEscChars = '
       \\(
       \\)
@@ -19,7 +27,7 @@ match :
       \\-
       \\!
     '
-    #if these chracters have "$" in from of them
+    #if these characters have "$" in from of them
     #is will be removed at the end of the function
     escChars = '
       {
@@ -27,15 +35,15 @@ match :
       }
     '
 
-    #replace remove "!" after negate variable is defined
+    #remove "!" after negate variable is defined
     test = test.replace(/^\!/g,'')
 
-    #reset normal regex characters defined in regexEscChars
+    #normal regex characters defined in regexEscChars
     regexEscChars = regexEscChars.replace(/\ /g, '|')
     regexEscChars = new RegExp('(?=(' + regexEscChars + '))' , 'g')
     test = test.replace(regexEscChars,'\\')
 
-    #isolate escaped escape
+    #isolate escaped "$"
     test = test.replace(/\$\$/g,'(\\$)')
 
     #match "?" with anything but "/"

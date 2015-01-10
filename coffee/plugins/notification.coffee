@@ -42,18 +42,18 @@ _info :
 _aliases : ['noti']
 
 #functions
-basic : (title,content) ->
+basic : (title,message) ->
   if ext.browser is 'chrome'
     chrome.notifications.create '', {
       iconUrl : chrome.extension.getURL('icon-128.png')
       type: 'basic'
       title:title
-      message: content
+      message: message
     }, () ->
   else if ext.browser is 'safari'
-    new Notification(title,{body : content})
+    new Notification(title,{body : message})
 
-delay : (title,content,milliseconds) ->
+delay : (title,message,milliseconds) ->
   if 50000 < parseInt milliseconds
     log.error 'timeout too long'
   else
@@ -63,10 +63,10 @@ delay : (title,content,milliseconds) ->
           iconUrl : chrome.extension.getURL('icon-128.png')
           type: 'basic'
           title:title
-          message: content
+          message: message
         }, () ->
       else if ext.browser is 'safari'
-        new Notification(title,{body : content})
+        new Notification(title,{body : message})
     ,milliseconds
 
 }

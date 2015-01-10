@@ -25,7 +25,7 @@ ini : (userOptions) ->
       item._load(userOptions)
       delete item._load
 
-    #check if aliases exsist
+    #check if aliases exists
     if item._aliases?
       #set aliases
       for alias in item._aliases
