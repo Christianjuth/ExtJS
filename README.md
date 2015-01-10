@@ -1,6 +1,7 @@
 ### Basic Documentation
 * [Getting Started](https://github.com/Christianjuth/ExtJS_Framework/wiki/Getting-Started)
-* [Advanced Guide](https://github.com/Christianjuth/ExtJS_Framework/wiki/Advanced-Guide)
+* [Building Your Extension](https://github.com/Christianjuth/ExtJS_Framework/wiki/Building-Your-Extension)
+* [ExtJS Functions](https://github.com/Christianjuth/ExtJS_Framework/wiki/ExtJS-Functions)
 
 
 ### Advanced Documentation
