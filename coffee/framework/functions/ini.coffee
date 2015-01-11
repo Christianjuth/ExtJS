@@ -1,7 +1,7 @@
 #functions
-ini : (userOptions) ->
+ini : (options) ->
   #set vars
-  options = $.extend defultOptions, userOptions
+  options = $.extend defultOptions, options
   this.browser = this.getBrowser()
 
   #define global options
@@ -22,7 +22,7 @@ ini : (userOptions) ->
 
     #call load function
     if item._load?
-      item._load(userOptions)
+      item._load(options)
       delete item._load
 
     #check if aliases exists

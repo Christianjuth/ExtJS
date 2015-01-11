@@ -48,7 +48,8 @@ module.exports = (grunt) ->
           src: [
             'ext.js',
             'ext.min.js',
-            'ext.js.map'
+            'ext.js.map',
+            'ext.coffee'
           ]
           dest: 'test/js/'
         }]
