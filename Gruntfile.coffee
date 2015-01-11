@@ -42,12 +42,24 @@ module.exports = (grunt) ->
         files :
           'ext.min.js' : 'ext.js'
 
+    copy :
+      framework :
+        files : [{
+          src: [
+            'ext.js',
+            'ext.min.js',
+            'ext.js.map'
+          ]
+          dest: 'test/js/'
+        }]
+
   }
 
   grunt.registerTask 'default', [
     'coffeelint:framework'
     'coffee:framework'
-    'uglify:framework'
+    'uglify:framework',
+    'copy:framework'
   ]
 
   grunt.task.run('notify_hooks')

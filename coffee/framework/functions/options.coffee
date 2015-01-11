@@ -17,7 +17,7 @@ options :
   _load : ->
     if ext.browser is 'chrome'
       $.ajax {
-      url: '../../configure.json',
+      url: chrome.extension.getURL 'configure.json'
       dataType: 'json',
       async: false,
       success: (data) ->
@@ -77,19 +77,16 @@ options :
   #configure.json, get all the keys for those options,
   #and loop through them resetting them to their defaults.
   resetAll : (exceptions) ->
-    #vars
-    output = []
-    #logic
     $.ajax({
       url: '../../configure.json',
       dataType: 'json',
       async: false,
       success: (data) ->
         for item in data.options
-          if exceptions.indexOf item is -1
-            output.push ext.options.reset(item.key)
+          if -1 is exceptions.indexOf item.key
+            ext.options.reset(item.key)
     })
-    return output
+    return ext.options.dump()
 
 
   #This function will return a array of option keys
@@ -103,7 +100,7 @@ options :
       async: false,
       success: (data) ->
         for item in data.options
-          output.push item
+          output.push item.key
     })
     return output
 
