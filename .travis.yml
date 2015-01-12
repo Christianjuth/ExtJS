@@ -1,12 +1,13 @@
 language: node_js
 node_js:
-  - "0.10.33"
-before_deploy: "cd dist"
+- '0.10'
+before_deploy: cd dist
 deploy:
   provider: cloudfiles
   username: christianjuth
-  api-key:
-    secure: J2s3TFUVxcGd/fy4ds0ozc8Th3Tk+KjBiljV36RKij1KjHOcEwhEdfaelG9ULGpa/b7XMa/J+uWChVfgje4EpA24CoFykt1l3+vs5AMVAubso83urdRGE1A0xyqLF5MaKXSSQuqWlTsN+ccMIz0k1odYfKiE72fXF//WzQgWuzY=
+  api_key:
+    secure: aNmfbx7vOXT2tMKM+1x1G2EICyDYjO0gsBpR1X6qtNq0xRL/tDL455pZN+bRQxtrBpsukNVZC2Xv1iAsISs2OYKIWyEq/W4/tZ0K+8W3A/rBD9qbMuhA1cw137DmRa1Wy2Bs6h6YQvBvFAgvWQRMJiXB9w7apNV/K1evA69j8cw=
   region: Northern Virginia (IAD)
   container: ExtJS
-  skip_cleanup: true
+  on:
+    repo: Christianjuth/ExtJS_Library
