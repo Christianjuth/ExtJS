@@ -164,11 +164,12 @@ match :
     else
       output = test.test url
 
+    #min and max
     if options.maxLength isnt '*'
       output = output and url.length <= options.maxLength
-
     output = output and url.length >= options.minLength
 
+    #required characters
     output = output and url.contains(options.require)
 
     return output
@@ -243,15 +244,16 @@ match :
     else
       output = test.test text
 
-    #options
+    #if allow spaceses is false
     if !options.allowSpaces
       output = output and -1 is text.indexOf(" ")
 
+    #min and max
     if options.maxLength isnt '*'
       output = output and text.length <= options.maxLength
-
     output = output and text.length >= options.minLength
 
+    #required characters
     output = output and text.contains(options.require)
 
     return output
@@ -509,7 +511,7 @@ validate :
   password : (passwd,options) ->
     #default options
     defultOptions  = {
-      maxLength : '12',
+      maxLength : 12,
       minLength : 5,
       require : ''
     }

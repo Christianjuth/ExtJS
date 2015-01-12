@@ -20,11 +20,11 @@ module.exports = (grunt) ->
     coffee :
       options :
         join: true
-        sourceMap : true
         joinExt : '.coffee'
+        sourceMap : true
       framework :
         files :
-          'ext.js' : [
+          'dist/ext.js' : [
             'coffee/framework/options.coffee',
             'coffee/framework/header.coffee',
             'coffee/framework/vars.coffee',
@@ -40,18 +40,17 @@ module.exports = (grunt) ->
         preserveComments : 'some'
       framework :
         files :
-          'ext.min.js' : 'ext.js'
+          'dist/ext.min.js' : 'dist/ext.js'
 
     copy :
       framework :
         files : [{
-          src: [
-            'ext.js',
-            'ext.min.js',
-            'ext.js.map',
-            'ext.coffee'
-          ]
-          dest: 'test/js/'
+          expand: true,
+          cwd: 'dist/',
+          src: '**',
+          dest: 'test/js/',
+          flatten: true,
+          filter: 'isFile'
         }]
 
   }

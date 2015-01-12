@@ -447,7 +447,7 @@
       password: function(passwd, options) {
         var force;
         defultOptions = {
-          maxLength: '12',
+          maxLength: 12,
           minLength: 5,
           require: ''
         };

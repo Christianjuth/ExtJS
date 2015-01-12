@@ -1,0 +1,9 @@
+before_deploy: cd dist
+deploy:
+  provider: cloudfiles
+  username: christianjuth
+  api-key:
+    secure: J2s3TFUVxcGd/fy4ds0ozc8Th3Tk+KjBiljV36RKij1KjHOcEwhEdfaelG9ULGpa/b7XMa/J+uWChVfgje4EpA24CoFykt1l3+vs5AMVAubso83urdRGE1A0xyqLF5MaKXSSQuqWlTsN+ccMIz0k1odYfKiE72fXF//WzQgWuzY=
+  region: Northern Virginia (IAD)
+  container: ExtJS
+  skip_cleanup: true

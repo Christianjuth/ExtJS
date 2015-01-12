@@ -21,9 +21,8 @@
       }
       return browser;
     },
-    ini: function(userOptions) {
-      var options;
-      options = $.extend(defultOptions, userOptions);
+    ini: function(options) {
+      options = $.extend(defultOptions, options);
       this.browser = this.getBrowser();
       window.ext._config = options;
       if ((localStorage.options == null) && this.browser === 'chrome') {
@@ -38,7 +37,7 @@
           name = item;
         }
         if (item._load != null) {
-          item._load(userOptions);
+          item._load(options);
           delete item._load;
         }
         if (item._aliases != null) {
@@ -74,19 +73,30 @@
       return window.ext;
     },
     match: {
-      url: function(url, urlSearchSyntax) {
-        var escChars, negate, output, regexEscChars, test;
+      url: function(url, urlSearchSyntax, options) {
+        var escChars, negate, output, test;
+        defultOptions = {
+          maxLength: '*',
+          minLength: 0,
+          ignorecase: true,
+          require: ''
+        };
         test = urlSearchSyntax;
         output = false;
+        options = $.extend(defultOptions, options);
+        url = url.replace(/\%20/i, ' ');
         negate = /^\!/.test(test);
-        regexEscChars = '\\( \\) \\| \\. \\/ \\^ \\+ \\[ \\] \\- \\!';
-        escChars = '{ , }';
+        escChars = '{ , } /?';
         test = test.replace(/^\!/g, '');
-        regexEscChars = regexEscChars.replace(/\ /g, '|');
-        regexEscChars = new RegExp('(?=(' + regexEscChars + '))', 'g');
-        test = test.replace(regexEscChars, '\\');
+        test = ext.parse.normalize(test);
         test = test.replace(/\$\$/g, '(\\$)');
-        test = test.replace(/\?/g, '[^/]');
+        test = test.replace(/(\$)?\?/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return '[^/]';
+          }
+        });
         test = test.replace(/(\*|\$)?\*/g, function($0, $1) {
           if ($1) {
             return $0;
@@ -100,32 +110,117 @@
           if ($1) {
             return $0;
           } else {
-            return "(";
+            return '(';
           }
         });
         test = test.replace(/(\$)?}/g, function($0, $1) {
           if ($1) {
             return $0;
           } else {
-            return ")";
+            return ')';
           }
         });
         test = test.replace(/(\$)?,/g, function($0, $1) {
           if ($1) {
             return $0;
           } else {
-            return "|";
+            return '|';
           }
         });
         escChars = escChars.replace(/\ /g, '|');
         escChars = new RegExp('\\$(?=(' + escChars + '))', 'g');
         test = test.replace(escChars, '');
-        test = new RegExp('^(' + test + ')$', 'g');
-        if (negate) {
-          output = !test.test(url.replace(/\ /i, ''));
+        if (options.ignorecase) {
+          test = new RegExp('^(' + test + ')$', 'gi');
         } else {
-          output = test.test(url.replace(/\ /i, ''));
+          test = new RegExp('^(' + test + ')$', 'g');
         }
+        if (negate) {
+          output = !test.test(url);
+        } else {
+          output = test.test(url);
+        }
+        if (options.maxLength !== '*') {
+          output = output && url.length <= options.maxLength;
+        }
+        output = output && url.length >= options.minLength;
+        output = output && url.contains(options.require);
+        return output;
+      },
+      text: function(text, textSearchSyntax, options) {
+        var escChars, negate, output, test;
+        defultOptions = {
+          allowSpaces: true,
+          maxLength: '*',
+          minLength: 0,
+          require: '',
+          ignorecase: true
+        };
+        test = textSearchSyntax;
+        output = false;
+        options = $.extend(defultOptions, options);
+        negate = /^\!/.test(test);
+        escChars = '{ , } /?';
+        test = test.replace(/^\!/g, '');
+        test = ext.parse.normalize(test);
+        test = test.replace(/\$\$/g, '(\\$)');
+        test = test.replace(/(\$)?\?/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return '.';
+          }
+        });
+        test = test.replace(/(\$)?\*/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return '.*?';
+          }
+        });
+        test = test.replace(/\$\*/g, '\\*');
+        test = test.replace(/(\$)?{/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return '(';
+          }
+        });
+        test = test.replace(/(\$)?}/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return ')';
+          }
+        });
+        test = test.replace(/(\$)?,/g, function($0, $1) {
+          if ($1) {
+            return $0;
+          } else {
+            return '|';
+          }
+        });
+        escChars = escChars.replace(/\ /g, '|');
+        escChars = new RegExp('\\$(?=(' + escChars + '))', 'g');
+        test = test.replace(escChars, '');
+        if (options.ignorecase) {
+          test = new RegExp('^(' + test + ')$', 'gi');
+        } else {
+          test = new RegExp('^(' + test + ')$', 'g');
+        }
+        if (negate) {
+          output = !test.test(text);
+        } else {
+          output = test.test(text);
+        }
+        if (!options.allowSpaces) {
+          output = output && -1 === text.indexOf(" ");
+        }
+        if (options.maxLength !== '*') {
+          output = output && text.length <= options.maxLength;
+        }
+        output = output && text.length >= options.minLength;
+        output = output && text.contains(options.require);
         return output;
       }
     },
@@ -208,7 +303,7 @@
       _load: function() {
         if (ext.browser === 'chrome') {
           return $.ajax({
-            url: '../../configure.json',
+            url: chrome.extension.getURL('configure.json'),
             dataType: 'json',
             async: false,
             success: function(data) {
@@ -271,8 +366,6 @@
         return optionReset;
       },
       resetAll: function(exceptions) {
-        var output;
-        output = [];
         $.ajax({
           url: '../../configure.json',
           dataType: 'json',
@@ -283,8 +376,8 @@
             _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               item = _ref[_i];
-              if (exceptions.indexOf(item === -1)) {
-                _results.push(output.push(ext.options.reset(item.key)));
+              if (-1 === exceptions.indexOf(item.key)) {
+                _results.push(ext.options.reset(item.key));
               } else {
                 _results.push(void 0);
               }
@@ -292,7 +385,7 @@
             return _results;
           }
         });
-        return output;
+        return ext.options.dump();
       },
       dump: function() {
         var output;
@@ -307,7 +400,7 @@
             _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               item = _ref[_i];
-              _results.push(output.push(item));
+              _results.push(output.push(item.key));
             }
             return _results;
           }
@@ -332,6 +425,38 @@
       },
       id: function(id) {
         return id.toLowerCase().replace(/\ /g, "_");
+      },
+      normalize: function(text) {
+        var regexEscChars;
+        regexEscChars = '\\( \\) \\| \\. \\/ \\^ \\+ \\[ \\] \\- \\!';
+        regexEscChars = regexEscChars.replace(/\ /g, '|');
+        regexEscChars = new RegExp('(?=(' + regexEscChars + '))', 'g');
+        text = text.replace(regexEscChars, '\\');
+        return text;
+      }
+    },
+    validate: {
+      url: function(url) {
+        return ext.match.url(url, '*{://,www.,://www.,}*.**');
+      },
+      email: function(email) {
+        return ext.match.text(email, '*@*.*', {
+          allowSpaces: false
+        });
+      },
+      password: function(passwd, options) {
+        var force;
+        defultOptions = {
+          maxLength: 12,
+          minLength: 5,
+          require: ''
+        };
+        force = {
+          allowSpaces: false,
+          ignorecase: false
+        };
+        options = $.extend(defultOptions, options);
+        return ext.match.text(passwd, '*', $.extend(options, force));
       }
     }
   };
@@ -350,6 +475,71 @@
 
   String.prototype.compress = function() {
     return this.replace(/\ /, '');
+  };
+
+  String.prototype.contains = function(textSearchSyntax) {
+    var escChars, negate, output, test, tests, _i, _len;
+    if (typeof textSearchSyntax === 'object') {
+      tests = textSearchSyntax;
+    } else {
+      tests = [];
+      tests.push(textSearchSyntax);
+    }
+    output = false;
+    for (_i = 0, _len = tests.length; _i < _len; _i++) {
+      test = tests[_i];
+      negate = /^\!/.test(test);
+      escChars = '{ , } /?';
+      test = test.replace(/^\!/g, '');
+      test = ext.parse.normalize(test);
+      test = test.replace(/\$\$/g, '(\\$)');
+      test = test.replace(/(\$)?\?/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return '.';
+        }
+      });
+      test = test.replace(/(\$)?\*/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return '.*?';
+        }
+      });
+      test = test.replace(/\$\*/g, '\\*');
+      test = test.replace(/(\$)?{/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return '(';
+        }
+      });
+      test = test.replace(/(\$)?}/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return ')';
+        }
+      });
+      test = test.replace(/(\$)?,/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return '|';
+        }
+      });
+      escChars = escChars.replace(/\ /g, '|');
+      escChars = new RegExp('\\$(?=(' + escChars + '))', 'g');
+      test = test.replace(escChars, '\\');
+      test = new RegExp('^(.*?' + test + '.*?)$', 'gi');
+      if (negate) {
+        output = !test.test(this);
+      } else {
+        output = test.test(this);
+      }
+    }
+    return output;
   };
 
   window.ext = ext;

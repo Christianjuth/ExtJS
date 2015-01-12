@@ -11,7 +11,7 @@ validate :
   password : (passwd,options) ->
     #default options
     defultOptions  = {
-      maxLength : '12',
+      maxLength : 12,
       minLength : 5,
       require : ''
     }
