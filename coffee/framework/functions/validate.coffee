@@ -11,13 +11,17 @@ validate :
   password : (passwd,options) ->
     #default options
     defultOptions  = {
-      allowSpaces : false,
       maxLength : '12',
       minLength : 5,
-      ignorecase : false,
       require : ''
+    }
+    #These constraints will be forces based on the
+    #nature of this function
+    force = {
+      allowSpaces : false,
+      ignorecase : false
     }
     #vars
     options = $.extend defultOptions, options
     #logic
-    ext.match.text passwd, '*', options
+    ext.match.text passwd, '*', $.extend options, force

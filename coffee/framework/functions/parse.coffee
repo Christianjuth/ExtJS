@@ -26,3 +26,24 @@ parse :
   #allowed
   id : (id) ->
     id.toLowerCase().replace(/\ /g,"_")
+
+
+  normalize : (text) ->
+    regexEscChars = '
+      \\(
+      \\)
+      \\|
+      \\.
+      \\/
+      \\^
+      \\+
+      \\[
+      \\]
+      \\-
+      \\!
+    '
+    #normal regex characters defined in regexEscChars
+    regexEscChars = regexEscChars.replace(/\ /g, '|')
+    regexEscChars = new RegExp('(?=(' + regexEscChars + '))' , 'g')
+    text = text.replace(regexEscChars,'\\')
+    return text

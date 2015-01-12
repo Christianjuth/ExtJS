@@ -98,7 +98,8 @@ match :
     defultOptions  = {
       maxLength : '*',
       minLength : 0,
-      ignorecase : true
+      ignorecase : true,
+      require : ''
     }
     #vars
     test = urlSearchSyntax
@@ -107,35 +108,19 @@ match :
     url = url.replace(/\%20/i, ' ')
     #check if expression is negated
     negate = /^\!/.test(test)
-    #these characters will be escaped
-    regexEscChars = '
-      \\(
-      \\)
-      \\|
-      \\.
-      \\/
-      \\^
-      \\+
-      \\[
-      \\]
-      \\-
-      \\!
-    '
     #if these characters have "$" in from of them
     #is will be removed at the end of the function
     escChars = '
       {
       ,
       }
-      //?
+      /?
     '
     #remove "!" after negate variable is defined
     test = test.replace(/^\!/g,'')
 
-    #normal regex characters defined in regexEscChars
-    regexEscChars = regexEscChars.replace(/\ /g, '|')
-    regexEscChars = new RegExp('(?=(' + regexEscChars + '))' , 'g')
-    test = test.replace(regexEscChars,'\\')
+    #normal regex characters
+    test = ext.parse.normalize(test)
 
     #isolate escaped "$"
     test = test.replace(/\$\$/g,'(\\$)')
@@ -180,11 +165,11 @@ match :
       output = test.test url
 
     if options.maxLength isnt '*'
-      output = output and text.length <= options.maxLength
+      output = output and url.length <= options.maxLength
 
-    output = output and text.length >= options.minLength
+    output = output and url.length >= options.minLength
 
-    output = output and output.contains(options.require)
+    output = output and url.contains(options.require)
 
     return output
 
@@ -205,35 +190,19 @@ match :
     options = $.extend defultOptions, options
     #check if expression is negated
     negate = /^\!/.test(test)
-    #these characters will be escaped
-    regexEscChars = '
-      \\(
-      \\)
-      \\|
-      \\.
-      \\/
-      \\^
-      \\+
-      \\[
-      \\]
-      \\-
-      \\!
-    '
     #if these characters have "$" in from of them
     #is will be removed at the end of the function
     escChars = '
       {
       ,
       }
-      //?
+      /?
     '
     #remove "!" after negate variable is defined
     test = test.replace(/^\!/g,'')
 
-    #normal regex characters defined in regexEscChars
-    regexEscChars = regexEscChars.replace(/\ /g, '|')
-    regexEscChars = new RegExp('(?=(' + regexEscChars + '))' , 'g')
-    test = test.replace(regexEscChars,'\\')
+    #normal regex characters
+    test = ext.parse.normalize(test)
 
     #isolate escaped "$"
     test = test.replace(/\$\$/g,'(\\$)')
@@ -506,6 +475,27 @@ parse :
   id : (id) ->
     id.toLowerCase().replace(/\ /g,"_")
 
+
+  normalize : (text) ->
+    regexEscChars = '
+      \\(
+      \\)
+      \\|
+      \\.
+      \\/
+      \\^
+      \\+
+      \\[
+      \\]
+      \\-
+      \\!
+    '
+    #normal regex characters defined in regexEscChars
+    regexEscChars = regexEscChars.replace(/\ /g, '|')
+    regexEscChars = new RegExp('(?=(' + regexEscChars + '))' , 'g')
+    text = text.replace(regexEscChars,'\\')
+    return text
+
 validate :
 
   url : (url) ->
@@ -519,16 +509,20 @@ validate :
   password : (passwd,options) ->
     #default options
     defultOptions  = {
-      allowSpaces : false,
       maxLength : '12',
       minLength : 5,
-      ignorecase : false,
       require : ''
+    }
+    #These constraints will be forces based on the
+    #nature of this function
+    force = {
+      allowSpaces : false,
+      ignorecase : false
     }
     #vars
     options = $.extend defultOptions, options
     #logic
-    ext.match.text passwd, '*', options
+    ext.match.text passwd, '*', $.extend options, force
 
 }
 #bottom of extjs object container
@@ -536,6 +530,7 @@ validate :
 #These functions below are defined global
 #on the page and are part of the window
 #object
+
 
 
 #This function will combine alike elements of an
@@ -552,86 +547,76 @@ Array.prototype.compress = ->
   return output
 
 
+
 #This function simply remove spaces from a string.
 String.prototype.compress = ->
   return this.replace(/\ /,'')
 
 
 
-
-
-
+#This function is a more advaced method then indexOf
+#for searching strings.
 String.prototype.contains = (textSearchSyntax) ->
   #vars
-  test = textSearchSyntax
-  output = false
-  #check if expression is negated
-  negate = /^\!/.test(test)
-  #these characters will be escaped
-  regexEscChars = '
-    \\(
-    \\)
-    \\|
-    \\.
-    \\/
-    \\^
-    \\+
-    \\[
-    \\]
-    \\-
-    \\!
-  '
-  #if these characters have "$" in from of them
-  #is will be removed at the end of the function
-  escChars = '
-    {
-    ,
-    }
-    //?
-  '
-  #remove "!" after negate variable is defined
-  test = test.replace(/^\!/g,'')
-
-  #normal regex characters defined in regexEscChars
-  regexEscChars = regexEscChars.replace(/\ /g, '|')
-  regexEscChars = new RegExp('(?=(' + regexEscChars + '))' , 'g')
-  test = test.replace(regexEscChars,'\\')
-
-  #isolate escaped "$"
-  test = test.replace(/\$\$/g,'(\\$)')
-
-  #match "?" with anything
-  test = test.replace /(\$)?\?/g, ($0, $1) ->
-    if $1 then $0 else '.'
-
-  #replace "*" with "([^/]+)*"
-  test = test.replace /(\$)?\*/g, ($0, $1) ->
-    if $1 then $0 else '.*?'
-
-  #replace "$*" with "\*"
-  test = test.replace(/\$\*/g,'\\*')
-
-  #replace "{ | }" with "( | )"
-  test = test.replace /(\$)?{/g, ($0, $1) ->
-    if $1 then $0 else '('
-  test = test.replace /(\$)?}/g, ($0, $1) ->
-    if $1 then $0 else ')'
-  test = test.replace /(\$)?,/g, ($0, $1) ->
-    if $1 then $0 else '|'
-
-  #remove "$" from character in escChars
-  escChars = escChars.replace(/\ /g, '|')
-  escChars = new RegExp('\\$(?=(' + escChars + '))' , 'g')
-  test = test.replace(escChars,'\\')
-
-  #parse as regex expression
-  test = new RegExp('^(.*?' + test + '.*?)$', 'gi')
-
-  #test the text against regex expression
-  if negate
-    output = ! test.test this
+  if typeof textSearchSyntax is 'object'
+    tests = textSearchSyntax
   else
-    output = test.test this
+    tests = []
+    tests.push textSearchSyntax
+  output = false
+
+  for test in tests
+    #check if expression is negated
+    negate = /^\!/.test(test)
+    #if these characters have "$" in from of them
+    #is will be removed at the end of the function
+    escChars = '
+      {
+      ,
+      }
+      /?
+    '
+    #remove "!" after negate variable is defined
+    test = test.replace(/^\!/g,'')
+
+    #normal regex characters
+    test = ext.parse.normalize(test)
+
+    #isolate escaped "$"
+    test = test.replace(/\$\$/g,'(\\$)')
+
+    #match "?" with anything
+    test = test.replace /(\$)?\?/g, ($0, $1) ->
+      if $1 then $0 else '.'
+
+    #replace "*" with "([^/]+)*"
+    test = test.replace /(\$)?\*/g, ($0, $1) ->
+      if $1 then $0 else '.*?'
+
+    #replace "$*" with "\*"
+    test = test.replace(/\$\*/g,'\\*')
+
+    #replace "{ | }" with "( | )"
+    test = test.replace /(\$)?{/g, ($0, $1) ->
+      if $1 then $0 else '('
+    test = test.replace /(\$)?}/g, ($0, $1) ->
+      if $1 then $0 else ')'
+    test = test.replace /(\$)?,/g, ($0, $1) ->
+      if $1 then $0 else '|'
+
+    #remove "$" from character in escChars
+    escChars = escChars.replace(/\ /g, '|')
+    escChars = new RegExp('\\$(?=(' + escChars + '))' , 'g')
+    test = test.replace(escChars,'\\')
+
+    #parse as regex expression
+    test = new RegExp('^(.*?' + test + '.*?)$', 'gi')
+
+    #test the text against regex expression
+    if negate
+      output = ! test.test this
+    else
+      output = test.test this
 
   return output
 

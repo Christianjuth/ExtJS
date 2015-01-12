@@ -74,23 +74,21 @@
     },
     match: {
       url: function(url, urlSearchSyntax, options) {
-        var escChars, negate, output, regexEscChars, test;
+        var escChars, negate, output, test;
         defultOptions = {
           maxLength: '*',
           minLength: 0,
-          ignorecase: true
+          ignorecase: true,
+          require: ''
         };
         test = urlSearchSyntax;
         output = false;
         options = $.extend(defultOptions, options);
         url = url.replace(/\%20/i, ' ');
         negate = /^\!/.test(test);
-        regexEscChars = '\\( \\) \\| \\. \\/ \\^ \\+ \\[ \\] \\- \\!';
-        escChars = '{ , } //?';
+        escChars = '{ , } /?';
         test = test.replace(/^\!/g, '');
-        regexEscChars = regexEscChars.replace(/\ /g, '|');
-        regexEscChars = new RegExp('(?=(' + regexEscChars + '))', 'g');
-        test = test.replace(regexEscChars, '\\');
+        test = ext.parse.normalize(test);
         test = test.replace(/\$\$/g, '(\\$)');
         test = test.replace(/(\$)?\?/g, function($0, $1) {
           if ($1) {
@@ -143,14 +141,14 @@
           output = test.test(url);
         }
         if (options.maxLength !== '*') {
-          output = output && text.length <= options.maxLength;
+          output = output && url.length <= options.maxLength;
         }
-        output = output && text.length >= options.minLength;
-        output = output && output.contains(options.require);
+        output = output && url.length >= options.minLength;
+        output = output && url.contains(options.require);
         return output;
       },
       text: function(text, textSearchSyntax, options) {
-        var escChars, negate, output, regexEscChars, test;
+        var escChars, negate, output, test;
         defultOptions = {
           allowSpaces: true,
           maxLength: '*',
@@ -162,12 +160,9 @@
         output = false;
         options = $.extend(defultOptions, options);
         negate = /^\!/.test(test);
-        regexEscChars = '\\( \\) \\| \\. \\/ \\^ \\+ \\[ \\] \\- \\!';
-        escChars = '{ , } //?';
+        escChars = '{ , } /?';
         test = test.replace(/^\!/g, '');
-        regexEscChars = regexEscChars.replace(/\ /g, '|');
-        regexEscChars = new RegExp('(?=(' + regexEscChars + '))', 'g');
-        test = test.replace(regexEscChars, '\\');
+        test = ext.parse.normalize(test);
         test = test.replace(/\$\$/g, '(\\$)');
         test = test.replace(/(\$)?\?/g, function($0, $1) {
           if ($1) {
@@ -430,6 +425,14 @@
       },
       id: function(id) {
         return id.toLowerCase().replace(/\ /g, "_");
+      },
+      normalize: function(text) {
+        var regexEscChars;
+        regexEscChars = '\\( \\) \\| \\. \\/ \\^ \\+ \\[ \\] \\- \\!';
+        regexEscChars = regexEscChars.replace(/\ /g, '|');
+        regexEscChars = new RegExp('(?=(' + regexEscChars + '))', 'g');
+        text = text.replace(regexEscChars, '\\');
+        return text;
       }
     },
     validate: {
@@ -442,15 +445,18 @@
         });
       },
       password: function(passwd, options) {
+        var force;
         defultOptions = {
-          allowSpaces: false,
           maxLength: '12',
           minLength: 5,
-          ignorecase: false,
           require: ''
         };
+        force = {
+          allowSpaces: false,
+          ignorecase: false
+        };
         options = $.extend(defultOptions, options);
-        return ext.match.text(passwd, '*', options);
+        return ext.match.text(passwd, '*', $.extend(options, force));
       }
     }
   };
@@ -472,61 +478,66 @@
   };
 
   String.prototype.contains = function(textSearchSyntax) {
-    var escChars, negate, output, regexEscChars, test;
-    test = textSearchSyntax;
-    output = false;
-    negate = /^\!/.test(test);
-    regexEscChars = '\\( \\) \\| \\. \\/ \\^ \\+ \\[ \\] \\- \\!';
-    escChars = '{ , } //?';
-    test = test.replace(/^\!/g, '');
-    regexEscChars = regexEscChars.replace(/\ /g, '|');
-    regexEscChars = new RegExp('(?=(' + regexEscChars + '))', 'g');
-    test = test.replace(regexEscChars, '\\');
-    test = test.replace(/\$\$/g, '(\\$)');
-    test = test.replace(/(\$)?\?/g, function($0, $1) {
-      if ($1) {
-        return $0;
-      } else {
-        return '.';
-      }
-    });
-    test = test.replace(/(\$)?\*/g, function($0, $1) {
-      if ($1) {
-        return $0;
-      } else {
-        return '.*?';
-      }
-    });
-    test = test.replace(/\$\*/g, '\\*');
-    test = test.replace(/(\$)?{/g, function($0, $1) {
-      if ($1) {
-        return $0;
-      } else {
-        return '(';
-      }
-    });
-    test = test.replace(/(\$)?}/g, function($0, $1) {
-      if ($1) {
-        return $0;
-      } else {
-        return ')';
-      }
-    });
-    test = test.replace(/(\$)?,/g, function($0, $1) {
-      if ($1) {
-        return $0;
-      } else {
-        return '|';
-      }
-    });
-    escChars = escChars.replace(/\ /g, '|');
-    escChars = new RegExp('\\$(?=(' + escChars + '))', 'g');
-    test = test.replace(escChars, '\\');
-    test = new RegExp('^(.*?' + test + '.*?)$', 'gi');
-    if (negate) {
-      output = !test.test(this);
+    var escChars, negate, output, test, tests, _i, _len;
+    if (typeof textSearchSyntax === 'object') {
+      tests = textSearchSyntax;
     } else {
-      output = test.test(this);
+      tests = [];
+      tests.push(textSearchSyntax);
+    }
+    output = false;
+    for (_i = 0, _len = tests.length; _i < _len; _i++) {
+      test = tests[_i];
+      negate = /^\!/.test(test);
+      escChars = '{ , } /?';
+      test = test.replace(/^\!/g, '');
+      test = ext.parse.normalize(test);
+      test = test.replace(/\$\$/g, '(\\$)');
+      test = test.replace(/(\$)?\?/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return '.';
+        }
+      });
+      test = test.replace(/(\$)?\*/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return '.*?';
+        }
+      });
+      test = test.replace(/\$\*/g, '\\*');
+      test = test.replace(/(\$)?{/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return '(';
+        }
+      });
+      test = test.replace(/(\$)?}/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return ')';
+        }
+      });
+      test = test.replace(/(\$)?,/g, function($0, $1) {
+        if ($1) {
+          return $0;
+        } else {
+          return '|';
+        }
+      });
+      escChars = escChars.replace(/\ /g, '|');
+      escChars = new RegExp('\\$(?=(' + escChars + '))', 'g');
+      test = test.replace(escChars, '\\');
+      test = new RegExp('^(.*?' + test + '.*?)$', 'gi');
+      if (negate) {
+        output = !test.test(this);
+      } else {
+        output = test.test(this);
+      }
     }
     return output;
   };
