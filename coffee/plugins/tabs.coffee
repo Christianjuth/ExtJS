@@ -73,7 +73,7 @@ indexOf : (urlSearchSyntax, callback) ->
     chrome.tabs.query {}, (tabs) ->
       for tab in tabs
         #strip trailing "/" from url
-        url = tab.url.replace /\/$/,''
+        url = tab.url.replace /(\/)$/,''
         #check if url matches urlSearchSyntax
         if ext.match.url(url, urlSearchSyntax) isnt false
           outputTabs.push(tab)
@@ -86,7 +86,7 @@ indexOf : (urlSearchSyntax, callback) ->
       #prevent undefined error
       if tab.url?
         #strip trailing "/" from url
-        url = tab.url.replace /\/$/,''
+        url = tab.url.replace /(\/)$/,''
         #check if url matches urlSearchSyntax
         if ext.match.url(url, urlSearchSyntax) isnt false
           outputTabs.push(tab)
