@@ -1,7 +1,25 @@
 {
+  "name" : "extension_framework",
   "author" : "Christian Juth",
-  "name":"extension_framework",
   "version" : "0.1.1",
+  "bundleID" : "com.christianjuth.extension",
+  "databaseQuota" : "1",
+
+
+  "description" : "something",
+  "website" : "http://christianjuth.com",
+
+
+  "permissions" : [
+    "secureWebsites",
+    "websites",
+    "notifications"
+  ],
+
+  "options_page": "pages/options/options.html",
+  "background" : "pages/background/background.html",
+  "popup" : "pages/popup/popup.html",
+
 
   "storage" : [
     {
@@ -18,6 +36,7 @@
     }
   ],
 
+
   "options" : [
     {
       "title" : "Name",
@@ -28,7 +47,7 @@
 
     {
       "title" : "Age",
-      "type" : "number",
+      "type" : "text",
       "key":"age",
       "default":"18"
     },
@@ -52,7 +71,15 @@
       "type" : "text",
       "key" : "food",
       "default":"Pizza"
+    },
+    {
+      "title" : "What you want",
+      "type" : "list",
+      "key" : "list",
+      "default": "food",
+      "titles" : ["Shit","Food"],
+      "values" : ["shit","food"]
     }
-
   ]
 }
+

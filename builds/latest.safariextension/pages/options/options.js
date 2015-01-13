@@ -7,16 +7,12 @@
         var elm;
         elm = '<div class="row"><label class="col-sm-4 control-label right 400">' + json.title + '</label><div class="col-sm-8">' + this.types[json.type](json) + '</div></div>';
         elm = $(elm).appendTo("#settings");
-        return elm.find("input").change(function() {
+        return elm.find("input, select").change(function() {
           return ext.options.set(json.key, $(this).val());
         });
       },
       types: {
         text: function(json) {
-          var elm;
-          return elm = '<input type="text" class="form-control" value="' + ext.options.get(json.key) + '">';
-        },
-        number: function(json) {
           var elm;
           return elm = '<input type="text" class="form-control" value="' + ext.options.get(json.key) + '">';
         },
@@ -33,13 +29,19 @@
           }
           return elm;
         },
-        select: function(json) {
-          var elm, item, _i, _len, _ref;
-          elm = '<select id="disabledSelect" class="form-control"></select>';
-          _ref = json.options;
+        list: function(json) {
+          var elm, storage, title, value, _i, _len, _ref;
+          elm = '<select id="disabledSelect" class="form-control" value="' + ext.options.get(json.key) + '"></select>';
+          _ref = json.titles;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            item = _ref[_i];
-            elm = $(elm).append('<option>' + item + '</option>');
+            title = _ref[_i];
+            value = json.values[_i];
+            storage = ext.options.get(json.key);
+            if (storage === value) {
+              elm = $(elm).append('<option value="' + value + '" selected>' + title + '</option>');
+            } else {
+              elm = $(elm).append('<option value="' + value + '">' + title + '</option>');
+            }
           }
           return elm.prop('outerHTML');
         }
@@ -55,7 +57,8 @@
           title: item.title,
           key: item.key,
           type: item.type,
-          options: item.options
+          titles: item.titles,
+          values: item.values
         }));
       }
       return _results;

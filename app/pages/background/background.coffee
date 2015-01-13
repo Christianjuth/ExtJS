@@ -22,12 +22,12 @@ require [
   #your code here
 
   #set icon badge on extension load
-  ext.menu.icon.setBadge parseInt ext.storage.get "google"
+  ext.menu.setBadge parseInt ext.storage.get "google"
 
   #set icon click function
-  ext.menu.icon.click () ->
+  ext.menu.click () ->
     ext.tabs.indexOf "htt*//plus.google.com**", (data) ->
       if data.length is 0
         ext.storage.set("google", parseInt(ext.storage.get("google")) + 1)
-        ext.menu.icon.setBadge ext.storage.get("google")
+        ext.menu.setBadge ext.storage.get("google")
         ext.tabs.create "https://plus.google.com",true

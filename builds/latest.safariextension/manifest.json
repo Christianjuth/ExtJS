@@ -1,37 +1,29 @@
 {
   "manifest_version": 2,
-
-  "name": "One Click Google",
-  "description": "",
-  "version": "0.1.1",
-
+  "name": "extension_framework",
   "author": "Christian Juth",
-
+  "version": "0.1.1",
+  "description": "something",
+  "homepage_url": "http://christianjuth.com",
   "browser_action": {
     "default_icon": {
       "19": "menu-icons/icon-19.png",
       "38": "icon-38.png"
-    }
+    },
+    "default_popup": "pages/popup/popup.html"
   },
-
-  "homepage_url": "http://calculatorextension.com",
-
+  "background": {
+    "page": "pages/background/background.html"
+  },
+  "permissions": [
+    "http://*/",
+    "https://*/",
+    "notifications"
+  ],
   "icons": {
     "16": "icon-16.png",
     "48": "icon-48.png",
     "128": "icon-128.png"
   },
-
-  "permissions": [
-    "clipboardWrite",
-    "clipboardRead",
-    "tabs",
-    "notifications"
-  ],
-
-  "background" : {
-    "page": "pages/background/background.html"
-  },
-
   "options_page": "pages/options/options.html"
 }

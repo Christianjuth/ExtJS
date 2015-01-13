@@ -47,8 +47,13 @@ module.exports = (grunt) ->
     define :
       dir : 'app/js/libs/',
       files: [{
-        'ext.js': 'https://raw.githubusercontent.com/Christianjuth/ExtJS_Library/master/ext.js'
+        'ext.js': 'http://code.ext-js.org/ext.js'
       }]
+
+  extension_manifest :
+    default :
+      file: 'app/configure.json',
+      dest: 'builds/latest.safariextension/'
 
   #other
   notify_hooks : grunt.file.readJSON('grunt/notify_hooks.json')
@@ -66,6 +71,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'compile', [
     'clean:libs'
     'browserDependencies',
+    'extension_manifest',
     'rsync:package',
     'img',
     'assets'

@@ -1,16 +1,96 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<array>
-	<dict>
-		<key>DefaultValue</key>
-		<string>hey</string>
-		<key>Key</key>
-		<string>setting</string>
-		<key>Title</key>
-		<string>Setting</string>
-		<key>Type</key>
-		<string>TextField</string>
-	</dict>
-</array>
+<plist>
+  <array version="1.0">
+    <dict>
+      <key>DefaultValue</key>
+      <string>John</string>
+      <key>Titles</key>
+      <array/>
+      <key>Values</key>
+      <array/>
+      <key>Key</key>
+      <string>name</string>
+      <key>Title</key>
+      <string>Name</string>
+      <key>Type</key>
+      <string>TextField</string>
+    </dict>
+    <dict>
+      <key>DefaultValue</key>
+      <string>18</string>
+      <key>Titles</key>
+      <array/>
+      <key>Values</key>
+      <array/>
+      <key>Key</key>
+      <string>age</string>
+      <key>Title</key>
+      <string>Age</string>
+      <key>Type</key>
+      <string>TextField</string>
+    </dict>
+    <dict>
+      <key>DefaultValue</key>
+      <string>hey</string>
+      <key>Titles</key>
+      <array/>
+      <key>Values</key>
+      <array/>
+      <key>Key</key>
+      <string>setting</string>
+      <key>Title</key>
+      <string>Setting</string>
+      <key>Type</key>
+      <string>TextField</string>
+    </dict>
+    <dict>
+      <key>DefaultValue</key>
+      <string>blue</string>
+      <key>Titles</key>
+      <array/>
+      <key>Values</key>
+      <array/>
+      <key>Key</key>
+      <string>color</string>
+      <key>Title</key>
+      <string>Favorite Color</string>
+      <key>Type</key>
+      <string>TextField</string>
+    </dict>
+    <dict>
+      <key>DefaultValue</key>
+      <string>Pizza</string>
+      <key>Titles</key>
+      <array/>
+      <key>Values</key>
+      <array/>
+      <key>Key</key>
+      <string>food</string>
+      <key>Title</key>
+      <string>Favorite Food</string>
+      <key>Type</key>
+      <string>TextField</string>
+    </dict>
+    <dict>
+      <key>DefaultValue</key>
+      <string>food</string>
+      <key>Titles</key>
+      <array>
+        <string>Shit</string>
+        <string>Food</string>
+      </array>
+      <key>Values</key>
+      <array>
+        <string>shit</string>
+        <string>food</string>
+      </array>
+      <key>Key</key>
+      <string>list</string>
+      <key>Title</key>
+      <string>What you want</string>
+      <key>Type</key>
+      <string>ListBox</string>
+    </dict>
+  </array>
 </plist>

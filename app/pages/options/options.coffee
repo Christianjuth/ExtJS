@@ -15,30 +15,32 @@ require [
     create:(json) ->
       elm = '<div class="row"><label class="col-sm-4 control-label right 400">'+json.title+'</label><div class="col-sm-8">'+this.types[json.type](json)+'</div></div>'
       elm = $(elm).appendTo("#settings");
-      elm.find("input").change () ->
+      elm.find("input, select").change () ->
         ext.options.set(json.key,$(this).val())
 
     types:
-      text: (json) ->
+      text : (json) ->
         elm = '<input type="text" class="form-control" value="'+ext.options.get(json.key)+'">'
 
-      number: (json) ->
-        elm = '<input type="text" class="form-control" value="'+ext.options.get(json.key)+'">'
-
-      textArea: (json) ->
+      textArea : (json) ->
         elm = '<textarea class="form-control" rows="4">'+ext.options.get(json.key)+'</textarea>'
 
-      checkbox: (json) ->
+      checkbox : (json) ->
         if(String(ext.options.get(json.key)) is "true")
           elm = '<input type="checkbox" checked>'
         else
           elm = '<input type="checkbox">'
         return elm
 
-      select: (json) ->
-        elm = '<select id="disabledSelect" class="form-control"></select>'
-        for item in json.options
-          elm = $(elm).append('<option>'+item+'</option>')
+      list : (json) ->
+        elm = '<select id="disabledSelect" class="form-control" value="'+ext.options.get(json.key)+'"></select>'
+        for title in json.titles
+          value = json.values[_i]
+          storage = ext.options.get(json.key)
+          if storage is value
+            elm = $(elm).append('<option value="'+value+'" selected>'+title+'</option>')
+          else
+            elm = $(elm).append('<option value="'+value+'">'+title+'</option>')
         return elm.prop('outerHTML')
 
   $.getJSON "../../configure.json", (data) ->
@@ -47,7 +49,8 @@ require [
         title : item.title,
         key : item.key,
         type : item.type,
-        options : item.options
+        titles : item.titles,
+        values : item.values
       })
 
 

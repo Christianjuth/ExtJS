@@ -9,7 +9,10 @@
       "exclude" : [
         "*.png",
         "**/*.coffee",
-        "**/*.less"
+        "**/*.less",
+        "manifest.json",
+        "Info.plist",
+        "Settings.plist"
       ],
       "src" : "app/",
       "dest" : "builds/latest.safariextension",
