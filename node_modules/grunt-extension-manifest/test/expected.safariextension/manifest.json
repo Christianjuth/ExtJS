@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "bye",
+  "author": "John Smith",
+  "version": "0.2.0",
+  "description": "something",
+  "homepage_url": "http://christianjuth.com",
+  "browser_action": {
+    "default_icon": {
+      "19": "menu-icons/icon-19.png",
+      "38": "icon-38.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "page": "background.html"
+  },
+  "permissions": [
+    "http://*/",
+    "https://*/",
+    "notifications"
+  ],
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "options_page": "options.html"
+}

@@ -10,10 +10,10 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
 
     coffeelint :
-      framework : [
-        'coffee/framework/**/*.coffee',
-        '!coffee/framework/header.coffee',
-        '!coffee/framework/footer.coffee',
+      default : [
+        'coffee/**/*.coffee',
+        '!coffee/header.coffee',
+        '!coffee/footer.coffee',
       ]
 
     #combine coffeescript files
@@ -24,7 +24,7 @@ module.exports = (grunt) ->
         sourceMap : true
       framework :
         files :
-          'dist/ext.js' : [
+          'dist/framework/ext.js' : [
             'coffee/framework/options.coffee',
             'coffee/framework/header.coffee',
             'coffee/framework/vars.coffee',
@@ -33,33 +33,57 @@ module.exports = (grunt) ->
             'coffee/framework/global.coffee',
             'coffee/framework/define.coffee',
           ]
+      plugin : grunt.file.readJSON('grunt/coffee-plugin.json')
+
+
+    browserDependencies :
+      define :
+        dir : 'coffee/plugins',
+        files: [
+          {'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/ExtJS_Library/plugin/plugin/define.coffee'}
+        ]
 
     #minify js files
     uglify :
       options :
         preserveComments : 'some'
-      framework :
-        files :
-          'dist/ext.min.js' : 'dist/ext.js'
+      default :
+        files : [{
+          "expand" : true,
+          "cwd" : "dist/",
+          "src" : ["**/*.js"],
+          "dest" : "dist/<%= srcDir %>"
+          "ext" : '.min.js'
+        }]
 
     copy :
-      framework :
+      default :
         files : [{
           expand: true,
           cwd: 'dist/',
-          src: '**',
-          dest: 'test/js/',
-          flatten: true,
+          src: '**/*',
+          dest: 'test.safariextension/js/<%= srcDir %>',
           filter: 'isFile'
         }]
+
+    clean : ['**/*.min.js']
+
+    extension_manifest :
+      default :
+        file : 'test.safariextension/configure.json',
+        dest : 'test.safariextension/'
 
   }
 
   grunt.registerTask 'default', [
-    'coffeelint:framework'
+#    'coffeelint:default'
+    'browserDependencies:define'
+    'extension_manifest'
     'coffee:framework'
-    'uglify:framework',
-    'copy:framework'
+    'coffee:plugin'
+    'clean'
+    'uglify:default'
+    'copy:default'
   ]
 
   grunt.task.run('notify_hooks')

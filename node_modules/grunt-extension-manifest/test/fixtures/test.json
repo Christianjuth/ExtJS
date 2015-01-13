@@ -1,0 +1,62 @@
+{
+  "name" : "bye",
+  "author" : "John Smith",
+  "version" : "0.2.0",
+  "bundleID" : "com.yourcompany.extension",
+  "databaseQuota" : "100",
+
+
+  "description" : "something",
+  "website" : "http://christianjuth.com",
+
+
+  "permissions" : [
+    "secureWebsites",
+    "websites",
+    "notifications"
+  ],
+
+  "options_page": "options.html",
+  "background" : "background.html",
+  "popup" : "popup.html",
+
+
+  "storage" : [
+    {
+      "key" : "google",
+      "default":"0"
+    },
+    {
+      "key" : "microsoft",
+      "default":"0"
+    },
+    {
+      "key" : "xbox",
+      "default":"0"
+    }
+  ],
+
+
+  "options" : [
+    {
+      "title" : "Full Name",
+      "type" : "text",
+      "key" : "name",
+      "default": "John Smith"
+    },
+    {
+      "title" : "Mailing List",
+      "type" : "checkbox",
+      "key" : "email",
+      "default": true
+    },
+    {
+      "title" : "What you want",
+      "type" : "list",
+      "key" : "list",
+      "default": "all",
+      "titles" : ["Shit","Food"],
+      "values" : ["shit","food"]
+    }
+  ]
+}

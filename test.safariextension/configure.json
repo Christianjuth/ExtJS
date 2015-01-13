@@ -1,0 +1,40 @@
+{
+  "name" : "extension_library",
+  "author" : "Christian Juth",
+  "version" : "0.1.1",
+  "bundleID" : "com.christianjuth.extension-library",
+  "databaseQuota" : "100",
+
+
+  "description" : "This is for testing ExtJS",
+  "website" : "https://github.com/Christianjuth/ExtJS_Library",
+
+
+  "permissions" : [
+    "secureWebsites",
+    "websites",
+    "notifications"
+  ],
+
+  "background" : "background.html",
+
+
+  "storage" : [
+    {
+      "key" : "google",
+      "default":"0"
+    },
+    {
+      "key" : "microsoft",
+      "default":"0"
+    },
+    {
+      "key" : "xbox",
+      "default":"0"
+    }
+  ],
+
+  "options":[]
+}
+
+

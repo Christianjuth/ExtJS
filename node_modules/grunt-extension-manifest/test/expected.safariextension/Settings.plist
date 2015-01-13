@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist>
+  <array version="1.0">
+    <dict>
+      <key>DefaultValue</key>
+      <string>John Smith</string>
+      <key>Titles</key>
+      <array/>
+      <key>Values</key>
+      <array/>
+      <key>Key</key>
+      <string>name</string>
+      <key>Title</key>
+      <string>Full Name</string>
+      <key>Type</key>
+      <string>TextField</string>
+    </dict>
+    <dict>
+      <key>DefaultValue</key>
+      <true></true>
+      <key>Titles</key>
+      <array/>
+      <key>Values</key>
+      <array/>
+      <key>Key</key>
+      <string>email</string>
+      <key>Title</key>
+      <string>Mailing List</string>
+      <key>Type</key>
+      <string>CheckBox</string>
+    </dict>
+    <dict>
+      <key>DefaultValue</key>
+      <string>all</string>
+      <key>Titles</key>
+      <array>
+        <string>Shit</string>
+        <string>Food</string>
+      </array>
+      <key>Values</key>
+      <array>
+        <string>shit</string>
+        <string>food</string>
+      </array>
+      <key>Key</key>
+      <string>list</string>
+      <key>Title</key>
+      <string>What you want</string>
+      <key>Type</key>
+      <string>ListBox</string>
+    </dict>
+  </array>
+</plist>
