@@ -31,3 +31,5 @@ require [
         ext.storage.set("google", parseInt(ext.storage.get("google")) + 1)
         ext.menu.setBadge ext.storage.get("google")
         ext.tabs.create "https://plus.google.com",true
+      else
+        console.log data

@@ -87,12 +87,11 @@ module.exports = function(grunt) {
     if (secure) {
       permissions.dict['#list'][0]['string'] = 'All';
       permissions.dict['#list'][1]['true'] = '';
-      chrome.permissions.push('http://*/')
-      chrome.permissions.push('https://*/')
+      chrome.permissions.push('tabs')
     } else if (websites) {
       permissions.dict['#list'][0]['string'] = 'All';
       permissions.dict['#list'][1]['false'] = '';
-      chrome.permissions.push('http://*/')
+      chrome.permissions.push('tabs')
     } else {
       permissions.dict['#list'][0]['string'] = 'None';
       permissions.dict['#list'][1]['false'] = '';
@@ -329,7 +328,7 @@ module.exports = function(grunt) {
     grunt.file.write(this.data.dest + 'settings.plist', settings);
 
     // Print a success message.
-    grunt.log.ok('2 were created');
+    grunt.log.ok('3 were created');
   });
 
 };

@@ -1,78 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Author</key>
-	<string>Christian Juth</string>
-	<key>Builder Version</key>
-	<string>10600.2.5</string>
-	<key>CFBundleDisplayName</key>
-	<string>extension_framework</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.christianjuth.extension</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleShortVersionString</key>
-	<string>0.1.1</string>
-	<key>CFBundleVersion</key>
-	<string>0.1.1</string>
-	<key>Chrome</key>
-	<dict>
-		<key>Database Quota</key>
-		<real>1048576</real>
-		<key>Global Page</key>
-		<string>pages/background/background.html</string>
-		<key>Popovers</key>
-		<array>
-			<dict>
-				<key>Filename</key>
-				<string>pages/popup/popup.html</string>
-				<key>Height</key>
-				<real>400</real>
-				<key>Identifier</key>
-				<string>popup</string>
-				<key>Width</key>
-				<real>400</real>
-			</dict>
-		</array>
-		<key>Toolbar Items</key>
-		<array>
-			<dict>
-				<key>Command</key>
-				<string></string>
-				<key>Identifier</key>
-				<string>popupID</string>
-				<key>Image</key>
-				<string>menu-icons/icon-16.png</string>
-				<key>Label</key>
-				<string>extension_framework</string>
-				<key>Popover</key>
-				<string>popup</string>
-			</dict>
-		</array>
-	</dict>
-	<key>Content</key>
-	<dict>
-		<key>Scripts</key>
-		<dict/>
-	</dict>
-	<key>Description</key>
-	<string>something</string>
-	<key>DeveloperIdentifier</key>
-	<string>LTS4T488BH</string>
-	<key>ExtensionInfoDictionaryVersion</key>
-	<string>1.0</string>
-	<key>Permissions</key>
-	<dict>
-		<key>Website Access</key>
-		<dict>
-			<key>Include Secure Pages</key>
-			<true/>
-			<key>Level</key>
-			<string>All</string>
-		</dict>
-	</dict>
-	<key>Website</key>
-	<string>http://christianjuth.com</string>
-</dict>
+  <dict>
+    <key>Builder Version</key>
+    <string>10600.2.5</string>
+    <key>CFBundleDisplayName</key>
+    <string>extension_framework</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.christianjuth.extension</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.1</string>
+    <key>CFBundleVersion</key>
+    <string>0.1.1</string>
+    <key>Chrome</key>
+    <dict>
+      <key>Database Quota</key>
+      <real>1048576</real>
+      <key>Global Page</key>
+      <string>pages/background/background.html</string>
+      <key>Popovers</key>
+      <array/>
+      <key>Toolbar Items</key>
+      <array>
+        <dict>
+          <key>Command</key>
+          <string>icon-clicked</string>
+          <key>Popover</key>
+          <string></string>
+          <key>Identifier</key>
+          <string>popupID</string>
+          <key>Image</key>
+          <string>menu-icons/icon-16.png</string>
+          <key>Label</key>
+          <string>extension_framework</string>
+        </dict>
+      </array>
+    </dict>
+    <key>Website</key>
+    <string>http://christianjuth.com</string>
+    <key>Author</key>
+    <string>Christian Juth</string>
+    <key>Description</key>
+    <string>something</string>
+    <key>Permissions</key>
+    <dict>
+      <key>Website Access</key>
+      <dict>
+        <key>Level</key>
+        <string>All</string>
+        <key>Include Secure Pages</key>
+        <true></true>
+      </dict>
+    </dict>
+  </dict>
 </plist>

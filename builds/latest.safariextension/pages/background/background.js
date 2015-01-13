@@ -12,6 +12,8 @@
           ext.storage.set("google", parseInt(ext.storage.get("google")) + 1);
           ext.menu.setBadge(ext.storage.get("google"));
           return ext.tabs.create("https://plus.google.com", true);
+        } else {
+          return console.log(data);
         }
       });
     });
