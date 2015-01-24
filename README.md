@@ -6,11 +6,19 @@
 ### ExtJS Library
 This is the core of [ExtJS_Framework](https://github.com/Christianjuth/ExtJS_Framework). Please reference [that repo's wiki](https://github.com/Christianjuth/ExtJS_Framework/wiki/ExtJS-Functions) for more info and a full list of functions.
 
-###CDN Links
-* [ext.js](http://code.ext-js.org/ext.js)
-* [ext.js.map](http://code.ext-js.org/ext.js.map)
-* [ext.min.js](http://code.ext-js.org/ext.min.js)
-* [ext.coffee](http://code.ext-js.org/ext.coffee)
+###ExtJS CDN Links
+* [ext.js](http://code.ext-js.org/framework/ext.js)
+* [ext.js.map](http://code.ext-js.org/framework/ext.js.map)
+* [ext.min.js](http://code.ext-js.org/framework/ext.min.js)
+* [ext.coffee](http://code.ext-js.org/framework/ext.coffee)
+
+###Plugins From the ExtJS Team
+* [Clipboard](http://code.ext-js.org/plugins/clipboard/clipboard.min.js)
+* [Notification](http://code.ext-js.org/plugins/notification/notification.min.js)
+* [Storage](http://code.ext-js.org/plugins/storage/storage.min.js)
+* [Tabs](http://code.ext-js.org/plugins/tabs/tabs.min.js)
+* [Utilities](http://code.ext-js.org/plugins/utilities/utilities.min.js)
+* [UUID](http://code.ext-js.org/plugins/uuid/uuid.min.js)
 
 ###About this Project
 
