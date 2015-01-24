@@ -90,8 +90,8 @@ module.exports = (grunt) ->
     'coffee:framework'
     'coffee:plugin'
     'coffee:default'
-#    'clean'
-#    'uglify:default'
+    'clean'
+    'uglify:default'
     'copy:default'
   ]
 

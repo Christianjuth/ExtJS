@@ -1,5 +1,6 @@
 {
     "jscodehints.detectedExclusions": [
-        "/Users/christianjuth/Documents/Development/Chrome Development/Extensions/ExtJS_Library/test.safariextension/js/test.js"
+        "/Users/christianjuth/Documents/Development/Chrome Development/Extensions/ExtJS_Library/test.safariextension/js/test.js",
+        "/Users/christianjuth/Documents/Development/Chrome Development/Extensions/ExtJS_Library/test.safariextension/js/plugins/uuid/uuid.min.js"
     ]
 }
