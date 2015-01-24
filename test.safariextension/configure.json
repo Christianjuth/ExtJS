@@ -16,7 +16,7 @@
     "notifications"
   ],
 
-  "background" : "background.html",
+  "background" : "pages/background/background.html",
 
 
   "storage" : [

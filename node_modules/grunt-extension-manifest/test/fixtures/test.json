@@ -55,8 +55,8 @@
       "type" : "list",
       "key" : "list",
       "default": "all",
-      "titles" : ["Shit","Food"],
-      "values" : ["shit","food"]
+      "titles" : ["Food"],
+      "values" : ["food"]
     }
   ]
 }

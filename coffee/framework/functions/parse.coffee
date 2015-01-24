@@ -1,4 +1,9 @@
+#The foloing functions are used to manipulate
+#the inputed string/numbers and return the new
+#value
 parse :
+
+
 
   #This function will take an unlimited amount
   #of parameters that are strings, Ints, floats,
@@ -20,6 +25,7 @@ parse :
     return output
 
 
+
   #This function will make the input text all
   #lowercase and replace spaces with "_". This
   #can be useful for tasks where spaces are not.
@@ -28,6 +34,11 @@ parse :
     id.toLowerCase().replace(/\ /g,"_")
 
 
+
+  #This function will escape most regex special
+  #chars from a string. This can be used to
+  #nutrilize a string to match or replace the
+  #exact value using rexes
   normalize : (text) ->
     regexEscChars = '
       \\(

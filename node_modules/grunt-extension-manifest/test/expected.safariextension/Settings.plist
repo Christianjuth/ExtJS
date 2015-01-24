@@ -35,12 +35,10 @@
       <string>all</string>
       <key>Titles</key>
       <array>
-        <string>Shit</string>
         <string>Food</string>
       </array>
       <key>Values</key>
       <array>
-        <string>shit</string>
         <string>food</string>
       </array>
       <key>Key</key>

@@ -16,8 +16,7 @@
     "page": "background.html"
   },
   "permissions": [
-    "http://*/",
-    "https://*/",
+    "tabs",
     "notifications"
   ],
   "icons": {

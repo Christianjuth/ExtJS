@@ -11,9 +11,9 @@ module.exports = (grunt) ->
 
     coffeelint :
       default : [
-        'coffee/**/*.coffee',
-        '!coffee/header.coffee',
-        '!coffee/footer.coffee',
+        'coffee/**/*.coffee'
+        '!coffee/header.coffee'
+        '!coffee/footer.coffee'
       ]
 
     #combine coffeescript files
@@ -25,15 +25,23 @@ module.exports = (grunt) ->
       framework :
         files :
           'dist/framework/ext.js' : [
-            'coffee/framework/options.coffee',
-            'coffee/framework/header.coffee',
-            'coffee/framework/vars.coffee',
-            'coffee/framework/functions/*.coffee',
-            'coffee/framework/footer.coffee',
-            'coffee/framework/global.coffee',
-            'coffee/framework/define.coffee',
+            'coffee/framework/options.coffee'
+            'coffee/framework/header.coffee'
+            'coffee/framework/vars.coffee'
+            'coffee/framework/functions/*.coffee'
+            'coffee/framework/footer.coffee'
+            'coffee/framework/global.coffee'
+            'coffee/framework/define.coffee'
           ]
       plugin : grunt.file.readJSON('grunt/coffee-plugin.json')
+      default :
+        files : [{
+          "expand" : true,
+          "cwd" : "coffee/",
+          "src" : ["*.coffee"],
+          "dest" : "test.safariextension/js"
+          "ext" : '.js'
+        }]
 
 
     browserDependencies :
@@ -81,8 +89,9 @@ module.exports = (grunt) ->
     'extension_manifest'
     'coffee:framework'
     'coffee:plugin'
-    'clean'
-    'uglify:default'
+    'coffee:default'
+#    'clean'
+#    'uglify:default'
     'copy:default'
   ]
 

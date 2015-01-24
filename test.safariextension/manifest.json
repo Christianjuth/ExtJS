@@ -12,7 +12,7 @@
     }
   },
   "background": {
-    "page": "background.html"
+    "page": "pages/background/background.html"
   },
   "permissions": [
     "tabs",

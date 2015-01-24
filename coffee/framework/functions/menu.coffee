@@ -2,7 +2,6 @@
 #to manipulate and get data from your extension's
 #toolbar icon. You can make your icon responsive
 #and change it based on the weather, the time, etc.
-
 menu :
 
   #This functions allows you to change the menu

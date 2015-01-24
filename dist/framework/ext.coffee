@@ -30,12 +30,14 @@ ini : (options) ->
   options = $.extend defultOptions, options
   this.browser = this.getBrowser()
 
-  #define global options
+  #expose options globally
   window.ext._config = options
 
-  #set required storage items
+  #set required localStorage items
   if !localStorage.options? and this.browser is 'chrome'
     localStorage.options = JSON.stringify({})
+
+  defineLog()
 
   #check plugins for _ APIs
   $.each ext, (item) ->
@@ -59,9 +61,9 @@ ini : (options) ->
           window.ext[alias] = item
 
         #alias warning
-        else if options.silent isnt true
+        else
           msg = 'Ext plugin "'+name+'" can\'t define alias "'+alias+'"'
-          console.warn msg
+          ext._log.warn msg
 
       delete item._aliases
 
@@ -70,20 +72,23 @@ ini : (options) ->
       compatibility = item._info.compatibility
       #chrome compatibility
       if compatibility.chrome is 'none'
-        console.warn 'Ext plugin "' + name + '" is Safari only'
+        msg = 'Ext plugin "' + name + '" is Safari only'
+        ext._log.warn msg
       else if compatibility.chrome isnt 'full'
         msg = 'Ext plugin "' + name + '" may contain some Safari only functions'
-        console.warn msg
+        ext._log.warn msg
 
       #safari compatibility
       if compatibility.safari is 'none'
-        console.warn 'Ext plugin "' + name + '" is Chrome only'
+        msg = 'Ext plugin "' + name + '" is Chrome only'
+        ext._log.warn msg
       else if compatibility.safari isnt 'full'
         msg = 'Ext plugin "' + name + '" may contain some Chrome only functions'
-        console.warn msg
+        ext._log.warn msg
 
     delete item._info
   return window.ext
+
 
 #This is a group of functions that will
 #search strings using a defined syntax.
@@ -91,9 +96,13 @@ ini : (options) ->
 #By adding this extra layer it becomes
 #less confusing to the user while still
 #retaining all the power of regex.
-
 match :
 
+
+
+  #This function if defines a syntax for
+  #matching urls. This syntax compiles down
+  #to a regex and is used to test the url
   url : (url,urlSearchSyntax,options) ->
     defultOptions  = {
       maxLength : '*',
@@ -160,7 +169,7 @@ match :
 
     #test the url against regex expression
     if negate
-      output = ! test.test url
+      output = !test.test url
     else
       output = test.test url
 
@@ -177,6 +186,9 @@ match :
 
 
 
+  #This function if defines a syntax for
+  #matching text. This syntax compiles down
+  #to a regex and is used to test the text
   text : (text,textSearchSyntax, options) ->
     defultOptions  = {
       allowSpaces : true,
@@ -240,7 +252,7 @@ match :
 
     #test the text against regex expression
     if negate
-      output = ! test.test text
+      output = !test.test text
     else
       output = test.test text
 
@@ -262,7 +274,6 @@ match :
 #to manipulate and get data from your extension's
 #toolbar icon. You can make your icon responsive
 #and change it based on the weather, the time, etc.
-
 menu :
 
   #This functions allows you to change the menu
@@ -346,12 +357,14 @@ menu :
 #for storing data the user can update.  This group
 #of function will allow you to set, get, reset, and
 #dump all the options.
-
 options :
+
+
 
   #These are some simple aliases I have defined to
   #help keep things short and tidy.
   _aliases : ['ops', 'opts']
+
 
 
   #This function will set up undefined options when
@@ -369,6 +382,7 @@ options :
       }
 
 
+
   #This function will set a storage item.  It pulls
   #the value of localStorage.options, parses them as
   #a object, sets the option based on the key you
@@ -383,6 +397,7 @@ options :
     return options[key]
 
 
+
   #This function will gram localStorage.options, parse
   #it as a object, retrieve the value of the key you
   #requested, and return the value.
@@ -393,6 +408,7 @@ options :
     else if ext.browser is 'safari'
       requestedOption = safari.extension.settings[key]
     return requestedOption
+
 
 
   #This function wil grab localStorage.options, parse
@@ -415,6 +431,7 @@ options :
     return optionReset
 
 
+
   #This function will find al the defined options in
   #configure.json, get all the keys for those options,
   #and loop through them resetting them to their defaults.
@@ -429,6 +446,7 @@ options :
             ext.options.reset(item.key)
     })
     return ext.options.dump()
+
 
 
   #This function will return a array of option keys
@@ -448,7 +466,12 @@ options :
 
 
 
+#The foloing functions are used to manipulate
+#the inputed string/numbers and return the new
+#value
 parse :
+
+
 
   #This function will take an unlimited amount
   #of parameters that are strings, Ints, floats,
@@ -470,6 +493,7 @@ parse :
     return output
 
 
+
   #This function will make the input text all
   #lowercase and replace spaces with "_". This
   #can be useful for tasks where spaces are not.
@@ -478,6 +502,11 @@ parse :
     id.toLowerCase().replace(/\ /g,"_")
 
 
+
+  #This function will escape most regex special
+  #chars from a string. This can be used to
+  #nutrilize a string to match or replace the
+  #exact value using rexes
   normalize : (text) ->
     regexEscChars = '
       \\(
@@ -498,16 +527,58 @@ parse :
     text = text.replace(regexEscChars,'\\')
     return text
 
+#The folling is a group of functions
+#for clent side validation. Please note
+#if you are using these to validate data
+#for a database or webserver you shold have
+#the validation done on that server. The
+#end use has the ablility to bypass and
+#tamper with this validation.
 validate :
 
+
+
+  #This function will validate any
+  #domain in the folling formats and more
+  # * HTTP://DOMAIN.TLD
+  # * HTTPs://DOMAIN.TLD
+  # * DOMAIN.TLD/SUBDIR
+  # * SUB.DOMAIN.TLD/SUBDIR
   url : (url) ->
     ext.match.url url, '*{://,www.,://www.,}*.**'
 
 
+
+  #This function will look for any
+  #https secure domain
+  secureUrl : (url) ->
+    ext.match.url url, 'https://{www.,}*.**'
+
+
+
+  #This function will look for a local
+  #file url containing "file://"
+  file : (path,type) ->
+    if type?
+      ext.match.url path, 'file://**.' + type
+    else
+      ext.match.url path, 'file://**'
+
+
+
+  #This function will validate any email
+  #address in this format "EXAMPLE@DOMAIN.TLD"
   email : (email) ->
     ext.match.text email, '*@*.*', { allowSpaces : false }
 
 
+
+  #This function required a little more
+  #customisation. You can input a password,
+  #required chars, max length, and min legnth.
+  #Please not this is client side validation and
+  #you should still have the password validated
+  #on your webserver for most secure practice.
   password : (passwd,options) ->
     #default options
     defultOptions  = {
@@ -521,13 +592,37 @@ validate :
       allowSpaces : false,
       ignorecase : false
     }
-    #vars
+    #User options overide default options
     options = $.extend defultOptions, options
+    #Forced options overide user options
+    $.extend options, force
     #logic
-    ext.match.text passwd, '*', $.extend options, force
+    ext.match.text passwd, '*', options
 
 }
 #bottom of extjs object container
+
+defineLog = ->
+  #define ext log object
+  ext._log = {}
+  #log
+  if ext._config.silent isnt true
+    ext._log.info = do ->
+      Function.prototype.bind.call(console.info, console)
+  else
+    ext._log.info = ->
+  #warn
+  if ext._config.silent isnt true
+    ext._log.warn = do ->
+      Function.prototype.bind.call(console.warn, console)
+  else
+    ext._log.warn = ->
+  #error
+  ext._log.error = do ->
+    Function.prototype.bind.call(console.error, console)
+
+
+
 
 #These functions below are defined global
 #on the page and are part of the window
@@ -552,7 +647,7 @@ Array.prototype.compress = ->
 
 #This function simply remove spaces from a string.
 String.prototype.compress = ->
-  return this.replace(/\ /,'')
+  return this.replace(/\ /g,'')
 
 
 

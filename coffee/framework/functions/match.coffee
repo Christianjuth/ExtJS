@@ -4,9 +4,13 @@
 #By adding this extra layer it becomes
 #less confusing to the user while still
 #retaining all the power of regex.
-
 match :
 
+
+
+  #This function if defines a syntax for
+  #matching urls. This syntax compiles down
+  #to a regex and is used to test the url
   url : (url,urlSearchSyntax,options) ->
     defultOptions  = {
       maxLength : '*',
@@ -73,7 +77,7 @@ match :
 
     #test the url against regex expression
     if negate
-      output = ! test.test url
+      output = !test.test url
     else
       output = test.test url
 
@@ -90,6 +94,9 @@ match :
 
 
 
+  #This function if defines a syntax for
+  #matching text. This syntax compiles down
+  #to a regex and is used to test the text
   text : (text,textSearchSyntax, options) ->
     defultOptions  = {
       allowSpaces : true,
@@ -153,7 +160,7 @@ match :
 
     #test the text against regex expression
     if negate
-      output = ! test.test text
+      output = !test.test text
     else
       output = test.test text
 

@@ -4,12 +4,14 @@ ini : (options) ->
   options = $.extend defultOptions, options
   this.browser = this.getBrowser()
 
-  #define global options
+  #expose options globally
   window.ext._config = options
 
-  #set required storage items
+  #set required localStorage items
   if !localStorage.options? and this.browser is 'chrome'
     localStorage.options = JSON.stringify({})
+
+  defineLog()
 
   #check plugins for _ APIs
   $.each ext, (item) ->
@@ -33,9 +35,9 @@ ini : (options) ->
           window.ext[alias] = item
 
         #alias warning
-        else if options.silent isnt true
+        else
           msg = 'Ext plugin "'+name+'" can\'t define alias "'+alias+'"'
-          console.warn msg
+          ext._log.warn msg
 
       delete item._aliases
 
@@ -44,17 +46,19 @@ ini : (options) ->
       compatibility = item._info.compatibility
       #chrome compatibility
       if compatibility.chrome is 'none'
-        console.warn 'Ext plugin "' + name + '" is Safari only'
+        msg = 'Ext plugin "' + name + '" is Safari only'
+        ext._log.warn msg
       else if compatibility.chrome isnt 'full'
         msg = 'Ext plugin "' + name + '" may contain some Safari only functions'
-        console.warn msg
+        ext._log.warn msg
 
       #safari compatibility
       if compatibility.safari is 'none'
-        console.warn 'Ext plugin "' + name + '" is Chrome only'
+        msg = 'Ext plugin "' + name + '" is Chrome only'
+        ext._log.warn msg
       else if compatibility.safari isnt 'full'
         msg = 'Ext plugin "' + name + '" may contain some Chrome only functions'
-        console.warn msg
+        ext._log.warn msg
 
     delete item._info
   return window.ext

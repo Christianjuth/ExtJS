@@ -4,12 +4,14 @@
 #for storing data the user can update.  This group
 #of function will allow you to set, get, reset, and
 #dump all the options.
-
 options :
+
+
 
   #These are some simple aliases I have defined to
   #help keep things short and tidy.
   _aliases : ['ops', 'opts']
+
 
 
   #This function will set up undefined options when
@@ -27,6 +29,7 @@ options :
       }
 
 
+
   #This function will set a storage item.  It pulls
   #the value of localStorage.options, parses them as
   #a object, sets the option based on the key you
@@ -41,6 +44,7 @@ options :
     return options[key]
 
 
+
   #This function will gram localStorage.options, parse
   #it as a object, retrieve the value of the key you
   #requested, and return the value.
@@ -51,6 +55,7 @@ options :
     else if ext.browser is 'safari'
       requestedOption = safari.extension.settings[key]
     return requestedOption
+
 
 
   #This function wil grab localStorage.options, parse
@@ -73,6 +78,7 @@ options :
     return optionReset
 
 
+
   #This function will find al the defined options in
   #configure.json, get all the keys for those options,
   #and loop through them resetting them to their defaults.
@@ -87,6 +93,7 @@ options :
             ext.options.reset(item.key)
     })
     return ext.options.dump()
+
 
 
   #This function will return a array of option keys
