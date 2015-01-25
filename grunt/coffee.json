@@ -1,0 +1,10 @@
+{
+  "options": {
+    "join": true,
+    "joinExt" : ".coffee",
+    "sourceMap" : true
+  },
+  "default": {
+    "files" : {}
+  }
+}

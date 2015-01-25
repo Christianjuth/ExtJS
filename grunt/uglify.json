@@ -1,0 +1,8 @@
+{
+  "options": {
+    "preserveComments": "some"
+  },
+  "default": {
+    "files": {}
+  }
+}

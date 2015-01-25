@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Builder Version</key>
+    <string>10600.2.5</string>
+    <key>CFBundleDisplayName</key>
+    <string>extension_plugin</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.johnsmith.extension</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.1</string>
+    <key>CFBundleVersion</key>
+    <string>0.1.1</string>
+    <key>Chrome</key>
+    <dict>
+      <key>Database Quota</key>
+      <real>10485760</real>
+      <key>Global Page</key>
+      <string>pages/background/background.html</string>
+      <key>Popovers</key>
+      <array/>
+      <key>Toolbar Items</key>
+      <array>
+        <dict>
+          <key>Command</key>
+          <string>icon-clicked</string>
+          <key>Popover</key>
+          <string></string>
+          <key>Identifier</key>
+          <string>popupID</string>
+          <key>Image</key>
+          <string>menu-icons/icon-16.png</string>
+          <key>Label</key>
+          <string>extension_plugin</string>
+        </dict>
+      </array>
+    </dict>
+    <key>Website</key>
+    <string/>
+    <key>Author</key>
+    <string>John Smith</string>
+    <key>Description</key>
+    <string>something</string>
+    <key>Permissions</key>
+    <dict>
+      <key>Website Access</key>
+      <dict>
+        <key>Level</key>
+        <string>All</string>
+        <key>Include Secure Pages</key>
+        <true></true>
+      </dict>
+    </dict>
+  </dict>
+</plist>

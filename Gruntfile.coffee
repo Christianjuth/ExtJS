@@ -4,79 +4,71 @@ module.exports = (grunt) ->
   require('time-grunt')(grunt)
   require('load-grunt-tasks')(grunt)
 
+  #set config vars
+  config = grunt.file.readJSON('configure.json')
+  name = config.name
+
   #Project functions
   grunt.initConfig {
 
-    pkg: grunt.file.readJSON('package.json')
+  pkg: grunt.file.readJSON('package.json')
 
-    #lint functions
-    coffeelint : default: ['plugin/**/*.coffee']
+  #lint functions
+  coffeelint : default: ['plugin/**/*.coffee']
 
-    #combine coffeescript files
-    coffee :
-      options :
-        join: true
-      default :
-        files :
-          'dist/plugin.js' : [
-            'plugin/licence.coffee',
-            'plugin/plugin.coffee',
-            'plugin/define.coffee'
-          ]
-
-    #minify js files
-    uglify :
-      options :
-        preserveComments : 'some'
-      default :
-        files :
-          'dist/plugin.min.js' : 'dist/plugin.js'
-
-    copy :
-      default :
-        expand: true,
-        cwd: 'dist/'
-        src: '**'
-        dest: 'test/js/'
+  #combine coffeescript files
+  coffee : grunt.file.readJSON('grunt/coffee.json')
 
 
-    #notify on task finish
-    notify_hooks :
-      options :
-        enabled : true,
-        max_jshint_notifications : 5,
-        title : 'ExtJS Plugin Builder',
-        success : true,
-        duration : 3
+  #minify js files
+  uglify : grunt.file.readJSON('grunt/uglify.json')
 
+  #copy files for testing
+  copy : grunt.file.readJSON('grunt/copy.json')
 
-    browserDependencies :
-      define :
-        dir : 'plugin',
-        files: [
-          {'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/ExtJS_Library/plugin/plugin/define.coffee'}
-        ]
-      assets :
-        dir : 'test/js',
-        files: [
-          {'jquery.js': 'https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'}
-          {'require.js': 'http://requirejs.org/docs/release/2.1.15/minified/require.js'}
-          {'ext.js': 'https://raw.githubusercontent.com/Christianjuth/ExtJS_Library/master/ext.js'}
-          {'underscore.js': 'http://underscorejs.org/underscore-min.js'}
-        ]
+  #notify on task finish
+  notify_hooks :
+    options :
+      enabled : true,
+      max_jshint_notifications : 5,
+      title : 'ExtJS Plugin Builder',
+      success : true,
+      duration : 3
 
-    clean :
-      default : [
-        'plugin/define.coffee'
-        'test/js/ext.js'
-      ]
+  #download cdn files
+  browserDependencies : grunt.file.readJSON('grunt/browserDependencies.json')
+
+  #clean old files
+  clean : grunt.file.readJSON('grunt/clean.json')
+
+  extension_manifest :
+    default :
+      file: 'test.safariextension/configure.json',
+      dest: 'test.safariextension/'
 
   }
 
+  #dynamic options
+  #grunt coffee
+  coffeeFiles = {}
+  coffeeFiles['dist/'+name+'.js'] = ["plugin/licence.coffee", "plugin/plugin.coffee", "plugin/define.coffee"]
+  grunt.config.set 'coffee.default.files', coffeeFiles
+  #grunt copy
+  grunt.config.set 'copy.default.rename', (dest, src) ->
+    if ! /\.(map|coffee)$/.test src
+      src = src.replace(name,'plugin')
+    return dest + src
+  #grunt uglify
+  uglifyFiles = {}
+  uglifyFiles['dist/'+name+'.min.js'] = 'dist/'+name+'.js'
+  grunt.config.set 'uglify.default.files', uglifyFiles
+
+  #define tasks
   grunt.registerTask 'default', [
     'coffeelint'
-#    'clean'
-#    'browserDependencies'
+    'clean'
+    'browserDependencies'
+    'extension_manifest'
     'coffee'
     'uglify'
     'copy'

@@ -1,0 +1,9 @@
+{
+  "default": {
+    "expand": true,
+    "flatten": true,
+    "cwd": "dist/",
+    "src": "**",
+    "dest": "test.safariextension/js/"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name" : "extension_plugin",
+  "author" : "John Smith",
+  "version" : "0.1.1",
+  "bundleID" : "com.johnsmith.extension",
+  "databaseQuota" : "10",
+
+
+  "description" : "something",
+
+
+  "permissions" : [
+    "secureWebsites",
+    "websites",
+    "notifications"
+  ],
+
+  "background": "pages/background/background.html",
+
+  "options" : []
+}
