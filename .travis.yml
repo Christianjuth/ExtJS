@@ -4,7 +4,7 @@ node_js:
 before_install: npm install -g grunt-cli
 install: npm install
 before_script: grunt
-before_deploy: cd dist
+before_deploy: "cd dist && echo 'uploading to cdn...'"
 deploy:
   provider: cloudfiles
   username: christianjuth
@@ -12,3 +12,4 @@ deploy:
     secure: aNmfbx7vOXT2tMKM+1x1G2EICyDYjO0gsBpR1X6qtNq0xRL/tDL455pZN+bRQxtrBpsukNVZC2Xv1iAsISs2OYKIWyEq/W4/tZ0K+8W3A/rBD9qbMuhA1cw137DmRa1Wy2Bs6h6YQvBvFAgvWQRMJiXB9w7apNV/K1evA69j8cw=
   region: iad
   container: ExtJS
+  skip_cleanup: true
