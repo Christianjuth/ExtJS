@@ -22,6 +22,7 @@ _load : ->
     success: (data) ->
       for item in data.storage
         if typeof ext.storage.get(item.key) is 'undefined'
+          log.info('storage item "' + item.key + '" was created')
           ext.storage.set(item.key, item.default)
   }
 

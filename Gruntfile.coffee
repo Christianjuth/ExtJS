@@ -1,6 +1,6 @@
 module.exports = (grunt) ->
 
-  #require it at the top and pass in the grunt instance
+  #start time and load tasks
   require('time-grunt')(grunt)
   require('load-grunt-tasks')(grunt)
 
@@ -9,90 +9,31 @@ module.exports = (grunt) ->
 
     pkg: grunt.file.readJSON('package.json')
 
-    coffeelint :
-      default : [
-        'coffee/**/*.coffee'
-        '!coffee/header.coffee'
-        '!coffee/footer.coffee'
-      ]
+    #resources
+    browserDependencies:  grunt.file.readJSON('grunt/browserDependencies.json')
 
-    #combine coffeescript files
-    coffee :
-      options :
-        join: true
-        joinExt : '.coffee'
-        sourceMap : true
-      framework :
-        files :
-          'dist/framework/ext.js' : [
-            'coffee/framework/options.coffee'
-            'coffee/framework/header.coffee'
-            'coffee/framework/vars.coffee'
-            'coffee/framework/functions/*.coffee'
-            'coffee/framework/footer.coffee'
-            'coffee/framework/global.coffee'
-            'coffee/framework/define.coffee'
-          ]
-      plugin : grunt.file.readJSON('grunt/coffee-plugin.json')
-      default :
-        files : [{
-          "expand" : true,
-          "cwd" : "coffee/",
-          "src" : ["*.coffee"],
-          "dest" : "test.safariextension/js"
-          "ext" : '.js'
-        }]
+    #scripts
+    coffeelint:           grunt.file.readJSON('grunt/coffeelint.json')
+    coffee:               grunt.file.readJSON('grunt/coffee.json')
+    uglify:               grunt.file.readJSON('grunt/uglify.json')
 
-
-    browserDependencies :
-      define :
-        dir : 'coffee/plugins',
-        files: [
-          {'define.coffee': 'https://raw.githubusercontent.com/Christianjuth/ExtJS_Library/plugin/plugin/define.coffee'}
-        ]
-
-    #minify js files
-    uglify :
-      options :
-        preserveComments : 'some'
-      default :
-        files : [{
-          "expand" : true,
-          "cwd" : "dist/",
-          "src" : ["**/*.js"],
-          "dest" : "dist/<%= srcDir %>"
-          "ext" : '.min.js'
-        }]
-
-    copy :
-      default :
-        files : [{
-          expand: true,
-          cwd: 'dist/',
-          src: '**/*',
-          dest: 'test.safariextension/js/<%= srcDir %>',
-          filter: 'isFile'
-        }]
-
-    clean : ['**/*.min.js']
-
-    extension_manifest :
-      default :
-        file : 'test.safariextension/configure.json',
-        dest : 'test.safariextension/'
+    #other
+    copy:                 grunt.file.readJSON('grunt/copy.json')
+    clean:                grunt.file.readJSON('grunt/clean.json')
+    extension_manifest:   grunt.file.readJSON('grunt/extension_manifest.json')
 
   }
 
   grunt.registerTask 'default', [
-#    'coffeelint:default'
-    'browserDependencies:define'
+    'coffeelint'
+    'browserDependencies'
     'extension_manifest'
-    'coffee:framework'
-    'coffee:plugin'
-    'coffee:default'
+    'coffee'
+    'coffee'
     'clean'
-    'uglify:default'
-    'copy:default'
+    'uglify'
+    'copy'
   ]
 
+  #notify when task is done
   grunt.task.run('notify_hooks')
