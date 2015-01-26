@@ -14,5 +14,27 @@
     "load-grunt-tasks": "^2.0.0",
     "time-grunt": "^1.0.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Christianjuth/ExtJS_Library.git"
+  },
+  "keywords": [
+    "ext",
+    "extjs",
+    "extension",
+    "chrome",
+    "safari"
+  ],
+  "author": "Christian Juth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Christianjuth/ExtJS_Library/issues"
+  },
+  "homepage": "https://github.com/Christianjuth/ExtJS_Library"
 }

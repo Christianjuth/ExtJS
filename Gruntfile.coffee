@@ -24,8 +24,12 @@ module.exports = (grunt) ->
 
   }
 
-  grunt.registerTask 'default', [
+  #define tasks
+  grunt.registerTask 'test', [
     'coffeelint'
+  ]
+
+  grunt.registerTask 'build', [
     'browserDependencies'
     'extension_manifest'
     'coffee'
@@ -33,6 +37,12 @@ module.exports = (grunt) ->
     'clean'
     'uglify'
     'copy'
+  ]
+
+  #default grunt task
+  grunt.registerTask 'default', [
+    'test',
+    'build'
   ]
 
   #notify when task is done
