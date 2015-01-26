@@ -1,0 +1,9 @@
+{
+  "options": {
+    "enabled": true,
+    "max_jshint_notifications": 5,
+    "title": "ExtJS Plugin Builder",
+    "success": true,
+    "duration": 3
+  }
+}
