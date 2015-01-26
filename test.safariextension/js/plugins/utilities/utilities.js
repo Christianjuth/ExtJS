@@ -89,17 +89,19 @@ SOFTWARE.
 
   log = {
     error: function(msg) {
-      return console.error('Ext plugin (' + NAME + ') says: ' + msg);
+      return (function() {
+        return ext._log.error('Ext plugin (' + NAME + ') says: ' + msg);
+      })();
     },
-    warn: function(msg) {
-      if (ext._config.silent !== true) {
-        return console.warn('Ext plugin (' + NAME + ') says: ' + msg);
-      }
+    warm: function(msg) {
+      return (function() {
+        return ext._log.warn('Ext plugin (' + NAME + ') says: ' + msg);
+      })();
     },
     info: function(msg) {
-      if (ext._config.silent !== true) {
-        return console.log('Ext plugin (' + NAME + ') says: ' + msg);
-      }
+      return (function() {
+        return ext._log.info('Ext plugin (' + NAME + ') says: ' + msg);
+      })();
     }
   };
 

@@ -1,0 +1,76 @@
+{
+  "options": {
+    "join": true,
+    "joinExt": ".coffee",
+    "sourceMap": true
+  },
+  "default": {
+    "files": [
+      {
+        "expand": true,
+        "cwd": "coffee/",
+        "src": ["*.coffee"],
+        "dest": "test.safariextension/js",
+        "ext": ".js"
+      }
+    ]
+  },
+  "plugins": {
+    "framework": {
+      "files": {
+        "dist/framework/ext.js": [
+          "coffee/framework/options.coffee",
+          "coffee/framework/header.coffee",
+          "coffee/framework/vars.coffee",
+          "coffee/framework/functions/*.coffee",
+          "coffee/framework/footer.coffee",
+          "coffee/framework/global.coffee",
+          "coffee/framework/define.coffee"
+        ]
+      }
+    },
+    "files" : {
+      "dist/plugins/clipboard/clipboard.js" : [
+        "coffee/plugins/LICENSE.coffee",
+        "coffee/plugins/clipboard/clipboard.coffee",
+        "coffee/plugins/define.coffee"
+      ],
+
+      "dist/plugins/notification/notification.js" : [
+        "coffee/plugins/LICENSE.coffee",
+        "coffee/plugins/notification/notification.coffee",
+        "coffee/plugins/define.coffee"
+      ],
+
+      "dist/plugins/storage/storage.js" : [
+        "coffee/plugins/LICENSE.coffee",
+        "coffee/plugins/storage/storage.coffee",
+        "coffee/plugins/define.coffee"
+      ],
+
+      "dist/plugins/tabs/tabs.js" : [
+        "coffee/plugins/LICENSE.coffee",
+        "coffee/plugins/tabs/tabs.coffee",
+        "coffee/plugins/define.coffee"
+      ],
+
+      "dist/plugins/utilities/utilities.js" : [
+        "coffee/plugins/LICENSE.coffee",
+        "coffee/plugins/utilities/utilities.coffee",
+        "coffee/plugins/define.coffee"
+      ],
+
+      "dist/plugins/uuid/uuid.js" : [
+        "coffee/plugins/LICENSE.coffee",
+        "coffee/plugins/uuid/uuid.coffee",
+        "coffee/plugins/define.coffee"
+      ],
+
+      "dist/plugins/encrypted_storage/encrypted_storage.js" : [
+        "coffee/plugins/LICENSE.coffee",
+        "coffee/plugins/encrypted_storage/encrypted_storage.coffee",
+        "coffee/plugins/define.coffee"
+      ]
+    }
+  }
+}

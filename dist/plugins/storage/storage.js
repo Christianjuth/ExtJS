@@ -54,6 +54,7 @@ SOFTWARE.
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             item = _ref[_i];
             if (typeof ext.storage.get(item.key) === 'undefined') {
+              log.info('storage item "' + item.key + '" was created');
               _results.push(ext.storage.set(item.key, item["default"]));
             } else {
               _results.push(void 0);
@@ -124,17 +125,19 @@ SOFTWARE.
 
   log = {
     error: function(msg) {
-      return console.error('Ext plugin (' + NAME + ') says: ' + msg);
+      return (function() {
+        return ext._log.error('Ext plugin (' + NAME + ') says: ' + msg);
+      })();
     },
-    warn: function(msg) {
-      if (ext._config.silent !== true) {
-        return console.warn('Ext plugin (' + NAME + ') says: ' + msg);
-      }
+    warm: function(msg) {
+      return (function() {
+        return ext._log.warn('Ext plugin (' + NAME + ') says: ' + msg);
+      })();
     },
     info: function(msg) {
-      if (ext._config.silent !== true) {
-        return console.log('Ext plugin (' + NAME + ') says: ' + msg);
-      }
+      return (function() {
+        return ext._log.info('Ext plugin (' + NAME + ') says: ' + msg);
+      })();
     }
   };
 

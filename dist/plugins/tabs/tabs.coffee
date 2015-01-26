@@ -113,14 +113,15 @@ NAME = plugin._info.name
 ID = NAME.toLowerCase().replace(/\ /g,"_")
 #console logging
 log = {
-error : (msg) -> console.error 'Ext plugin (' + NAME + ') says: ' + msg
-warn : (msg) ->
-  if ext._config.silent isnt true
-    console.warn 'Ext plugin (' + NAME + ') says: ' + msg
-info : (msg) ->
-  if ext._config.silent isnt true
-    console.log 'Ext plugin (' + NAME + ') says: ' + msg
-}
+  error: (msg) -> do ->
+    ext._log.error 'Ext plugin (' + NAME + ') says: ' + msg
+
+  warm: (msg) -> do ->
+    ext._log.warn 'Ext plugin (' + NAME + ') says: ' + msg
+
+  info: (msg) -> do ->
+    ext._log.info 'Ext plugin (' + NAME + ') says: ' + msg
+  }
 #setup AMD support if browser supports the AMD define function
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], ->

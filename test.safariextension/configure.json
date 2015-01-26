@@ -34,7 +34,12 @@
     }
   ],
 
+  "encryptedStorage" : [
+    {
+      "key" :    "google",
+      "default": "0"
+    }
+  ],
+
   "options":[]
 }
-
-
