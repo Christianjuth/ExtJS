@@ -4,7 +4,7 @@ node_js:
 before_install: npm install -g grunt-cli
 install: npm install
 before_script: grunt
-before_deploy: cd dist
+before_deploy: "cd dist && echo 'uploading to cdn...'"
 deploy:
   provider: cloudfiles
   username: christianjuth
