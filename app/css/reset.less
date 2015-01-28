@@ -15,12 +15,12 @@ body{
   position: relative;
 }
 
-.left{
+div.left{
   clear: right;
   float: left;
 }
 
-.right{
+div.right{
   clear: left;
   float: right;
 }
@@ -48,6 +48,8 @@ h1,h2,h3,h4,h5,p,label{
     text-align: left;
   }
   &.center{
+    width: 100%;
+    clear: both;
     text-align: center;
   }
   &.light, &.\33 00{
@@ -91,14 +93,41 @@ input[type=checkbox]{
   height:  30px;
 }
 
-@media only screen and (min-width:500px) and (max-width: 900px) {
-  .page_wrap{
-    padding: 50px 15%;
+form{
+  .form-group:last-child{
+    margin-bottom: 0;
   }
 }
 
-@media only screen and (min-width:0px) and (max-width: 500px) {
+@media (min-width: 1200px){
+  .page_wrap{
+    padding: 50px 30%;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .page_wrap{
+    padding: 50px 25%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .page_wrap{
+    padding: 50px 20%;
+  }
+}
+
+@media (max-width: 767px) {
   .page_wrap{
     padding: 20px 20px;
+  }
+
+  form{
+    label,
+    label.left,
+    label.right{
+      width: 100%;
+      text-align: left;
+    }
   }
 }

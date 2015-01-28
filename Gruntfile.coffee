@@ -46,8 +46,8 @@ module.exports = (grunt) ->
   ]
 
   grunt.registerTask 'build', [
-    'clean'
-    'browserDependencies'
+#    'clean'
+#    'browserDependencies'
     'extension_manifest'
     'rsync'
     'multiresize'

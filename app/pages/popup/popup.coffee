@@ -5,6 +5,9 @@ require [
   "jquery",
   "underscore",
   "ext",
+
+  "extPlugin/popup",
+  "extPlugin/tabs",
 ], ($,_,ext) ->
 
   ext.ini()

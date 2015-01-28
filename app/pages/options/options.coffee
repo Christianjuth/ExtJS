@@ -7,17 +7,21 @@ require [
   "mustache",
   "bootstrap",
 
-  "ext",
-  "extPlugin/extension",
+  "ext"
 ], ($,_,Mustache,bootstrap,ext) ->
+
   ext.ini()
 
-  window.Mustache = Mustache
-
+  change = ->
+    console.log('Settings saved...')
 
   option =
     create:(json) ->
-      item = this.types[json.type](json)
+      type = json.type.toLocaleLowerCase()
+      try
+        item = this.types[type](json)
+      catch
+        throw 'Setting type "'+json.type+'" does not exsist'
       elm = Mustache.render $("#option").html(), {
         title:json.title,
         option: item
@@ -25,18 +29,19 @@ require [
       elm = $(elm).appendTo("#settings");
       elm.find("input[type=text], textarea").keyup ->
         ext.options.set(json.key,$(this).val())
+        change()
       elm.find("select").change () ->
         ext.options.set(json.key,$(this).val())
+        change()
       elm.find("input[type=checkbox]").change () ->
         ext.options.set(json.key,$(this).is(':checked'))
-
+        change()
 
     types:
-
       text : (json) ->
         elm = Mustache.render($("#text").html(), {value:ext.options.get(json.key)})
 
-      textArea : (json) ->
+      textarea : (json) ->
         elm = Mustache.render($("#textarea").html(), {text:ext.options.get(json.key)})
 
       checkbox : (json) ->
@@ -59,9 +64,4 @@ require [
 
   $.getJSON "../../configure.json", (data) ->
     for item in data.options
-      option.create({
-        title : item.title,
-        key : item.key,
-        type : item.type,
-        options : item.options
-      })
+      option.create(item)

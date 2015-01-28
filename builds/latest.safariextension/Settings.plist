@@ -92,5 +92,19 @@
       <key>Type</key>
       <string>CheckBox</string>
     </dict>
+    <dict>
+      <key>DefaultValue</key>
+      <string>Type Something...</string>
+      <key>Titles</key>
+      <array/>
+      <key>Values</key>
+      <array/>
+      <key>Key</key>
+      <string>message</string>
+      <key>Title</key>
+      <string>A Message</string>
+      <key>Type</key>
+      <string>TextField</string>
+    </dict>
   </array>
 </plist>

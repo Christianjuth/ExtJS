@@ -25,7 +25,7 @@ require [
   ext.menu.setBadge parseInt ext.storage.get "google"
 
   #set icon click function
-  ext.menu.click () ->
+  ext.menu.iconOnClick () ->
     ext.tabs.indexOf "htt*//plus.google.com**", (data) ->
       if data.length is 0
         ext.storage.set("google", parseInt(ext.storage.get("google")) + 1)

@@ -4,6 +4,10 @@
   "version" : "0.1.1",
   "bundleID" : "com.christianjuth.extension",
   "databaseQuota" : "1",
+  "menuIcon" : {
+    "19" : "menu-icons/icon-19.png",
+    "16" : "menu-icons/icon-16.png"
+  },
 
 
   "description" : "something",
@@ -18,6 +22,7 @@
 
   "options_page": "pages/options/options.html",
   "background" : "pages/background/background.html",
+  "popup" : "pages/popup/popup.html",
 
 
   "storage" : [
@@ -76,6 +81,12 @@
       "type" : "checkbox",
       "key":"pinned",
       "default": true
+    },
+    {
+      "title" : "A Message",
+      "type" : "textarea",
+      "key":"message",
+      "default": "Type Something..."
     }
   ]
 }

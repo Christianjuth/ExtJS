@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <title>Options</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../../css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../../js/libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../js/libs/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../../js/libs/flat-ui.css">
     <link rel="stylesheet" type="text/css" href="options.css">
 
@@ -12,13 +13,13 @@
     <script data-main="options.js" src="../../js/libs/require-min.js"></script>
   </head>
   <body>
-    <script type="text/html" id="textarea">
-      <textarea class="form-control" rows="4">
-        {{text}}
-      </textarea>
-    </script>
 
     <!-- Templates -->
+
+    <!-- options -->
+    <script type="text/html" id="textarea">
+      <textarea class="form-control" rows="4">{{text}}</textarea>
+    </script>
 
     <script type="text/html" id="text">
       <input type="text" class="form-control" value="{{value}}">
@@ -36,6 +37,7 @@
       </select>
     </script>
 
+    <!-- option wrap -->
     <script type="text/html" id="option">
       <div class="form-group">
         <label class="col-sm-4 control-label right 400">{{title}}</label>
@@ -59,9 +61,12 @@
           </div>
         </div>
 
+        <!-- you are free to remove this tag -->
         <p class="text-center text-muted">Built by ExtJS using Boorstrap 3</p>
 
       </div>
+
     </div>
+
   </body>
 </html>

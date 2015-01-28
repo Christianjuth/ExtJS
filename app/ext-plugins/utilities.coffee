@@ -24,35 +24,49 @@ SOFTWARE.
 
 PLUGIN = {
 
+
+
 _: {
 
 #INFO
 authors : ['Christian Juth']
-name : 'Popup'
+name : 'Utilities'
 version : '0.1.0'
 min : '0.1.0'
 compatibility :
   chrome : 'full'
-  safari : 'full'
+  safari : 'partial'
 
 }
 
 
 
 #FUNCTIONS
-setWidth: (width)->
+run : () ->
   if BROWSER is 'chrome'
-    $('html, body').width(width)
-  if BROWSER is 'safari'
-    safari.self.width = width
+    bkPage = chrome.extension.getBackgroundPage()
+    bkPage.test = () ->
+      alert(window.message)
+    bkPage.test()
+    delete bkPage.test
 
 
 
-setHeight: (height)->
+reload : () ->
   if BROWSER is 'chrome'
-    $('body').height(height)
-  if BROWSER is 'safari'
-    safari.self.height = height
+    chrome.runtime.reload()
+  else if BROWSER is 'safari'
+    safari.extension.globalPage.contentWindow.reload = () ->
+      window.console.clear()
+      location.reload()
+    safari.extension.globalPage.contentWindow.reload()
+
+
+
+#this function is chrome only!
+update : () ->
+  if BROWSER is 'chrome'
+    chrome.runtime.requestUpdateCheck()
 
 
 

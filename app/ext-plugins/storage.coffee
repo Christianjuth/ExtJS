@@ -20,43 +20,45 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-https://github.com/Christianjuth/
 ###
 
-plugin = {
+PLUGIN = {
 
-_info :
-  authors : ['Christian Juth']
-  name : 'Storage'
-  version : '0.1.0'
-  min : '0.1.0'
-  compatibility :
-    chrome : 'full'
-    safari : 'full'
 
-_aliases : ['localStorage','local']
 
-_load : ->
+_: {
+
+#INFO
+authors : ['Christian Juth']
+name : 'Storage'
+aliases : ['localStorage','local']
+version : '0.1.0'
+min : '0.1.0'
+compatibility :
+  chrome : 'full'
+  safari : 'full'
+
+#EVENTS
+onload : ->
   if !localStorage.storage?
     localStorage.storage = JSON.stringify({})
+  data = ext._.getConfig()
+  for item in data.storage
+    if typeof ext.storage.get(item.key) is 'undefined'
+      log.info('storage item "' + item.key + '" was created')
+      ext.storage.set(item.key, item.default)
 
-  $.ajax {
-    url: '../../configure.json',
-    dataType: 'json',
-    async: false,
-    success: (data) ->
-      for item in data.storage
-        if typeof ext.storage.get(item.key) is 'undefined'
-          ext.storage.set(item.key, item.default)
-  }
+}
 
 
-#functions
+
+#FUNCTIONS
+
 set : (key, value) ->
   storage = $.parseJSON localStorage.storage
   storage[key] = value
   localStorage.storage = JSON.stringify storage
+
 
 
 get : (key) ->
@@ -64,10 +66,12 @@ get : (key) ->
   storage[key]
 
 
+
 remove : (key) ->
   storage = $.parseJSON localStorage.storage
   delete storage[key]
   localStorage.storage = JSON.stringify storage
+
 
 
 removeAll : (exceptions) ->
@@ -77,45 +81,56 @@ removeAll : (exceptions) ->
   ext.storage.dump()
 
 
+
 dump : ->
   output = []
   $.each $.parseJSON(localStorage.storage), (key,val) ->
     output.push key
   output
 
-}
 
+
+}
 
 ###
 From the ExtJS team
 -------------------
-The code below was designed by the ExtJS team to provide useful info to the
+The code below was designed by the ExtJS team to provIDe useful info to the
 developers. We ask you do not change this code unless necessary. By keeping
-this standard on all plugins, we hope to make development easy by providing
+this standard on all plugins, we hope to make development easy by provIDing
 useful info to developers.  In addition to logging, the code below also
 contains the AMD function for defining the plugin.  This waits for the ExtJS
 AMD module to define the library itself, and then your plugin is defined
 which prevents any undefined errors.  Although not suggested, plugins can be
 loaded before the ExtJS library.  The functionality below assures ease of
-use. We also ask you keep this code up to date with any changes that may
-occur in the future.  Please refer to the sample plugin on the GitHub repo
-where this code is updated.
+use.
 
 https://github.com/Christianjuth/extension_framework/tree/plugin
 ###
-name = plugin._info.name
-id = name.toLowerCase().replace(/\ /g,"_")
+BROWSER = ''
+NAME = PLUGIN._.name
+ID = NAME.toLowerCase().replace(/\ /g,"_")
 #console logging
 log = {
-  error : (msg) -> console.error 'Ext plugin (' + name + ') says: ' + msg
-  warn : (msg) -> console.warn 'Ext plugin (' + name + ') says: ' + msg
-  info : (msg) -> console.warn 'Ext plugin (' + name + ') says: ' + msg
-}
+  error: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.error msg
+
+  warm: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.warn msg
+
+  info: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.info msg
+  }
 #setup AMD support if browser supports the AMD define function
 if typeof window.define is 'function' && window.define.amd
-  window.define ['ext'], ->
-    #load ExtJS meets version requirements
-    if !plugin._info.min? or plugin._info.min <= window.ext.version
-      window.ext[id] = plugin
+  window.define ['ext'], (ext)->
+    BROWSER = ext._.browser
+    #load ExtJS meets VERSION requirements
+    if !PLUGIN._.min? or PLUGIN._.min <= window.ext.version
+      ext._.load(ID,PLUGIN)
     else
-      console.error 'Ext plugin ('+name+') requires ExtJS v'+plugin._info.min+'+'
+      VERSION = PLUGIN._.min
+      console.error 'Ext plugin ('+NAME+') requires ExtJS v'+VERSION+'+'
