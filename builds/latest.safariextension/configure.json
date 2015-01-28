@@ -43,28 +43,18 @@
       "key" : "name",
       "default":"John"
     },
-
-    {
-      "title" : "Age",
-      "type" : "text",
-      "key":"age",
-      "default":"18"
-    },
-
     {
       "title" : "Setting",
       "type" : "text",
       "key":"setting",
       "default":"hey"
     },
-
     {
       "title" : "Favorite Color",
       "type" : "text",
       "key":"color",
       "default":"blue"
     },
-
     {
       "title" : "Favorite Food",
       "type" : "text",
@@ -75,9 +65,17 @@
       "title" : "What you want",
       "type" : "list",
       "key" : "list",
-      "default": "food",
-      "titles" : ["Food"],
-      "values" : ["food"]
+      "default": "Five",
+      "options": [
+        {"title":"Five", "val": 5},
+        {"title":"Six", "val": 6}
+      ]
+    },
+    {
+      "title" : "Respect Pinned",
+      "type" : "checkbox",
+      "key":"pinned",
+      "default": true
     }
   ]
 }

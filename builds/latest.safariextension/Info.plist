@@ -23,20 +23,7 @@
       <key>Popovers</key>
       <array/>
       <key>Toolbar Items</key>
-      <array>
-        <dict>
-          <key>Command</key>
-          <string>icon-clicked</string>
-          <key>Popover</key>
-          <string></string>
-          <key>Identifier</key>
-          <string>popupID</string>
-          <key>Image</key>
-          <string>menu-icons/icon-16.png</string>
-          <key>Label</key>
-          <string>extension_framework</string>
-        </dict>
-      </array>
+      <array/>
     </dict>
     <key>Website</key>
     <string>http://christianjuth.com</string>

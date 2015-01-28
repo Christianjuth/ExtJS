@@ -18,20 +18,6 @@
     </dict>
     <dict>
       <key>DefaultValue</key>
-      <string>18</string>
-      <key>Titles</key>
-      <array/>
-      <key>Values</key>
-      <array/>
-      <key>Key</key>
-      <string>age</string>
-      <key>Title</key>
-      <string>Age</string>
-      <key>Type</key>
-      <string>TextField</string>
-    </dict>
-    <dict>
-      <key>DefaultValue</key>
       <string>hey</string>
       <key>Titles</key>
       <array/>
@@ -74,14 +60,16 @@
     </dict>
     <dict>
       <key>DefaultValue</key>
-      <string>food</string>
+      <string>Five</string>
       <key>Titles</key>
       <array>
-        <string>Food</string>
+        <string>Five</string>
+        <string>Six</string>
       </array>
       <key>Values</key>
       <array>
-        <string>food</string>
+        <string>5</string>
+        <string>6</string>
       </array>
       <key>Key</key>
       <string>list</string>
@@ -89,6 +77,20 @@
       <string>What you want</string>
       <key>Type</key>
       <string>ListBox</string>
+    </dict>
+    <dict>
+      <key>DefaultValue</key>
+      <true></true>
+      <key>Titles</key>
+      <array/>
+      <key>Values</key>
+      <array/>
+      <key>Key</key>
+      <string>pinned</string>
+      <key>Title</key>
+      <string>Respect Pinned</string>
+      <key>Type</key>
+      <string>CheckBox</string>
     </dict>
   </array>
 </plist>

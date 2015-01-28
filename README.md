@@ -1,12 +1,27 @@
-### Basic Documentation
+### Quick Descrption
+ExtJS is a framwork for building Chrome and Safari extensions in one, as well as providing a file structure with grunt setup and ready to go. [Learn more...](http://ext-js.org/)
+
+### Getting Started
 * [Getting Started](https://github.com/Christianjuth/ExtJS_Framework/wiki/Getting-Started)
 * [Building Your Extension](https://github.com/Christianjuth/ExtJS_Framework/wiki/Building-Your-Extension)
-* [ExtJS Functions](https://github.com/Christianjuth/ExtJS_Framework/wiki/ExtJS-Functions)
+
+_for more documentation please refer to [our site](http://ext-js.org)_
 
 
-### Advanced Documentation
-* [Url Syntax](https://github.com/Christianjuth/ExtJS_Framework/wiki/Url-Search-Syntax)
-* [Writing an ExtJS plugin](https://github.com/Christianjuth/ExtJS_Library/tree/plugin)
+### Reporting Issues
+Please submit issues with this framwork on github.  Any issues with "ext.js" or any plugins from the ExtJS team should be reported [here](https://github.com/Christianjuth/ExtJS_Library/issues). Plugins by the ExtJS team include...
+
+* Clipboard
+* Notification
+* Popup
+* Storage
+* Tabs
+* Utilities
+* UUID
+
+
+### Contributing
+Plese understand the perpose and direction of this project before contributing.  We are greatful to hear any suggections and fixes you present, and will carefully look them over.  All contibutions fall under the [MIT](http://opensource.org/licenses/MIT) licence and are opensource.
 
 
 ### About this Project

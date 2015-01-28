@@ -12,34 +12,54 @@
     <script data-main="options.js" src="../../js/libs/require-min.js"></script>
   </head>
   <body>
+    <script type="text/html" id="textarea">
+      <textarea class="form-control" rows="4">
+        {{text}}
+      </textarea>
+    </script>
+
+    <!-- Templates -->
+
+    <script type="text/html" id="text">
+      <input type="text" class="form-control" value="{{value}}">
+    </script>
+
+    <script type="text/html" id="checkbox">
+      <input type="checkbox" class="form-control" {{#sel}}checked{{/sel}}>
+    </script>
+
+    <script type="text/html" id="select">
+      <select class="form-control" value="{{current}}">
+        {{#options}}
+        <option value="{{val}}" {{#sel}}selected{{/sel}}>{{title}}</option>
+        {{/options}}
+      </select>
+    </script>
+
+    <script type="text/html" id="option">
+      <div class="form-group">
+        <label class="col-sm-4 control-label right 400">{{title}}</label>
+        <div class="col-sm-8">{{{option}}}</div>
+      </div>
+    </script>
+
+    <!-- Interface -->
+
     <!--page wrap-->
     <div class="page_wrap">
       <div class="page">
 
+        <h2 class="text-center">Options</h2>
+
         <!--main settings pannel-->
         <div class="panel panel-inverse">
-
-          <!--header-->
-          <div class="panel-heading">
-            <h4 class="panel-title bold">Settings</h4>
-          </div>
-
           <!--settings options-->
           <div class="panel-body">
-            <section id="settings" class="form-horizontal"></section>
-            <section class="form-horizontal">
-              <div class="row">
-                <div class="col-sm-12">
-
-                  <button class="btn btn-primary right">Save</button>
-                  <!--This butt in just a dummy button because input tags only save when unfoacused -->
-
-                </div>
-              </div>
-            </section>
+            <form id="settings" class="form-horizontal"></form>
           </div>
-
         </div>
+
+        <p class="text-center text-muted">Built by ExtJS using Boorstrap 3</p>
 
       </div>
     </div>

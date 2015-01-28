@@ -1,5 +1,5 @@
 (function() {
-  var defultOptions, ext;
+  var defineLog, defultOptions, ext;
 
   defultOptions = {
     silent: false
@@ -28,6 +28,7 @@
       if ((localStorage.options == null) && this.browser === 'chrome') {
         localStorage.options = JSON.stringify({});
       }
+      defineLog();
       $.each(ext, function(item) {
         var alias, compatibility, msg, name, _i, _len, _ref;
         item = window.ext[item];
@@ -46,9 +47,9 @@
             alias = _ref[_i];
             if (window.ext[alias] == null) {
               window.ext[alias] = item;
-            } else if (options.silent !== true) {
+            } else {
               msg = 'Ext plugin "' + name + '" can\'t define alias "' + alias + '"';
-              console.warn(msg);
+              ext._log.warn(msg);
             }
           }
           delete item._aliases;
@@ -56,16 +57,18 @@
         if ((item._info != null) && options.silent !== true) {
           compatibility = item._info.compatibility;
           if (compatibility.chrome === 'none') {
-            console.warn('Ext plugin "' + name + '" is Safari only');
+            msg = 'Ext plugin "' + name + '" is Safari only';
+            ext._log.warn(msg);
           } else if (compatibility.chrome !== 'full') {
             msg = 'Ext plugin "' + name + '" may contain some Safari only functions';
-            console.warn(msg);
+            ext._log.warn(msg);
           }
           if (compatibility.safari === 'none') {
-            console.warn('Ext plugin "' + name + '" is Chrome only');
+            msg = 'Ext plugin "' + name + '" is Chrome only';
+            ext._log.warn(msg);
           } else if (compatibility.safari !== 'full') {
             msg = 'Ext plugin "' + name + '" may contain some Chrome only functions';
-            console.warn(msg);
+            ext._log.warn(msg);
           }
         }
         return delete item._info;
@@ -439,6 +442,16 @@
       url: function(url) {
         return ext.match.url(url, '*{://,www.,://www.,}*.**');
       },
+      secureUrl: function(url) {
+        return ext.match.url(url, 'https://{www.,}*.**');
+      },
+      file: function(path, type) {
+        if (type != null) {
+          return ext.match.url(path, 'file://**.' + type);
+        } else {
+          return ext.match.url(path, 'file://**');
+        }
+      },
       email: function(email) {
         return ext.match.text(email, '*@*.*', {
           allowSpaces: false
@@ -456,9 +469,31 @@
           ignorecase: false
         };
         options = $.extend(defultOptions, options);
-        return ext.match.text(passwd, '*', $.extend(options, force));
+        $.extend(options, force);
+        return ext.match.text(passwd, '*', options);
       }
     }
+  };
+
+  defineLog = function() {
+    ext._log = {};
+    if (ext._config.silent !== true) {
+      ext._log.info = (function() {
+        return Function.prototype.bind.call(console.info, console);
+      })();
+    } else {
+      ext._log.info = function() {};
+    }
+    if (ext._config.silent !== true) {
+      ext._log.warn = (function() {
+        return Function.prototype.bind.call(console.warn, console);
+      })();
+    } else {
+      ext._log.warn = function() {};
+    }
+    return ext._log.error = (function() {
+      return Function.prototype.bind.call(console.error, console);
+    })();
   };
 
   Array.prototype.compress = function() {
@@ -474,7 +509,7 @@
   };
 
   String.prototype.compress = function() {
-    return this.replace(/\ /, '');
+    return this.replace(/\ /g, '');
   };
 
   String.prototype.contains = function(textSearchSyntax) {

@@ -4,44 +4,58 @@
 require [
   "jquery",
   "underscore",
+  "mustache",
   "bootstrap",
 
   "ext",
   "extPlugin/extension",
-], ($,_,bootstrap,ext) ->
+], ($,_,Mustache,bootstrap,ext) ->
   ext.ini()
+
+  window.Mustache = Mustache
+
 
   option =
     create:(json) ->
-      elm = '<div class="row"><label class="col-sm-4 control-label right 400">'+json.title+'</label><div class="col-sm-8">'+this.types[json.type](json)+'</div></div>'
+      item = this.types[json.type](json)
+      elm = Mustache.render $("#option").html(), {
+        title:json.title,
+        option: item
+      }
       elm = $(elm).appendTo("#settings");
-      elm.find("input, select").change () ->
+      elm.find("input[type=text], textarea").keyup ->
         ext.options.set(json.key,$(this).val())
+      elm.find("select").change () ->
+        ext.options.set(json.key,$(this).val())
+      elm.find("input[type=checkbox]").change () ->
+        ext.options.set(json.key,$(this).is(':checked'))
+
 
     types:
+
       text : (json) ->
-        elm = '<input type="text" class="form-control" value="'+ext.options.get(json.key)+'">'
+        elm = Mustache.render($("#text").html(), {value:ext.options.get(json.key)})
 
       textArea : (json) ->
-        elm = '<textarea class="form-control" rows="4">'+ext.options.get(json.key)+'</textarea>'
+        elm = Mustache.render($("#textarea").html(), {text:ext.options.get(json.key)})
 
       checkbox : (json) ->
-        if(String(ext.options.get(json.key)) is "true")
-          elm = '<input type="checkbox" checked>'
-        else
-          elm = '<input type="checkbox">'
-        return elm
+        checked =  String(ext.options.get(json.key)) is "true"
+        elm = Mustache.render($("#checkbox").html(), {sel:checked})
 
       list : (json) ->
-        elm = '<select id="disabledSelect" class="form-control" value="'+ext.options.get(json.key)+'"></select>'
-        for title in json.titles
-          value = json.values[_i]
-          storage = ext.options.get(json.key)
-          if storage is value
-            elm = $(elm).append('<option value="'+value+'" selected>'+title+'</option>')
-          else
-            elm = $(elm).append('<option value="'+value+'">'+title+'</option>')
-        return elm.prop('outerHTML')
+        current = ext.options.get(json.key)
+        inx = 0
+        _.find(json.options, (obj, INX) ->
+          if String(obj.val) is current
+            inx = INX
+        )
+        json.options[inx].sel = true
+        elm = Mustache.render $("#select").html(), {
+          current:current,
+          options: json.options
+        }
+
 
   $.getJSON "../../configure.json", (data) ->
     for item in data.options
@@ -49,12 +63,5 @@ require [
         title : item.title,
         key : item.key,
         type : item.type,
-        titles : item.titles,
-        values : item.values
+        options : item.options
       })
-
-
-#  option.create("Text","test","text")
-#  option.create("Checkbox","true","checkbox")
-#  option.create("Select",["one","two"],"select")
-#  option.create("Text","this is some text","textArea")

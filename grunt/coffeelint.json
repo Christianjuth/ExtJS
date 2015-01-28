@@ -1,0 +1,3 @@
+{
+  "app": ["app/**/*.coffee", "!app/js/libs/**/*.coffee"]
+}

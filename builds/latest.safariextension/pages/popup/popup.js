@@ -1,6 +1,1 @@
-(function() {
-  require(["jquery", "underscore", "ext"], function($, _, ext) {
-    return ext.ini();
-  });
-
-}).call(this);
+(function(){require(["jquery","underscore","ext"],function(a,b,c){return c.ini()})}).call(this);
