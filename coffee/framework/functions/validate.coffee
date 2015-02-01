@@ -1,3 +1,5 @@
+#functions/validate.coffee
+
 #The folling is a group of functions
 #for clent side validation. Please note
 #if you are using these to validate data
@@ -16,6 +18,11 @@ validate :
   # * DOMAIN.TLD/SUBDIR
   # * SUB.DOMAIN.TLD/SUBDIR
   url : (url) ->
+    #check usage
+    usage = 'url string'
+    ok = ext._.validateArg(arguments, ['string'], usage)
+    throw new Error(ok) if ok?
+    #logic
     ext.match.url url, '*{://,www.,://www.,}*.**'
 
 
@@ -23,6 +30,11 @@ validate :
   #This function will look for any
   #https secure domain
   secureUrl : (url) ->
+    #check usage
+    usage = 'url string'
+    ok = ext._.validateArg(arguments, ['string'], usage)
+    throw new Error(ok) if ok?
+    #logic
     ext.match.url url, 'https://{www.,}*.**'
 
 
@@ -30,6 +42,11 @@ validate :
   #This function will look for a local
   #file url containing "file://"
   file : (path,type) ->
+    #check usage
+    usage = 'path string, type string'
+    ok = ext._.validateArg(arguments, ['string','string'], usage)
+    throw new Error(ok) if ok?
+    #logic
     if type?
       ext.match.url path, 'file://**.' + type
     else
@@ -40,6 +57,11 @@ validate :
   #This function will validate any email
   #address in this format "EXAMPLE@DOMAIN.TLD"
   email : (email) ->
+    #check usage
+    usage = 'email string'
+    ok = ext._.validateArg(arguments, ['string'], usage)
+    throw new Error(ok) if ok?
+    #logic
     ext.match.text email, '*@*.*', { allowSpaces : false }
 
 
@@ -51,6 +73,10 @@ validate :
   #you should still have the password validated
   #on your webserver for most secure practice.
   password : (passwd,options) ->
+    #check usage
+    usage = 'passwd string, options object'
+    ok = ext._.validateArg(arguments, ['string','object,undefined'], usage)
+    throw new Error(ok) if ok?
     #default options
     defultOptions  = {
       maxLength : 12,

@@ -24,10 +24,10 @@ SOFTWARE.
  */
 
 (function() {
-  var ID, NAME, log, plugin;
+  var BROWSER, ID, NAME, PLUGIN, log;
 
-  plugin = {
-    _info: {
+  PLUGIN = {
+    _: {
       authors: ['Christian Juth'],
       name: 'Utilities',
       version: '0.1.0',
@@ -39,7 +39,7 @@ SOFTWARE.
     },
     run: function() {
       var bkPage;
-      if (ext.browser === 'chrome') {
+      if (BROWSER === 'chrome') {
         bkPage = chrome.extension.getBackgroundPage();
         bkPage.test = function() {
           return alert(window.message);
@@ -49,9 +49,9 @@ SOFTWARE.
       }
     },
     reload: function() {
-      if (ext.browser === 'chrome') {
+      if (BROWSER === 'chrome') {
         return chrome.runtime.reload();
-      } else if (ext.browser === 'safari') {
+      } else if (BROWSER === 'safari') {
         safari.extension.globalPage.contentWindow.reload = function() {
           window.console.clear();
           return location.reload();
@@ -60,7 +60,7 @@ SOFTWARE.
       }
     },
     update: function() {
-      if (ext.browser === 'chrome') {
+      if (BROWSER === 'chrome') {
         return chrome.runtime.requestUpdateCheck();
       }
     }
@@ -83,35 +83,41 @@ SOFTWARE.
   https://github.com/Christianjuth/extension_framework/tree/plugin
    */
 
-  NAME = plugin._info.name;
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
 
   ID = NAME.toLowerCase().replace(/\ /g, "_");
 
   log = {
     error: function(msg) {
       return (function() {
-        return ext._log.error('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
       })();
     },
     warm: function(msg) {
       return (function() {
-        return ext._log.warn('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
       })();
     },
     info: function(msg) {
       return (function() {
-        return ext._log.info('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
       })();
     }
   };
 
   if (typeof window.define === 'function' && window.define.amd) {
-    window.define(['ext'], function() {
+    window.define(['ext'], function(ext) {
       var VERSION;
-      if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
-        return window.ext[ID] = plugin;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+        return ext._.load(ID, PLUGIN);
       } else {
-        VERSION = plugin._info.min;
+        VERSION = PLUGIN._.min;
         return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
       }
     });

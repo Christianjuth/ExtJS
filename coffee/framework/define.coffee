@@ -1,3 +1,5 @@
+#define.coffee
+
 #Define a global copy of the library.
 #This is important because this is where
 #ExtJS becomes accessible to the user in
@@ -8,4 +10,6 @@ window.ext = ext
 #Without this ExtJS would not be compatible
 #with things like requirejs.
 if typeof window.define is 'function' && window.define.amd
-  window.define 'ext', ['jquery'], -> window.ext
+  window.define 'ext', ['jquery'], ->
+    ext._onload()
+    window.ext

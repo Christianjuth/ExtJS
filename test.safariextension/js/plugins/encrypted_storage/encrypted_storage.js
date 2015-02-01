@@ -24,58 +24,58 @@ SOFTWARE.
  */
 
 (function() {
-  var ID, NAME, encryptedStorage, log, plugin,
+  var BROWSER, ID, NAME, PLUGIN, encryptedStorage, log,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  plugin = {
-    _info: {
+  PLUGIN = {
+    _: {
       authors: ['Christian Juth'],
       name: 'Encrypted Storage',
+      aliases: ['enStore', 'enStorage'],
       version: '0.1.0',
       min: '0.1.0',
       compatibility: {
         chrome: 'full',
         safari: 'full'
       },
-      github: ''
-    },
-    _aliases: ['enStore', 'enStorage'],
-    _load: function() {
-      if (localStorage.encryptedStorage == null) {
-        localStorage.encryptedStorage = JSON.stringify({});
-      }
-      return $.ajax({
-        url: '../../configure.json',
-        dataType: 'json',
-        async: false,
-        success: function(data) {
-          var encryptedStorage, item, storage, _i, _len, _ref, _results;
-          encryptedStorage = data.encryptedStorage;
-          storage = JSON.parse(localStorage.encryptedStorage);
-          _ref = data.encryptedStorage;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            item = _ref[_i];
-            if (typeof storage[item.key] === 'undefined') {
-              log.info('storage item "' + item.key + '" default password is "password"');
-              _results.push(ext.encrypted_storage.set(item.key, item["default"], 'password'));
-            } else {
-              _results.push(void 0);
-            }
-          }
-          return _results;
+      github: '',
+      onload: function() {
+        var encryptedStorage, item, storage, _i, _len, _results;
+        if (localStorage.encryptedStorage == null) {
+          localStorage.encryptedStorage = JSON.stringify({});
         }
-      });
+        encryptedStorage = ext._.getConfig().encryptedStorage;
+        storage = JSON.parse(localStorage.encryptedStorage);
+        _results = [];
+        for (_i = 0, _len = encryptedStorage.length; _i < _len; _i++) {
+          item = encryptedStorage[_i];
+          if (typeof storage[item.key] === 'undefined') {
+            log.info('storage item "' + item.key + '" default password is "password"');
+            _results.push(ext.encrypted_storage.set(item.key, item["default"], 'password'));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      }
     },
     set: function(key, passwd, value) {
-      var storage;
-      value = String(value);
+      var expected, ok, storage, usage;
+      usage = 'key string, passwd string, value string';
+      expected = ['string', 'string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
       storage = $.parseJSON(localStorage.encryptedStorage);
       storage[key] = sjcl.encrypt(passwd, value);
       return localStorage.encryptedStorage = JSON.stringify(storage);
     },
     get: function(key, passwd) {
-      var error, output, storage;
+      var error, expected, ok, output, storage, usage;
+      usage = 'key string, passwd string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
       output = '';
       storage = $.parseJSON(localStorage.encryptedStorage);
       if (typeof storage[key] === 'undefined') {
@@ -91,18 +91,27 @@ SOFTWARE.
       return output;
     },
     changePasswd: function(key, Old, New) {
-      var value;
+      var expected, ok, usage, value;
+      usage = 'key string, oldPasswd string, newPasswd string';
+      expected = ['string', 'string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
       value = ext.encrypted_storage.get(key, Old);
       return ext.encrypted_storage.set(key, value, New);
     },
     remove: function(key) {
-      var storage;
+      var expected, ok, storage, usage;
+      usage = 'key string';
+      expected = ['string'];
+      ok = ext._.validateArg(arguments, expected, usage);
       storage = $.parseJSON(localStorage.encryptedStorage);
       delete storage[key];
       return localStorage.encryptedStorage = JSON.stringify(encryptedStorage);
     },
     removeAll: function(exceptions) {
-      var item, _i, _len, _ref;
+      var expected, item, ok, usage, _i, _len, _ref;
+      usage = 'exceptions array';
+      expected = ['object'];
+      ok = ext._.validateArg(arguments, expected, usage);
       _ref = ext.encrypted_storage.dump();
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         item = _ref[_i];
@@ -141,35 +150,41 @@ SOFTWARE.
   https://github.com/Christianjuth/extension_framework/tree/plugin
    */
 
-  NAME = plugin._info.name;
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
 
   ID = NAME.toLowerCase().replace(/\ /g, "_");
 
   log = {
     error: function(msg) {
       return (function() {
-        return ext._log.error('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
       })();
     },
     warm: function(msg) {
       return (function() {
-        return ext._log.warn('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
       })();
     },
     info: function(msg) {
       return (function() {
-        return ext._log.info('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
       })();
     }
   };
 
   if (typeof window.define === 'function' && window.define.amd) {
-    window.define(['ext'], function() {
+    window.define(['ext'], function(ext) {
       var VERSION;
-      if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
-        return window.ext[ID] = plugin;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+        return ext._.load(ID, PLUGIN);
       } else {
-        VERSION = plugin._info.min;
+        VERSION = PLUGIN._.min;
         return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
       }
     });

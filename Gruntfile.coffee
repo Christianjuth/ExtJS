@@ -30,9 +30,8 @@ module.exports = (grunt) ->
   ]
 
   grunt.registerTask 'build', [
-    'browserDependencies'
+    #    'browserDependencies'
     'extension_manifest'
-    'coffee'
     'coffee'
     'clean'
     'uglify'

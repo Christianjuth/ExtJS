@@ -1,37 +1,40 @@
-plugin = {
+PLUGIN = {
 
-_info :
-  authors : ['Christian Juth']
-  name : 'Storage'
-  version : '0.1.0'
-  min : '0.1.0'
-  compatibility :
-    chrome : 'full'
-    safari : 'full'
 
-_aliases : ['localStorage','local']
 
-_load : ->
+_: {
+
+#INFO
+authors : ['Christian Juth']
+name : 'Storage'
+aliases : ['localStorage','local']
+version : '0.1.0'
+min : '0.1.0'
+compatibility :
+  chrome : 'full'
+  safari : 'full'
+
+#EVENTS
+onload : ->
   if !localStorage.storage?
     localStorage.storage = JSON.stringify({})
+  data = ext._.getConfig()
+  for item in data.storage
+    if typeof ext.storage.get(item.key) is 'undefined'
+      log.info('storage item "' + item.key + '" was created')
+      ext.storage.set(item.key, item.default)
 
-  $.ajax {
-    url: '../../configure.json',
-    dataType: 'json',
-    async: false,
-    success: (data) ->
-      for item in data.storage
-        if typeof ext.storage.get(item.key) is 'undefined'
-          log.info('storage item "' + item.key + '" was created')
-          ext.storage.set(item.key, item.default)
-  }
+}
 
 
-#functions
+
+#FUNCTIONS
+
 set : (key, value) ->
   storage = $.parseJSON localStorage.storage
   storage[key] = value
   localStorage.storage = JSON.stringify storage
+
 
 
 get : (key) ->
@@ -39,10 +42,12 @@ get : (key) ->
   storage[key]
 
 
+
 remove : (key) ->
   storage = $.parseJSON localStorage.storage
   delete storage[key]
   localStorage.storage = JSON.stringify storage
+
 
 
 removeAll : (exceptions) ->
@@ -52,10 +57,13 @@ removeAll : (exceptions) ->
   ext.storage.dump()
 
 
+
 dump : ->
   output = []
   $.each $.parseJSON(localStorage.storage), (key,val) ->
     output.push key
   output
+
+
 
 }

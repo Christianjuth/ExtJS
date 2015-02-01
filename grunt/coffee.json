@@ -15,20 +15,21 @@
       }
     ]
   },
+  "framework": {
+    "files": {
+      "dist/framework/ext.js": [
+        "coffee/framework/defaultOptions.coffee",
+        "coffee/framework/header.coffee",
+        "coffee/framework/vars.coffee",
+        "coffee/framework/functions/*.coffee",
+        "coffee/framework/footer.coffee",
+        "coffee/framework/internal.coffee",
+        "coffee/framework/global.coffee",
+        "coffee/framework/define.coffee"
+      ]
+    }
+  },
   "plugins": {
-    "framework": {
-      "files": {
-        "dist/framework/ext.js": [
-          "coffee/framework/options.coffee",
-          "coffee/framework/header.coffee",
-          "coffee/framework/vars.coffee",
-          "coffee/framework/functions/*.coffee",
-          "coffee/framework/footer.coffee",
-          "coffee/framework/global.coffee",
-          "coffee/framework/define.coffee"
-        ]
-      }
-    },
     "files" : {
       "dist/plugins/clipboard/clipboard.js" : [
         "coffee/plugins/LICENSE.coffee",
@@ -63,6 +64,12 @@
       "dist/plugins/uuid/uuid.js" : [
         "coffee/plugins/LICENSE.coffee",
         "coffee/plugins/uuid/uuid.coffee",
+        "coffee/plugins/define.coffee"
+      ],
+
+      "dist/plugins/popup/popup.js" : [
+        "coffee/plugins/LICENSE.coffee",
+        "coffee/plugins/popup/popup.coffee",
         "coffee/plugins/define.coffee"
       ],
 

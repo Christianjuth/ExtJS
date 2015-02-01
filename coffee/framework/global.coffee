@@ -1,24 +1,4 @@
-defineLog = ->
-  #define ext log object
-  ext._log = {}
-  #log
-  if ext._config.silent isnt true
-    ext._log.info = do ->
-      Function.prototype.bind.call(console.info, console)
-  else
-    ext._log.info = ->
-  #warn
-  if ext._config.silent isnt true
-    ext._log.warn = do ->
-      Function.prototype.bind.call(console.warn, console)
-  else
-    ext._log.warn = ->
-  #error
-  ext._log.error = do ->
-    Function.prototype.bind.call(console.error, console)
-
-
-
+#global.coffee
 
 #These functions below are defined global
 #on the page and are part of the window

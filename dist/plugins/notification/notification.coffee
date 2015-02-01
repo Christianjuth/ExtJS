@@ -22,49 +22,68 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ###
 
-plugin = {
+PLUGIN = {
+
+
 
 #define plugin info object
-_info :
-  authors : ['Christian Juth']
-  name : 'Notification'
-  version : '0.1.0'
-  min : '0.1.0'
-  compatibility :
-    chrome : 'full'
-    safari : 'full'
-  github : ''
+_: {
 
-#define plugin aliases
-_aliases : ['noti']
+#INFO
+authors : ['Christian Juth']
+name : 'Notification'
+aliases : ['noti']
+version : '0.1.0'
+min : '0.1.0'
+compatibility :
+  chrome : 'full'
+  safari : 'full'
+github : ''
 
-#functions
+}
+
+
+
+#FUNCTIONS
 basic : (title,message) ->
-  if ext.browser is 'chrome'
+  #check usage
+  usage = 'title string, message string'
+  expected = ['string','string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  #logic
+  if BROWSER is 'chrome'
     chrome.notifications.create '', {
       iconUrl : chrome.extension.getURL('icon-128.png')
       type: 'basic'
       title:title
       message: message
     }, () ->
-  else if ext.browser is 'safari'
+  else if BROWSER is 'safari'
     new Notification(title,{body : message})
 
+
+
 delay : (title,message,milliseconds) ->
+  #check usage
+  usage = 'key string, passwd string, value string'
+  expected = ['string','string','string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  #
   if 50000 < parseInt milliseconds
-    log.error 'timeout too long'
-  else
-    setTimeout ->
-      if ext.browser is 'chrome'
-        chrome.notifications.create '', {
-          iconUrl : chrome.extension.getURL('icon-128.png')
-          type: 'basic'
-          title:title
-          message: message
-        }, () ->
-      else if ext.browser is 'safari'
-        new Notification(title,{body : message})
-    ,milliseconds
+    throw new Error 'timeout too long'
+  setTimeout ->
+    if BROWSER is 'chrome'
+      chrome.notifications.create '', {
+        iconUrl : chrome.extension.getURL('icon-128.png')
+        type: 'basic'
+        title:title
+        message: message
+      }, () ->
+    else if BROWSER is 'safari'
+      new Notification(title,{body : message})
+  ,milliseconds
+
+
 
 }
 
@@ -83,25 +102,30 @@ use.
 
 https://github.com/Christianjuth/extension_framework/tree/plugin
 ###
-NAME = plugin._info.name
+BROWSER = ''
+NAME = PLUGIN._.name
 ID = NAME.toLowerCase().replace(/\ /g,"_")
 #console logging
 log = {
-  error: (msg) -> do ->
-    ext._log.error 'Ext plugin (' + NAME + ') says: ' + msg
+  error: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.error msg
 
-  warm: (msg) -> do ->
-    ext._log.warn 'Ext plugin (' + NAME + ') says: ' + msg
+  warm: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.warn msg
 
-  info: (msg) -> do ->
-    ext._log.info 'Ext plugin (' + NAME + ') says: ' + msg
+  info: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.info msg
   }
 #setup AMD support if browser supports the AMD define function
 if typeof window.define is 'function' && window.define.amd
-  window.define ['ext'], ->
+  window.define ['ext'], (ext)->
+    BROWSER = ext._.browser
     #load ExtJS meets VERSION requirements
-    if !plugin._info.min? or plugin._info.min <= window.ext.version
-      window.ext[ID] = plugin
+    if !PLUGIN._.min? or PLUGIN._.min <= window.ext.version
+      ext._.load(ID,PLUGIN)
     else
-      VERSION = plugin._info.min
-      console.error 'Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+'
+      VERSION = PLUGIN._.min
+      console.error 'Ext plugin ('+NAME+') requires ExtJS v'+VERSION+'+'

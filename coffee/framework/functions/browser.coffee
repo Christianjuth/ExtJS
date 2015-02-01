@@ -1,9 +1,9 @@
-getBrowser : ->
+ #check browser
+browser: do->
   #vars
   userAgent = navigator.userAgent
   vendor =  navigator.vendor
-
-  #check browser
+  #logic
   if /Chrome/.test(userAgent) and /Google Inc/.test(vendor)
     browser = 'chrome'
   else if /Safari/.test(userAgent) and /Apple Computer/.test(vendor)

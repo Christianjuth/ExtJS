@@ -22,50 +22,60 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ###
 
-plugin = {
+PLUGIN = {
+
+
 
 #define plugin info object
-_info :
-  authors : ['Christian Juth']
-  name : 'Encrypted Storage'
-  version : '0.1.0'
-  min : '0.1.0'
-  compatibility :
-    chrome : 'full'
-    safari : 'full'
-  github : ''
+_: {
 
+#INFO
+authors : ['Christian Juth']
+name : 'Encrypted Storage'
+aliases : ['enStore','enStorage']
+version : '0.1.0'
+min : '0.1.0'
+compatibility :
+  chrome : 'full'
+  safari : 'full'
+github : ''
 
-_aliases : ['enStore','enStorage']
-
-
-_load : ->
+#EVENTS
+onload : ->
   if !localStorage.encryptedStorage?
     localStorage.encryptedStorage = JSON.stringify({})
 
-  $.ajax {
-    url: '../../configure.json',
-    dataType: 'json',
-    async: false,
-    success: (data) ->
-      encryptedStorage = data.encryptedStorage
-      storage = JSON.parse(localStorage.encryptedStorage)
-      for item in data.encryptedStorage
-        if typeof storage[item.key] is 'undefined'
-          log.info('storage item "'+item.key+'" default password is "password"')
-          ext.encrypted_storage.set(item.key, item.default, 'password')
-  }
+  encryptedStorage = ext._.getConfig().encryptedStorage
+  storage = JSON.parse(localStorage.encryptedStorage)
+  for item in encryptedStorage
+    if typeof storage[item.key] is 'undefined'
+      log.info('storage item "'+item.key+'" default password is "password"')
+      ext.encrypted_storage.set(item.key, item.default, 'password')
+
+}
 
 
-#functions
+
+#FUNCTIONS
 set : (key, passwd, value) ->
-  value = String value
+  #check usage
+  usage = 'key string, passwd string, value string'
+  expected = ['string','string','string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
+  #logic
   storage = $.parseJSON localStorage.encryptedStorage
   storage[key] = sjcl.encrypt passwd, value
   localStorage.encryptedStorage = JSON.stringify storage
 
 
+
 get : (key, passwd) ->
+  #check usage
+  usage = 'key string, passwd string'
+  expected = ['string','string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  #logic
   output = ''
   storage = $.parseJSON localStorage.encryptedStorage
   return if typeof storage[key] is 'undefined'
@@ -77,22 +87,41 @@ get : (key, passwd) ->
   return output
 
 
+
 changePasswd : (key, Old, New) ->
+  #check usage
+  usage = 'key string, oldPasswd string, newPasswd string'
+  expected = ['string','string','string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  #logic
   value = ext.encrypted_storage.get key, Old
   ext.encrypted_storage.set key, value, New
 
 
+
 remove : (key) ->
+  #check usage
+  usage = 'key string'
+  expected = ['string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  #logic
   storage = $.parseJSON localStorage.encryptedStorage
   delete storage[key]
   localStorage.encryptedStorage = JSON.stringify encryptedStorage
 
 
+
 removeAll : (exceptions) ->
+  #check usage
+  usage = 'exceptions array'
+  expected = ['object']
+  ok = ext._.validateArg(arguments,expected,usage)
+  #logic
   for item in ext.encrypted_storage.dump()
     if item not in exceptions
       ext.encrypted_storage.remove(item)
   ext.encrypted_storage.dump()
+
 
 
 dump : ->
@@ -121,25 +150,30 @@ use.
 
 https://github.com/Christianjuth/extension_framework/tree/plugin
 ###
-NAME = plugin._info.name
+BROWSER = ''
+NAME = PLUGIN._.name
 ID = NAME.toLowerCase().replace(/\ /g,"_")
 #console logging
 log = {
-  error: (msg) -> do ->
-    ext._log.error 'Ext plugin (' + NAME + ') says: ' + msg
+  error: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.error msg
 
-  warm: (msg) -> do ->
-    ext._log.warn 'Ext plugin (' + NAME + ') says: ' + msg
+  warm: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.warn msg
 
-  info: (msg) -> do ->
-    ext._log.info 'Ext plugin (' + NAME + ') says: ' + msg
+  info: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.info msg
   }
 #setup AMD support if browser supports the AMD define function
 if typeof window.define is 'function' && window.define.amd
-  window.define ['ext'], ->
+  window.define ['ext'], (ext)->
+    BROWSER = ext._.browser
     #load ExtJS meets VERSION requirements
-    if !plugin._info.min? or plugin._info.min <= window.ext.version
-      window.ext[ID] = plugin
+    if !PLUGIN._.min? or PLUGIN._.min <= window.ext.version
+      ext._.load(ID,PLUGIN)
     else
-      VERSION = plugin._info.min
-      console.error 'Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+'
+      VERSION = PLUGIN._.min
+      console.error 'Ext plugin ('+NAME+') requires ExtJS v'+VERSION+'+'

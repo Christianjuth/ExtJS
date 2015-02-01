@@ -24,45 +24,39 @@ SOFTWARE.
  */
 
 (function() {
-  var ID, NAME, log, plugin,
+  var BROWSER, ID, NAME, PLUGIN, log,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  plugin = {
-    _info: {
+  PLUGIN = {
+    _: {
       authors: ['Christian Juth'],
       name: 'Storage',
+      aliases: ['localStorage', 'local'],
       version: '0.1.0',
       min: '0.1.0',
       compatibility: {
         chrome: 'full',
         safari: 'full'
-      }
-    },
-    _aliases: ['localStorage', 'local'],
-    _load: function() {
-      if (localStorage.storage == null) {
-        localStorage.storage = JSON.stringify({});
-      }
-      return $.ajax({
-        url: '../../configure.json',
-        dataType: 'json',
-        async: false,
-        success: function(data) {
-          var item, _i, _len, _ref, _results;
-          _ref = data.storage;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            item = _ref[_i];
-            if (typeof ext.storage.get(item.key) === 'undefined') {
-              log.info('storage item "' + item.key + '" was created');
-              _results.push(ext.storage.set(item.key, item["default"]));
-            } else {
-              _results.push(void 0);
-            }
-          }
-          return _results;
+      },
+      onload: function() {
+        var data, item, _i, _len, _ref, _results;
+        if (localStorage.storage == null) {
+          localStorage.storage = JSON.stringify({});
         }
-      });
+        data = ext._.getConfig();
+        _ref = data.storage;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          item = _ref[_i];
+          if (typeof ext.storage.get(item.key) === 'undefined') {
+            log.info('storage item "' + item.key + '" was created');
+            _results.push(ext.storage.set(item.key, item["default"]));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      }
     },
     set: function(key, value) {
       var storage;
@@ -119,35 +113,41 @@ SOFTWARE.
   https://github.com/Christianjuth/extension_framework/tree/plugin
    */
 
-  NAME = plugin._info.name;
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
 
   ID = NAME.toLowerCase().replace(/\ /g, "_");
 
   log = {
     error: function(msg) {
       return (function() {
-        return ext._log.error('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
       })();
     },
     warm: function(msg) {
       return (function() {
-        return ext._log.warn('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
       })();
     },
     info: function(msg) {
       return (function() {
-        return ext._log.info('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
       })();
     }
   };
 
   if (typeof window.define === 'function' && window.define.amd) {
-    window.define(['ext'], function() {
+    window.define(['ext'], function(ext) {
       var VERSION;
-      if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
-        return window.ext[ID] = plugin;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+        return ext._.load(ID, PLUGIN);
       } else {
-        VERSION = plugin._info.min;
+        VERSION = PLUGIN._.min;
         return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
       }
     });

@@ -1,3 +1,5 @@
+#functions/match.coffee
+
 #This is a group of functions that will
 #search strings using a defined syntax.
 #This works by compiling down to regex.
@@ -12,6 +14,11 @@ match :
   #matching urls. This syntax compiles down
   #to a regex and is used to test the url
   url : (url,urlSearchSyntax,options) ->
+    #check usage
+    usage = 'url string, urlSearchSyntax, options object'
+    ok=ext._.validateArg(arguments,['string','string','object,undefined'],usage)
+    throw new Error(ok) if ok?
+    #default options
     defultOptions  = {
       maxLength : '*',
       minLength : 0,
@@ -98,6 +105,11 @@ match :
   #matching text. This syntax compiles down
   #to a regex and is used to test the text
   text : (text,textSearchSyntax, options) ->
+    #check usage
+    usage = 'url string, textSearchSyntax, options object'
+    ok=ext._.validateArg(arguments,['string','string','object,undefined'],usage)
+    throw new Error(ok) if ok?
+    #default options
     defultOptions  = {
       allowSpaces : true,
       maxLength : '*',

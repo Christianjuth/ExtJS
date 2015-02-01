@@ -1,16 +1,22 @@
-plugin = {
+PLUGIN = {
 
-_info :
-  authors : ['Christian Juth']
-  name : 'UUID'
-  version : '0.1.0'
-  compatibility :
-    chrome : 'full'
-    safari : 'full'
 
-_aliases : ['UUID']
 
-_load : (options) ->
+_: {
+
+#INFO
+authors : ['Christian Juth']
+name : 'UUID'
+aliases : ['UUID']
+version : '0.1.0'
+compatibility :
+  chrome : 'full'
+  safari : 'full'
+
+
+
+#EVENTS
+onload : (options) ->
   if !localStorage.uuid?
     s = []
     hexDigits = '0123456789abcdef'
@@ -27,7 +33,11 @@ _load : (options) ->
       console.info('UUID "' + uuid + '" was created')
     localStorage.uuid = uuid
 
-#functions
+}
+
+
+
+#FUNCTIONS
 reset : ->
   options = window.ext._config
   s = []
@@ -45,7 +55,11 @@ reset : ->
     console.info('UUID was reset to "' + uuid + '"')
   localStorage.uuid = uuid
 
+
+
 get : ->
   return localStorage.uuid
+
+
 
 }

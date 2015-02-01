@@ -1,7 +1,25 @@
+#functions/parse.coffee
+
 #The foloing functions are used to manipulate
 #the inputed string/numbers and return the new
 #value
 parse :
+
+
+  url: (url) ->
+    #check usage
+    usage = 'url string'
+    ok = ext._.validateArg(arguments, ['string'], usage)
+    throw new Error(ok) if ok?
+    #logic
+    if !ext.validate.url(url)
+      throw Error 'Invalid url'
+    protical =
+      url.indexOf('https://') isnt -1 and
+      url.indexOf('https://') isnt -1
+    if !protical
+      url = 'http://' + url
+    return url
 
 
 
@@ -31,6 +49,11 @@ parse :
   #can be useful for tasks where spaces are not.
   #allowed
   id : (id) ->
+    #check usage
+    usage = 'id string'
+    ok = ext._.validateArg(arguments, ['string'], usage)
+    throw new Error(ok) if ok?
+    #logic
     id.toLowerCase().replace(/\ /g,"_")
 
 
@@ -40,6 +63,11 @@ parse :
   #nutrilize a string to match or replace the
   #exact value using rexes
   normalize : (text) ->
+    #check usage
+    usage = 'string'
+    ok = ext._.validateArg(arguments, ['string'], usage)
+    throw new Error(ok) if ok?
+    #logic
     regexEscChars = '
       \\(
       \\)

@@ -1,18 +1,25 @@
-plugin = {
-
-_info :
-  authors : ['Christian Juth']
-  name : 'Utilities'
-  version : '0.1.0'
-  min : '0.1.0'
-  compatibility :
-    chrome : 'full'
-    safari : 'partial'
+PLUGIN = {
 
 
-#functions
+
+_: {
+
+#INFO
+authors : ['Christian Juth']
+name : 'Utilities'
+version : '0.1.0'
+min : '0.1.0'
+compatibility :
+  chrome : 'full'
+  safari : 'partial'
+
+}
+
+
+
+#FUNCTIONS
 run : () ->
-  if ext.browser is 'chrome'
+  if BROWSER is 'chrome'
     bkPage = chrome.extension.getBackgroundPage()
     bkPage.test = () ->
       alert(window.message)
@@ -20,19 +27,23 @@ run : () ->
     delete bkPage.test
 
 
+
 reload : () ->
-  if ext.browser is 'chrome'
+  if BROWSER is 'chrome'
     chrome.runtime.reload()
-  else if ext.browser is 'safari'
+  else if BROWSER is 'safari'
     safari.extension.globalPage.contentWindow.reload = () ->
       window.console.clear()
       location.reload()
     safari.extension.globalPage.contentWindow.reload()
 
 
+
 #this function is chrome only!
 update : () ->
-  if ext.browser is 'chrome'
+  if BROWSER is 'chrome'
     chrome.runtime.requestUpdateCheck()
+
+
 
 }

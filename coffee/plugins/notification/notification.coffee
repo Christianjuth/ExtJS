@@ -1,45 +1,64 @@
-plugin = {
+PLUGIN = {
+
+
 
 #define plugin info object
-_info :
-  authors : ['Christian Juth']
-  name : 'Notification'
-  version : '0.1.0'
-  min : '0.1.0'
-  compatibility :
-    chrome : 'full'
-    safari : 'full'
-  github : ''
+_: {
 
-#define plugin aliases
-_aliases : ['noti']
+#INFO
+authors : ['Christian Juth']
+name : 'Notification'
+aliases : ['noti']
+version : '0.1.0'
+min : '0.1.0'
+compatibility :
+  chrome : 'full'
+  safari : 'full'
+github : ''
 
-#functions
+}
+
+
+
+#FUNCTIONS
 basic : (title,message) ->
-  if ext.browser is 'chrome'
+  #check usage
+  usage = 'title string, message string'
+  expected = ['string','string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  #logic
+  if BROWSER is 'chrome'
     chrome.notifications.create '', {
       iconUrl : chrome.extension.getURL('icon-128.png')
       type: 'basic'
       title:title
       message: message
     }, () ->
-  else if ext.browser is 'safari'
+  else if BROWSER is 'safari'
     new Notification(title,{body : message})
 
+
+
 delay : (title,message,milliseconds) ->
+  #check usage
+  usage = 'key string, passwd string, value string'
+  expected = ['string','string','string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  #
   if 50000 < parseInt milliseconds
-    log.error 'timeout too long'
-  else
-    setTimeout ->
-      if ext.browser is 'chrome'
-        chrome.notifications.create '', {
-          iconUrl : chrome.extension.getURL('icon-128.png')
-          type: 'basic'
-          title:title
-          message: message
-        }, () ->
-      else if ext.browser is 'safari'
-        new Notification(title,{body : message})
-    ,milliseconds
+    throw new Error 'timeout too long'
+  setTimeout ->
+    if BROWSER is 'chrome'
+      chrome.notifications.create '', {
+        iconUrl : chrome.extension.getURL('icon-128.png')
+        type: 'basic'
+        title:title
+        message: message
+      }, () ->
+    else if BROWSER is 'safari'
+      new Notification(title,{body : message})
+  ,milliseconds
+
+
 
 }

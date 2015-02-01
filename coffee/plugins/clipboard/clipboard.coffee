@@ -1,16 +1,22 @@
-plugin = {
+PLUGIN = {
 
-_info :
+_: {
+
+  #INFO
   authors : ['Christian Juth']
   name : 'Clipboard'
+  aliases : ['clippy']
   version : '0.5.0'
   min : '0.1.0'
   compatibility :
     chrome : 'full'
     safari : 'none'
 
-_aliases : ['clippy']
+}
 
+
+
+#FUNCTIONS
 write : (text) ->
   #set vars
   input = text

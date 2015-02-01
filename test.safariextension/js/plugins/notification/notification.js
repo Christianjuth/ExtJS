@@ -24,12 +24,13 @@ SOFTWARE.
  */
 
 (function() {
-  var ID, NAME, log, plugin;
+  var BROWSER, ID, NAME, PLUGIN, log;
 
-  plugin = {
-    _info: {
+  PLUGIN = {
+    _: {
       authors: ['Christian Juth'],
       name: 'Notification',
+      aliases: ['noti'],
       version: '0.1.0',
       min: '0.1.0',
       compatibility: {
@@ -38,40 +39,46 @@ SOFTWARE.
       },
       github: ''
     },
-    _aliases: ['noti'],
     basic: function(title, message) {
-      if (ext.browser === 'chrome') {
+      var expected, ok, usage;
+      usage = 'title string, message string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (BROWSER === 'chrome') {
         return chrome.notifications.create('', {
           iconUrl: chrome.extension.getURL('icon-128.png'),
           type: 'basic',
           title: title,
           message: message
         }, function() {});
-      } else if (ext.browser === 'safari') {
+      } else if (BROWSER === 'safari') {
         return new Notification(title, {
           body: message
         });
       }
     },
     delay: function(title, message, milliseconds) {
+      var expected, ok, usage;
+      usage = 'key string, passwd string, value string';
+      expected = ['string', 'string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
       if (50000 < parseInt(milliseconds)) {
-        return log.error('timeout too long');
-      } else {
-        return setTimeout(function() {
-          if (ext.browser === 'chrome') {
-            return chrome.notifications.create('', {
-              iconUrl: chrome.extension.getURL('icon-128.png'),
-              type: 'basic',
-              title: title,
-              message: message
-            }, function() {});
-          } else if (ext.browser === 'safari') {
-            return new Notification(title, {
-              body: message
-            });
-          }
-        }, milliseconds);
+        throw new Error('timeout too long');
       }
+      return setTimeout(function() {
+        if (BROWSER === 'chrome') {
+          return chrome.notifications.create('', {
+            iconUrl: chrome.extension.getURL('icon-128.png'),
+            type: 'basic',
+            title: title,
+            message: message
+          }, function() {});
+        } else if (BROWSER === 'safari') {
+          return new Notification(title, {
+            body: message
+          });
+        }
+      }, milliseconds);
     }
   };
 
@@ -92,35 +99,41 @@ SOFTWARE.
   https://github.com/Christianjuth/extension_framework/tree/plugin
    */
 
-  NAME = plugin._info.name;
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
 
   ID = NAME.toLowerCase().replace(/\ /g, "_");
 
   log = {
     error: function(msg) {
       return (function() {
-        return ext._log.error('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
       })();
     },
     warm: function(msg) {
       return (function() {
-        return ext._log.warn('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
       })();
     },
     info: function(msg) {
       return (function() {
-        return ext._log.info('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
       })();
     }
   };
 
   if (typeof window.define === 'function' && window.define.amd) {
-    window.define(['ext'], function() {
+    window.define(['ext'], function(ext) {
       var VERSION;
-      if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
-        return window.ext[ID] = plugin;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+        return ext._.load(ID, PLUGIN);
       } else {
-        VERSION = plugin._info.min;
+        VERSION = PLUGIN._.min;
         return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
       }
     });

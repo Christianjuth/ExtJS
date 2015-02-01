@@ -24,37 +24,37 @@ SOFTWARE.
  */
 
 (function() {
-  var ID, NAME, log, plugin;
+  var BROWSER, ID, NAME, PLUGIN, log;
 
-  plugin = {
-    _info: {
+  PLUGIN = {
+    _: {
       authors: ['Christian Juth'],
       name: 'UUID',
+      aliases: ['UUID'],
       version: '0.1.0',
       compatibility: {
         chrome: 'full',
         safari: 'full'
-      }
-    },
-    _aliases: ['UUID'],
-    _load: function(options) {
-      var hexDigits, i, s, uuid;
-      if (localStorage.uuid == null) {
-        s = [];
-        hexDigits = '0123456789abcdef';
-        i = 0;
-        while (i <= 36) {
-          i++;
-          s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+      },
+      onload: function(options) {
+        var hexDigits, i, s, uuid;
+        if (localStorage.uuid == null) {
+          s = [];
+          hexDigits = '0123456789abcdef';
+          i = 0;
+          while (i <= 36) {
+            i++;
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+          }
+          s[14] = '4';
+          s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+          s[9] = s[14] = s[19] = s[23] = '-';
+          uuid = s.join('');
+          if (options.silent !== true) {
+            console.info('UUID "' + uuid + '" was created');
+          }
+          return localStorage.uuid = uuid;
         }
-        s[14] = '4';
-        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
-        s[9] = s[14] = s[19] = s[23] = '-';
-        uuid = s.join('');
-        if (options.silent !== true) {
-          console.info('UUID "' + uuid + '" was created');
-        }
-        return localStorage.uuid = uuid;
       }
     },
     reset: function() {
@@ -98,35 +98,41 @@ SOFTWARE.
   https://github.com/Christianjuth/extension_framework/tree/plugin
    */
 
-  NAME = plugin._info.name;
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
 
   ID = NAME.toLowerCase().replace(/\ /g, "_");
 
   log = {
     error: function(msg) {
       return (function() {
-        return ext._log.error('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
       })();
     },
     warm: function(msg) {
       return (function() {
-        return ext._log.warn('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
       })();
     },
     info: function(msg) {
       return (function() {
-        return ext._log.info('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
       })();
     }
   };
 
   if (typeof window.define === 'function' && window.define.amd) {
-    window.define(['ext'], function() {
+    window.define(['ext'], function(ext) {
       var VERSION;
-      if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
-        return window.ext[ID] = plugin;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+        return ext._.load(ID, PLUGIN);
       } else {
-        VERSION = plugin._info.min;
+        VERSION = PLUGIN._.min;
         return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
       }
     });

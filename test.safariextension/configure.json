@@ -1,9 +1,14 @@
 {
+
   "name" : "extension_library",
   "author" : "Christian Juth",
   "version" : "0.1.1",
   "bundleID" : "com.christianjuth.extension-library",
   "databaseQuota" : "100",
+  "menuIcon" : {
+    "19" : "menu-icons/icon-19.png",
+    "16" : "menu-icons/icon-16.png"
+  },
 
 
   "description" : "This is for testing ExtJS",
@@ -42,4 +47,5 @@
   ],
 
   "options":[]
+
 }

@@ -24,10 +24,10 @@ SOFTWARE.
  */
 
 (function() {
-  var ID, NAME, log, plugin;
+  var BROWSER, ID, NAME, PLUGIN, Tab, compare, log;
 
-  plugin = {
-    _info: {
+  PLUGIN = {
+    _: {
       authors: ['Christian Juth'],
       name: 'Tabs',
       version: '0.1.0',
@@ -35,72 +35,337 @@ SOFTWARE.
       compatibility: {
         chrome: 'full',
         safari: 'full'
-      }
-    },
-    create: function(url, target_blank) {
-      if (ext.browser === 'chrome' && target_blank) {
-        return chrome.tabs.create({
-          url: url,
-          active: true
-        });
-      } else if (ext.browser === 'safari' && target_blank) {
-        return safari.application.activeBrowserWindow.openTab().url = url;
-      } else {
-        return window.location.href = url;
-      }
-    },
-    dump: function(callback) {
-      if (ext.browser === 'chrome') {
-        chrome.tabs.query({}, callback);
-      } else if (ext.browser === 'safari') {
-        setTimeout(function(callback) {
-          var tabs, window, _i, _len, _ref;
+      },
+      onload: function() {
+        var TabWindow, id, tab, tabs, _i, _j, _len, _len1, _ref;
+        if (BROWSER === 'safari') {
+          id = 0;
           tabs = [];
           _ref = safari.application.browserWindows;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            window = _ref[_i];
-            tabs = tabs.concat(window.tabs);
+            TabWindow = _ref[_i];
+            tabs = tabs.concat(TabWindow.tabs);
+            for (_j = 0, _len1 = tabs.length; _j < _len1; _j++) {
+              tab = tabs[_j];
+              if (tab.id == null) {
+                tab.id = id++;
+              }
+            }
+            tabs = tabs;
           }
-          return callback(tabs);
-        }, 0, callback);
+          return ext.tabs.onCreate(function(tab) {
+            var _k, _l, _len2, _len3, _ref1, _results;
+            tabs = [];
+            _ref1 = safari.application.browserWindows;
+            _results = [];
+            for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+              TabWindow = _ref1[_k];
+              tabs = tabs.concat(TabWindow.tabs);
+              for (_l = 0, _len3 = tabs.length; _l < _len3; _l++) {
+                tab = tabs[_l];
+                if (tab.id == null) {
+                  tab.id = id++;
+                }
+              }
+              _results.push(tabs = tabs);
+            }
+            return _results;
+          });
+        }
       }
-      return true;
     },
-    indexOf: function(urlSearchSyntax, callback) {
-      var outputTabs, tab, tabs, url, window, _i, _j, _len, _len1, _ref;
+    get: function(id, callback) {
+      if (BROWSER === 'chrome') {
+        chrome.tabs.get(id, function(tab) {
+          if (tab != null) {
+            if (callback != null) {
+              return callback(new Tab(tab));
+            }
+          }
+        });
+      }
+      if (BROWSER === 'safari') {
+        return ext.tabs.all(function(tabs) {
+          var t, _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = tabs.length; _i < _len; _i++) {
+            t = tabs[_i];
+            if (t.id === id && (callback != null)) {
+              _results.push(callback(new Tab(t)));
+            } else {
+              _results.push(void 0);
+            }
+          }
+          return _results;
+        });
+      }
+    },
+    create: function(url, callback) {
+      var defultOptions, options;
+      defultOptions = {
+        url: '**',
+        pinned: false,
+        active: false
+      };
+      if (typeof url !== "object") {
+        url = {
+          url: ext.parse.url(url)
+        };
+      } else {
+        url.url = ext.parse.url(url.url);
+      }
+      options = $.extend(defultOptions, url);
+      if (BROWSER === 'chrome') {
+        chrome.tabs.create({
+          url: options.url,
+          pinned: options.pinned,
+          active: options.active
+        });
+        if (callback != null) {
+          return callback();
+        }
+      } else if (BROWSER === 'safari') {
+        safari.application.activeBrowserWindow.openTab().url = options.url;
+        if (callback != null) {
+          return callback();
+        }
+      }
+    },
+    duplicate: function(id, callback) {
+      return ext.tabs.get(id, function(tab) {
+        return ext.tabs.create(tab, callback);
+      });
+    },
+    query: function(urlSearch, callback) {
+      var TabWindow, chromeQuery, defultOptions, options, outputTabs, tab, tabs, url, _i, _j, _len, _len1, _ref;
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      defultOptions = {
+        url: '**'
+      };
+      if (typeof urlSearch !== "object") {
+        urlSearch = {
+          url: urlSearch
+        };
+      }
+      options = $.extend(defultOptions, urlSearch);
+      chromeQuery = {
+        windowType: "normal"
+      };
+      if (options.pinned != null) {
+        chromeQuery.pinned = options.pinned;
+      }
       tabs = [];
       outputTabs = [];
-      if (ext.browser === 'chrome') {
-        chrome.tabs.query({}, function(tabs) {
+      if (BROWSER === 'chrome') {
+        chrome.tabs.query(chromeQuery, function(tabs) {
           var tab, url, _i, _len;
           for (_i = 0, _len = tabs.length; _i < _len; _i++) {
             tab = tabs[_i];
             url = tab.url.replace(/(\/)$/, '');
-            if (ext.match.url(url, urlSearchSyntax) !== false) {
-              outputTabs.push(tab);
+            if (ext.match.url(url, options.url) !== false) {
+              outputTabs.push(new Tab(tab));
+              outputTabs.sort(compare);
             }
           }
           return callback(outputTabs);
         });
-      } else if (ext.browser === 'safari') {
+      } else if (BROWSER === 'safari') {
         _ref = safari.application.browserWindows;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          window = _ref[_i];
-          tabs = tabs.concat(window.tabs);
+          TabWindow = _ref[_i];
+          tabs = tabs.concat(TabWindow.tabs);
         }
         for (_j = 0, _len1 = tabs.length; _j < _len1; _j++) {
           tab = tabs[_j];
-          if (tab.url != null) {
-            url = tab.url.replace(/(\/)$/, '');
-            if (ext.match.url(url, urlSearchSyntax) !== false) {
-              outputTabs.push(tab);
-            }
+          url = tabs.url;
+          if (url == null) {
+            url = '';
+          }
+          url = url.replace(/(\/)$/, '');
+          if (ext.match.url(url, options.url) !== false) {
+            outputTabs.push(new Tab(tab));
+            outputTabs.sort(compare);
           }
         }
         callback(outputTabs);
       }
-      return urlSearchSyntax;
+      return options.url;
+    },
+    all: function(callback) {
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      return ext.tabs.query('**', function(tabs) {
+        return callback(tabs);
+      });
+    },
+    active: function(callback) {
+      var tab;
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      if (BROWSER === 'chrome') {
+        chrome.tabs.query({
+          active: true
+        }, function(tab) {
+          return callback(new Tab(tab[0]));
+        });
+      }
+      if (BROWSER === 'safari') {
+        tab = safari.application.activeBrowserWindow.activeTab;
+        return callback(new Tab(tab));
+      }
+    },
+    oldest: function(callback, search) {
+      var defaultSearch, tabs;
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      defaultSearch = {
+        url: '**'
+      };
+      search = $.extend(defaultSearch, search);
+      return tabs = ext.tabs.query(search, function(tabs) {
+        var oldest, tab, _i, _j, _len, _len1, _results;
+        oldest = 9007199254740992;
+        for (_i = 0, _len = tabs.length; _i < _len; _i++) {
+          tab = tabs[_i];
+          if (tab.id < oldest) {
+            oldest = tab.id;
+          }
+        }
+        _results = [];
+        for (_j = 0, _len1 = tabs.length; _j < _len1; _j++) {
+          tab = tabs[_j];
+          if (tab.id === oldest) {
+            _results.push(callback(tab));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      });
+    },
+    newest: function(callback, search) {
+      var defaultSearch, tabs;
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      defaultSearch = {
+        url: '**'
+      };
+      search = $.extend(defaultSearch, search);
+      return tabs = ext.tabs.query(search, function(tabs) {
+        var oldest, tab, _i, _j, _len, _len1, _results;
+        oldest = -1;
+        for (_i = 0, _len = tabs.length; _i < _len; _i++) {
+          tab = tabs[_i];
+          if (tab.id > oldest) {
+            oldest = tab.id;
+          }
+        }
+        _results = [];
+        for (_j = 0, _len1 = tabs.length; _j < _len1; _j++) {
+          tab = tabs[_j];
+          if (tab.id === oldest) {
+            _results.push(callback(tab));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      });
+    },
+    onCreate: function(callback) {
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      if (BROWSER === 'chrome') {
+        chrome.tabs.onCreated.addListener(function(tab) {
+          return callback(new Tab(tab));
+        });
+      }
+      if (BROWSER === 'safari') {
+        return safari.application.addEventListener('open', function(e) {
+          var tab;
+          tab = e.target;
+          return callback(new Tab(tab));
+        }, true);
+      }
+    },
+    onDestroy: function(callback) {
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      if (BROWSER === 'chrome') {
+        chrome.tabs.onRemoved.addListener(function(tab) {
+          return callback(new Tab(tab));
+        });
+      }
+      if (BROWSER === 'safari') {
+        return safari.application.addEventListener('close', function(e) {
+          var tab;
+          tab = e.target;
+          return callback(new Tab(tab));
+        }, true);
+      }
     }
+  };
+
+  compare = function(a, b) {
+    if (a.id < b.id) {
+      return -1;
+    }
+    if (a.id > b.id) {
+      return 1;
+    }
+    return 0;
+  };
+
+  Tab = function(tab) {
+    var close;
+    this.url = tab.url;
+    this.title = tab.title;
+    this.id = tab.id;
+    this.pinned = tab.pinned;
+    close = function() {
+      return (function(tab) {
+        return tab.close();
+      })(tab);
+    };
+    this.duplicate = function() {
+      return ext.tabs.duplicate(this.id);
+    };
+    this.destroy = function(force) {
+      if (BROWSER === 'chrome') {
+        chrome.tabs.remove(this.id);
+      }
+      if (BROWSER === 'safari') {
+        return close();
+      }
+    };
+    this.onActive = function(callback) {
+      var id;
+      id = this.id;
+      if (BROWSER === 'chrome') {
+        chrome.tabs.onActivated.addListener(function(e) {
+          if (e.tabId === id) {
+            return ext.tabs.get(e.tabId, callback);
+          }
+        });
+      }
+      if (BROWSER === 'safari') {
+        return safari.application.addEventListener('activate', function(e) {
+          tab = e.target;
+          if (tab.id === id) {
+            return callback(new Tab(tab));
+          }
+        }, true);
+      }
+    };
+    return this;
   };
 
 
@@ -120,35 +385,41 @@ SOFTWARE.
   https://github.com/Christianjuth/extension_framework/tree/plugin
    */
 
-  NAME = plugin._info.name;
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
 
   ID = NAME.toLowerCase().replace(/\ /g, "_");
 
   log = {
     error: function(msg) {
       return (function() {
-        return ext._log.error('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
       })();
     },
     warm: function(msg) {
       return (function() {
-        return ext._log.warn('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
       })();
     },
     info: function(msg) {
       return (function() {
-        return ext._log.info('Ext plugin (' + NAME + ') says: ' + msg);
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
       })();
     }
   };
 
   if (typeof window.define === 'function' && window.define.amd) {
-    window.define(['ext'], function() {
+    window.define(['ext'], function(ext) {
       var VERSION;
-      if ((plugin._info.min == null) || plugin._info.min <= window.ext.version) {
-        return window.ext[ID] = plugin;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+        return ext._.load(ID, PLUGIN);
       } else {
-        VERSION = plugin._info.min;
+        VERSION = PLUGIN._.min;
         return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
       }
     });

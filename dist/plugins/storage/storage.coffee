@@ -22,40 +22,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ###
 
-plugin = {
+PLUGIN = {
 
-_info :
-  authors : ['Christian Juth']
-  name : 'Storage'
-  version : '0.1.0'
-  min : '0.1.0'
-  compatibility :
-    chrome : 'full'
-    safari : 'full'
 
-_aliases : ['localStorage','local']
 
-_load : ->
+_: {
+
+#INFO
+authors : ['Christian Juth']
+name : 'Storage'
+aliases : ['localStorage','local']
+version : '0.1.0'
+min : '0.1.0'
+compatibility :
+  chrome : 'full'
+  safari : 'full'
+
+#EVENTS
+onload : ->
   if !localStorage.storage?
     localStorage.storage = JSON.stringify({})
+  data = ext._.getConfig()
+  for item in data.storage
+    if typeof ext.storage.get(item.key) is 'undefined'
+      log.info('storage item "' + item.key + '" was created')
+      ext.storage.set(item.key, item.default)
 
-  $.ajax {
-    url: '../../configure.json',
-    dataType: 'json',
-    async: false,
-    success: (data) ->
-      for item in data.storage
-        if typeof ext.storage.get(item.key) is 'undefined'
-          log.info('storage item "' + item.key + '" was created')
-          ext.storage.set(item.key, item.default)
-  }
+}
 
 
-#functions
+
+#FUNCTIONS
+
 set : (key, value) ->
   storage = $.parseJSON localStorage.storage
   storage[key] = value
   localStorage.storage = JSON.stringify storage
+
 
 
 get : (key) ->
@@ -63,10 +66,12 @@ get : (key) ->
   storage[key]
 
 
+
 remove : (key) ->
   storage = $.parseJSON localStorage.storage
   delete storage[key]
   localStorage.storage = JSON.stringify storage
+
 
 
 removeAll : (exceptions) ->
@@ -76,11 +81,14 @@ removeAll : (exceptions) ->
   ext.storage.dump()
 
 
+
 dump : ->
   output = []
   $.each $.parseJSON(localStorage.storage), (key,val) ->
     output.push key
   output
+
+
 
 }
 
@@ -99,25 +107,30 @@ use.
 
 https://github.com/Christianjuth/extension_framework/tree/plugin
 ###
-NAME = plugin._info.name
+BROWSER = ''
+NAME = PLUGIN._.name
 ID = NAME.toLowerCase().replace(/\ /g,"_")
 #console logging
 log = {
-  error: (msg) -> do ->
-    ext._log.error 'Ext plugin (' + NAME + ') says: ' + msg
+  error: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.error msg
 
-  warm: (msg) -> do ->
-    ext._log.warn 'Ext plugin (' + NAME + ') says: ' + msg
+  warm: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.warn msg
 
-  info: (msg) -> do ->
-    ext._log.info 'Ext plugin (' + NAME + ') says: ' + msg
+  info: (msg)-> do->
+    msg = 'Ext plugin ('+NAME+') says: '+msg
+    ext._.log.info msg
   }
 #setup AMD support if browser supports the AMD define function
 if typeof window.define is 'function' && window.define.amd
-  window.define ['ext'], ->
+  window.define ['ext'], (ext)->
+    BROWSER = ext._.browser
     #load ExtJS meets VERSION requirements
-    if !plugin._info.min? or plugin._info.min <= window.ext.version
-      window.ext[ID] = plugin
+    if !PLUGIN._.min? or PLUGIN._.min <= window.ext.version
+      ext._.load(ID,PLUGIN)
     else
-      VERSION = plugin._info.min
-      console.error 'Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+'
+      VERSION = PLUGIN._.min
+      console.error 'Ext plugin ('+NAME+') requires ExtJS v'+VERSION+'+'
