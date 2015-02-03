@@ -24,7 +24,7 @@ SOFTWARE.
  */
 
 (function() {
-  var BROWSER, ID, NAME, PLUGIN, log;
+  var BROWSER, ID, NAME, PLUGIN, log, validateLocation;
 
   PLUGIN = {
     _: {
@@ -38,6 +38,14 @@ SOFTWARE.
       }
     },
     setWidth: function(width) {
+      var expected, ok, usage;
+      usage = 'width number';
+      expected = ['number'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      validateLocation();
       if (BROWSER === 'chrome') {
         $('html, body').width(width);
       }
@@ -46,12 +54,58 @@ SOFTWARE.
       }
     },
     setHeight: function(height) {
+      var expected, ok, usage;
+      usage = 'height number';
+      expected = ['number'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      validateLocation();
       if (BROWSER === 'chrome') {
-        $('body').height(height);
+        $('html, body').height(height);
       }
       if (BROWSER === 'safari') {
         return safari.self.height = height;
       }
+    },
+    codeWrap: function(callback) {
+      var expected, ok, usage;
+      usage = 'callback function';
+      expected = ['function'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      validateLocation();
+      if (BROWSER === 'chrome') {
+        callback();
+      }
+      if (BROWSER === 'safari') {
+        return safari.application.addEventListener("popover", callback, true);
+      }
+    }
+  };
+
+  validateLocation = function() {
+    var details, popup, valid;
+    valid = false;
+    if (BROWSER === 'safari') {
+      details = safari.extension;
+      if (details.popovers[0] != null) {
+        popup = safari.extension.popovers[0].contentWindow;
+        valid = window === popup.window;
+      }
+    }
+    if (BROWSER === 'chrome') {
+      details = chrome.app.getDetails();
+      if (details.browser_action != null) {
+        popup = chrome.app.getDetails().browser_action.default_popup;
+        valid = ext.match.url(location.pathname, '{/,}' + popup);
+      }
+    }
+    if (!valid) {
+      throw Error('ext.popup.codeWrap() must be run from a popup');
     }
   };
 
@@ -59,9 +113,9 @@ SOFTWARE.
   /*
   From the ExtJS team
   -------------------
-  The code below was designed by the ExtJS team to provIDe useful info to the
+  The code below was designed by the ExtJS team to providing useful info to the
   developers. We ask you do not change this code unless necessary. By keeping
-  this standard on all plugins, we hope to make development easy by provIDing
+  this standard on all plugins, we hope to make development easy by providing
   useful info to developers.  In addition to logging, the code below also
   contains the AMD function for defining the plugin.  This waits for the ExtJS
   AMD module to define the library itself, and then your plugin is defined
@@ -85,7 +139,7 @@ SOFTWARE.
         return ext._.log.error(msg);
       })();
     },
-    warm: function(msg) {
+    warn: function(msg) {
       return (function() {
         msg = 'Ext plugin (' + NAME + ') says: ' + msg;
         return ext._.log.warn(msg);
@@ -103,7 +157,7 @@ SOFTWARE.
     window.define(['ext'], function(ext) {
       var VERSION;
       BROWSER = ext._.browser;
-      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
         return ext._.load(ID, PLUGIN);
       } else {
         VERSION = PLUGIN._.min;

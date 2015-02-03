@@ -70,9 +70,9 @@ SOFTWARE.
   /*
   From the ExtJS team
   -------------------
-  The code below was designed by the ExtJS team to provIDe useful info to the
+  The code below was designed by the ExtJS team to providing useful info to the
   developers. We ask you do not change this code unless necessary. By keeping
-  this standard on all plugins, we hope to make development easy by provIDing
+  this standard on all plugins, we hope to make development easy by providing
   useful info to developers.  In addition to logging, the code below also
   contains the AMD function for defining the plugin.  This waits for the ExtJS
   AMD module to define the library itself, and then your plugin is defined
@@ -96,7 +96,7 @@ SOFTWARE.
         return ext._.log.error(msg);
       })();
     },
-    warm: function(msg) {
+    warn: function(msg) {
       return (function() {
         msg = 'Ext plugin (' + NAME + ') says: ' + msg;
         return ext._.log.warn(msg);
@@ -114,7 +114,7 @@ SOFTWARE.
     window.define(['ext'], function(ext) {
       var VERSION;
       BROWSER = ext._.browser;
-      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
         return ext._.load(ID, PLUGIN);
       } else {
         VERSION = PLUGIN._.min;

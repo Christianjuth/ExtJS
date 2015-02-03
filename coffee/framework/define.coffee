@@ -11,5 +11,7 @@ window.ext = ext
 #with things like requirejs.
 if typeof window.define is 'function' && window.define.amd
   window.define 'ext', ['jquery'], ->
-    ext._onload()
+    ext._.onbeforeload(ext)
     window.ext
+    ext._.onload()
+    return ext

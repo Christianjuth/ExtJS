@@ -14,7 +14,7 @@ compatibility :
   safari : 'full'
 
 #EVENTS
-onload : ->
+onload: ->
   if BROWSER is 'safari'
     #define ins on launch
     id = 0
@@ -38,7 +38,7 @@ onload : ->
 
 
 #get a specific tab by its id
-get : (id, callback) ->
+get: (id, callback)->
   if BROWSER is 'chrome'
     chrome.tabs.get id, (tab)->
       if tab?
@@ -52,7 +52,7 @@ get : (id, callback) ->
 
 #This function allows you to
 #creat a new tab
-create : (url, callback) ->
+create: (url, callback)->
   defultOptions = {
     url:    '**'
     pinned: false
@@ -78,8 +78,8 @@ create : (url, callback) ->
 
 #This function duplicates a
 #tab based on its id
-duplicate : (id, callback) ->
-  ext.tabs.get id, (tab) ->
+duplicate: (id, callback)->
+  ext.tabs.get id, (tab)->
     ext.tabs.create tab, callback
 
 
@@ -87,7 +87,7 @@ duplicate : (id, callback) ->
 #This function lets you query all
 #they open tabs using extjs's url
 #matching function
-query : (urlSearch, callback) ->
+query: (urlSearch, callback)->
   if !callback?
     throw Error 'Function requires a callback'
   defultOptions = {
@@ -138,7 +138,7 @@ query : (urlSearch, callback) ->
 
 #This function returns all
 #tabs in a callback function
-all : (callback) ->
+all: (callback)->
   if !callback?
     throw Error 'Function requires a callback'
   ext.tabs.query '**', (tabs) ->
@@ -148,7 +148,7 @@ all : (callback) ->
 
 #This function returns the active
 #tab in a callback functioin
-active : (callback) ->
+active: (callback)->
   if !callback?
     throw Error 'Function requires a callback'
   if BROWSER is 'chrome'
@@ -162,7 +162,7 @@ active : (callback) ->
 
 #This function returns the oldest
 #tab in a callback function
-oldest : (callback, search) ->
+oldest: (callback, search)->
   if !callback?
     throw Error 'Function requires a callback'
   defaultSearch = {
@@ -182,7 +182,7 @@ oldest : (callback, search) ->
 
 #This function returns the newest
 #tab in a callback function
-newest : (callback, search) ->
+newest: (callback, search)->
   if !callback?
     throw Error 'Function requires a callback'
   defaultSearch = {
@@ -199,12 +199,19 @@ newest : (callback, search) ->
         callback(tab)
 
 
+
+go: (id,url)->
+  ext.tabs.get id, (tab)->
+    tab.go(url);
+
+
+
 #Events
 
 #This function defines a callback
 #which is triggered when any new
 #tab is opened
-onCreate : (callback) ->
+onCreate: (callback)->
   if !callback?
     throw Error 'Function requires a callback'
   if BROWSER is 'chrome'
@@ -217,10 +224,12 @@ onCreate : (callback) ->
     , true
 
 
+
+
 #This function defines a callback
 #which is triggered when any tab
 #id closed
-onDestroy : (callback) ->
+onDestroy: (callback)->
   if !callback?
     throw Error 'Function requires a callback'
   if BROWSER is 'chrome'
@@ -231,8 +240,6 @@ onDestroy : (callback) ->
       tab = e.target
       callback(new Tab(tab))
     , true
-
-
 }
 
 
@@ -280,6 +287,14 @@ Tab = (tab) ->
         if tab.id is id
           callback(new Tab(tab))
       , true
+  this.go = (url)->
+    url = ext.parse.url(url)
+    if BROWSER is 'chrome'
+      chrome.tabs.update(this.id,{url:url})
+    if BROWSER is 'safari'
+      tab.url = url
+    this.url = tab.url
+
 
   #return
   return this

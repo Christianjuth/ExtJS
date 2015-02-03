@@ -22,7 +22,7 @@ log = {
     msg = 'Ext plugin ('+NAME+') says: '+msg
     ext._.log.error msg
 
-  warm: (msg)-> do->
+  warn: (msg)-> do->
     msg = 'Ext plugin ('+NAME+') says: '+msg
     ext._.log.warn msg
 
@@ -35,7 +35,7 @@ if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], (ext)->
     BROWSER = ext._.browser
     #load ExtJS meets VERSION requirements
-    if !PLUGIN._.min? or PLUGIN._.min <= window.ext.version
+    if !PLUGIN._.min? or PLUGIN._.min <= window.ext._.version
       ext._.load(ID,PLUGIN)
     else
       VERSION = PLUGIN._.min

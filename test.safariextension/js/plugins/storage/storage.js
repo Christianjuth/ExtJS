@@ -59,24 +59,48 @@ SOFTWARE.
       }
     },
     set: function(key, value) {
-      var storage;
+      var expected, ok, storage, usage;
+      usage = 'key string, value string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
       storage = $.parseJSON(localStorage.storage);
       storage[key] = value;
       return localStorage.storage = JSON.stringify(storage);
     },
     get: function(key) {
-      var storage;
+      var expected, ok, storage, usage;
+      usage = 'key string';
+      expected = ['string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
       storage = $.parseJSON(localStorage.storage);
       return storage[key];
     },
     remove: function(key) {
-      var storage;
+      var expected, ok, storage, usage;
+      usage = 'key string';
+      expected = ['string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
       storage = $.parseJSON(localStorage.storage);
       delete storage[key];
       return localStorage.storage = JSON.stringify(storage);
     },
     removeAll: function(exceptions) {
-      var item, _i, _len, _ref;
+      var expected, item, ok, usage, _i, _len, _ref;
+      usage = 'exceptions array';
+      expected = ['object'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
       _ref = ext.storage.dump();
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         item = _ref[_i];
@@ -100,9 +124,9 @@ SOFTWARE.
   /*
   From the ExtJS team
   -------------------
-  The code below was designed by the ExtJS team to provIDe useful info to the
+  The code below was designed by the ExtJS team to providing useful info to the
   developers. We ask you do not change this code unless necessary. By keeping
-  this standard on all plugins, we hope to make development easy by provIDing
+  this standard on all plugins, we hope to make development easy by providing
   useful info to developers.  In addition to logging, the code below also
   contains the AMD function for defining the plugin.  This waits for the ExtJS
   AMD module to define the library itself, and then your plugin is defined
@@ -126,7 +150,7 @@ SOFTWARE.
         return ext._.log.error(msg);
       })();
     },
-    warm: function(msg) {
+    warn: function(msg) {
       return (function() {
         msg = 'Ext plugin (' + NAME + ') says: ' + msg;
         return ext._.log.warn(msg);
@@ -144,7 +168,7 @@ SOFTWARE.
     window.define(['ext'], function(ext) {
       var VERSION;
       BROWSER = ext._.browser;
-      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
         return ext._.load(ID, PLUGIN);
       } else {
         VERSION = PLUGIN._.min;

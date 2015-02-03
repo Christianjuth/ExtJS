@@ -33,6 +33,7 @@ SOFTWARE.
       aliases: ['noti'],
       version: '0.1.0',
       min: '0.1.0',
+      background: true,
       compatibility: {
         chrome: 'full',
         safari: 'full'
@@ -41,9 +42,12 @@ SOFTWARE.
     },
     basic: function(title, message) {
       var expected, ok, usage;
-      usage = 'title string, message string';
+      usage = 'title string, msg string';
       expected = ['string', 'string'];
       ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
       if (BROWSER === 'chrome') {
         return chrome.notifications.create('', {
           iconUrl: chrome.extension.getURL('icon-128.png'),
@@ -59,9 +63,12 @@ SOFTWARE.
     },
     delay: function(title, message, milliseconds) {
       var expected, ok, usage;
-      usage = 'key string, passwd string, value string';
-      expected = ['string', 'string', 'string'];
+      usage = 'title string, msg string, delay number';
+      expected = ['string', 'string', 'number'];
       ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
       if (50000 < parseInt(milliseconds)) {
         throw new Error('timeout too long');
       }
@@ -86,9 +93,9 @@ SOFTWARE.
   /*
   From the ExtJS team
   -------------------
-  The code below was designed by the ExtJS team to provIDe useful info to the
+  The code below was designed by the ExtJS team to providing useful info to the
   developers. We ask you do not change this code unless necessary. By keeping
-  this standard on all plugins, we hope to make development easy by provIDing
+  this standard on all plugins, we hope to make development easy by providing
   useful info to developers.  In addition to logging, the code below also
   contains the AMD function for defining the plugin.  This waits for the ExtJS
   AMD module to define the library itself, and then your plugin is defined
@@ -112,7 +119,7 @@ SOFTWARE.
         return ext._.log.error(msg);
       })();
     },
-    warm: function(msg) {
+    warn: function(msg) {
       return (function() {
         msg = 'Ext plugin (' + NAME + ') says: ' + msg;
         return ext._.log.warn(msg);
@@ -130,7 +137,7 @@ SOFTWARE.
     window.define(['ext'], function(ext) {
       var VERSION;
       BROWSER = ext._.browser;
-      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
         return ext._.load(ID, PLUGIN);
       } else {
         VERSION = PLUGIN._.min;

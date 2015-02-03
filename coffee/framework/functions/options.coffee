@@ -13,22 +13,22 @@ options :
   _:{
 
   #INFO
-  aliases : ['ops', 'opts']
+  aliases: ['ops', 'opts']
+  background: true
 
   #THIS IS A HACK
   #local callback bindings
   changeBindings : []
   bindChange : (callback) ->
-    ext.options._changeBindings.push callback
-    console.log ext.options._changeBindings
+    ext.options._.changeBindings.push callback
+    console.log ext.options._.changeBindings
     console.log callback
   callChangeBindings : ->
-    console.log ext.options._changeBindings
-    for fun in ext.options._changeBindings
+    console.log ext.options._.changeBindings
+    for fun in ext.options._.changeBindings
       fun()
 
-  load : ->
-    alert()
+  onload : ->
     if ext._.browser is 'chrome'
       data = ext._.getConfig()
       for option in data.options
@@ -49,7 +49,10 @@ options :
   set : (key, value) ->
     #check usage
     usage = 'key string, value'
-    ok = ext._.validateArg(arguments, ['string','string,number,object'], usage)
+    ok = ext._.validateArg(arguments, [
+      'string'
+      'string,number,boolean,object'
+    ], usage)
     throw new Error(ok) if ok?
     #logic
     if ext._.browser is 'chrome'

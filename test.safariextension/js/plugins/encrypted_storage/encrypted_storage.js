@@ -40,91 +40,142 @@ SOFTWARE.
       },
       github: '',
       onload: function() {
-        var encryptedStorage, item, storage, _i, _len, _results;
-        if (localStorage.encryptedStorage == null) {
-          localStorage.encryptedStorage = JSON.stringify({});
-        }
+        var Default, encryptedStorage, item, storage, _i, _len, _results;
+        Default = JSON.stringify({});
         encryptedStorage = ext._.getConfig().encryptedStorage;
-        storage = JSON.parse(localStorage.encryptedStorage);
-        _results = [];
-        for (_i = 0, _len = encryptedStorage.length; _i < _len; _i++) {
-          item = encryptedStorage[_i];
-          if (typeof storage[item.key] === 'undefined') {
+        storage = {};
+        if (localStorage.encryptedStorage == null) {
+          localStorage.encryptedStorage = sjcl.encrypt('password', Default);
+          _results = [];
+          for (_i = 0, _len = encryptedStorage.length; _i < _len; _i++) {
+            item = encryptedStorage[_i];
             log.info('storage item "' + item.key + '" default password is "password"');
-            _results.push(ext.encrypted_storage.set(item.key, item["default"], 'password'));
-          } else {
-            _results.push(void 0);
+            _results.push(ext.encrypted_storage.set(item.key, 'password', item["default"]));
           }
+          return _results;
         }
-        return _results;
       }
     },
     set: function(key, passwd, value) {
-      var expected, ok, storage, usage;
+      var err, expected, ok, storage, usage;
       usage = 'key string, passwd string, value string';
-      expected = ['string', 'string', 'string'];
+      expected = ['string', 'string'];
       ok = ext._.validateArg(arguments, expected, usage);
       if (ok != null) {
         throw new Error(ok);
       }
-      storage = $.parseJSON(localStorage.encryptedStorage);
-      storage[key] = sjcl.encrypt(passwd, value);
-      return localStorage.encryptedStorage = JSON.stringify(storage);
+      storage = localStorage.encryptedStorage;
+      try {
+        storage = sjcl.decrypt(passwd, storage);
+      } catch (_error) {
+        err = _error;
+        throw Error(err.message);
+      }
+      storage = $.parseJSON(storage);
+      storage[key] = value;
+      storage = sjcl.encrypt(passwd, JSON.stringify(storage));
+      localStorage.encryptedStorage = storage;
+      return void 0;
     },
     get: function(key, passwd) {
-      var error, expected, ok, output, storage, usage;
+      var err, expected, ok, output, storage, usage;
+      usage = 'key string, passwd string, value string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      output = '';
+      storage = localStorage.encryptedStorage;
+      try {
+        storage = sjcl.decrypt(passwd, storage);
+      } catch (_error) {
+        err = _error;
+        throw Error(err.message);
+      }
+      storage = $.parseJSON(storage);
+      if (storage[key] == null) {
+        throw Error('undefined item');
+      }
+      output = storage[key];
+      return output;
+    },
+    changePasswd: function(Old, New) {
+      var err, expected, ok, storage, usage;
+      usage = 'oldPasswd string, newPasswd string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      storage = localStorage.encryptedStorage;
+      try {
+        storage = sjcl.decrypt(Old, storage);
+      } catch (_error) {
+        err = _error;
+        throw Error(err.message);
+      }
+      storage = sjcl.encrypt(New, storage);
+      return localStorage.encryptedStorage = storage;
+    },
+    remove: function(key, passwd) {
+      var err, expected, ok, storage, usage;
       usage = 'key string, passwd string';
       expected = ['string', 'string'];
       ok = ext._.validateArg(arguments, expected, usage);
-      output = '';
-      storage = $.parseJSON(localStorage.encryptedStorage);
-      if (typeof storage[key] === 'undefined') {
-        return;
+      if (ok != null) {
+        throw new Error(ok);
       }
+      storage = localStorage.encryptedStorage;
       try {
-        output = sjcl.decrypt(passwd, storage[key]);
+        storage = sjcl.decrypt(passwd, storage);
       } catch (_error) {
-        error = _error;
-        log.warn(error.message);
-        output = false;
+        err = _error;
+        throw Error(err.message);
       }
-      return output;
-    },
-    changePasswd: function(key, Old, New) {
-      var expected, ok, usage, value;
-      usage = 'key string, oldPasswd string, newPasswd string';
-      expected = ['string', 'string', 'string'];
-      ok = ext._.validateArg(arguments, expected, usage);
-      value = ext.encrypted_storage.get(key, Old);
-      return ext.encrypted_storage.set(key, value, New);
-    },
-    remove: function(key) {
-      var expected, ok, storage, usage;
-      usage = 'key string';
-      expected = ['string'];
-      ok = ext._.validateArg(arguments, expected, usage);
-      storage = $.parseJSON(localStorage.encryptedStorage);
+      storage = $.parseJSON(storage);
       delete storage[key];
-      return localStorage.encryptedStorage = JSON.stringify(encryptedStorage);
+      storage = sjcl.encrypt(passwd, JSON.stringify(storage));
+      return localStorage.encryptedStorage = storage;
     },
-    removeAll: function(exceptions) {
-      var expected, item, ok, usage, _i, _len, _ref;
-      usage = 'exceptions array';
-      expected = ['object'];
+    removeAll: function(passwd, exceptions) {
+      var expected, item, ok, usage, _i, _len, _ref, _results;
+      usage = 'passwd string, exceptions array';
+      expected = ['string', 'object,undefined'];
       ok = ext._.validateArg(arguments, expected, usage);
-      _ref = ext.encrypted_storage.dump();
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      _ref = ext.encrypted_storage.dump(passwd);
+      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         item = _ref[_i];
-        if (__indexOf.call(exceptions, item) < 0) {
-          ext.encrypted_storage.remove(item);
+        if ((exceptions == null) || __indexOf.call(exceptions, item) < 0) {
+          _results.push(ext.encrypted_storage.remove(item, passwd));
+        } else {
+          _results.push(void 0);
         }
       }
-      return ext.encrypted_storage.dump();
+      return _results;
     },
-    dump: function() {
-      var output;
+    dump: function(passwd) {
+      var err, expected, ok, output, storage, usage;
+      usage = 'passwd string';
+      expected = ['string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      storage = localStorage.encryptedStorage;
+      try {
+        storage = sjcl.decrypt(passwd, storage);
+      } catch (_error) {
+        err = _error;
+        throw Error(err.message);
+      }
+      storage = $.parseJSON(storage);
       output = [];
-      $.each($.parseJSON(localStorage.encryptedStorage), function(key, val) {
+      $.each(storage, function(key, val) {
         return output.push(key);
       });
       return output;
@@ -137,9 +188,9 @@ SOFTWARE.
   /*
   From the ExtJS team
   -------------------
-  The code below was designed by the ExtJS team to provIDe useful info to the
+  The code below was designed by the ExtJS team to providing useful info to the
   developers. We ask you do not change this code unless necessary. By keeping
-  this standard on all plugins, we hope to make development easy by provIDing
+  this standard on all plugins, we hope to make development easy by providing
   useful info to developers.  In addition to logging, the code below also
   contains the AMD function for defining the plugin.  This waits for the ExtJS
   AMD module to define the library itself, and then your plugin is defined
@@ -163,7 +214,7 @@ SOFTWARE.
         return ext._.log.error(msg);
       })();
     },
-    warm: function(msg) {
+    warn: function(msg) {
       return (function() {
         msg = 'Ext plugin (' + NAME + ') says: ' + msg;
         return ext._.log.warn(msg);
@@ -181,7 +232,7 @@ SOFTWARE.
     window.define(['ext'], function(ext) {
       var VERSION;
       BROWSER = ext._.browser;
-      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext.version) {
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
         return ext._.load(ID, PLUGIN);
       } else {
         VERSION = PLUGIN._.min;

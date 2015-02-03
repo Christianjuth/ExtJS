@@ -6,9 +6,8 @@ ini : (options) ->
   options = $.extend defultOptions, options
 
   #expose options globally
-  ext._config = options
   ext._.options = options
 
-  ext._onload()
+  ext._.onload()
 
   return window.ext

@@ -11,6 +11,7 @@ name : 'Notification'
 aliases : ['noti']
 version : '0.1.0'
 min : '0.1.0'
+background: true
 compatibility :
   chrome : 'full'
   safari : 'full'
@@ -23,9 +24,10 @@ github : ''
 #FUNCTIONS
 basic : (title,message) ->
   #check usage
-  usage = 'title string, message string'
+  usage = 'title string, msg string'
   expected = ['string','string']
   ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
   #logic
   if BROWSER is 'chrome'
     chrome.notifications.create '', {
@@ -41,9 +43,10 @@ basic : (title,message) ->
 
 delay : (title,message,milliseconds) ->
   #check usage
-  usage = 'key string, passwd string, value string'
-  expected = ['string','string','string']
+  usage = 'title string, msg string, delay number'
+  expected = ['string','string','number']
   ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
   #
   if 50000 < parseInt milliseconds
     throw new Error 'timeout too long'

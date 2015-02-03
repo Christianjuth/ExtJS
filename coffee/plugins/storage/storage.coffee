@@ -31,6 +31,12 @@ onload : ->
 #FUNCTIONS
 
 set : (key, value) ->
+  #check usage
+  usage = 'key string, value string'
+  expected = ['string','string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
+  #logic
   storage = $.parseJSON localStorage.storage
   storage[key] = value
   localStorage.storage = JSON.stringify storage
@@ -38,12 +44,22 @@ set : (key, value) ->
 
 
 get : (key) ->
+  #check usage
+  usage = 'key string'
+  expected = ['string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
   storage = $.parseJSON localStorage.storage
   storage[key]
 
 
 
 remove : (key) ->
+  #check usage
+  usage = 'key string'
+  expected = ['string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
   storage = $.parseJSON localStorage.storage
   delete storage[key]
   localStorage.storage = JSON.stringify storage
@@ -51,6 +67,11 @@ remove : (key) ->
 
 
 removeAll : (exceptions) ->
+  #check usage
+  usage = 'exceptions array'
+  expected = ['object']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
   for item in ext.storage.dump()
     if item not in exceptions
       ext.storage.remove(item)

@@ -41,6 +41,12 @@ compatibility :
 
 #FUNCTIONS
 setWidth: (width)->
+  #check usage
+  usage = 'width number'
+  expected = ['number']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
+  validateLocation()
   if BROWSER is 'chrome'
     $('html, body').width(width)
   if BROWSER is 'safari'
@@ -49,21 +55,60 @@ setWidth: (width)->
 
 
 setHeight: (height)->
+  #check usage
+  usage = 'height number'
+  expected = ['number']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
+  validateLocation()
   if BROWSER is 'chrome'
-    $('body').height(height)
+    $('html, body').height(height)
   if BROWSER is 'safari'
     safari.self.height = height
 
 
 
+codeWrap: (callback)->
+  #check usage
+  usage = 'callback function'
+  expected = ['function']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
+  validateLocation()
+  #logic
+  if BROWSER is 'chrome'
+    callback()
+  if BROWSER is 'safari'
+    safari.application.addEventListener("popover", callback, true)
+
+
 }
+
+
+
+validateLocation = ->
+  #vars
+  valid = false
+  #validate
+  if BROWSER is 'safari'
+    details = safari.extension
+    if details.popovers[0]?
+      popup = safari.extension.popovers[0].contentWindow
+      valid = window is popup.window
+  if BROWSER is 'chrome'
+    details = chrome.app.getDetails()
+    if details.browser_action?
+      popup = chrome.app.getDetails().browser_action.default_popup
+      valid = ext.match.url(location.pathname,'{/,}'+popup)
+  if !valid
+    throw Error 'ext.popup.codeWrap() must be run from a popup'
 
 ###
 From the ExtJS team
 -------------------
-The code below was designed by the ExtJS team to provIDe useful info to the
+The code below was designed by the ExtJS team to providing useful info to the
 developers. We ask you do not change this code unless necessary. By keeping
-this standard on all plugins, we hope to make development easy by provIDing
+this standard on all plugins, we hope to make development easy by providing
 useful info to developers.  In addition to logging, the code below also
 contains the AMD function for defining the plugin.  This waits for the ExtJS
 AMD module to define the library itself, and then your plugin is defined
@@ -82,7 +127,7 @@ log = {
     msg = 'Ext plugin ('+NAME+') says: '+msg
     ext._.log.error msg
 
-  warm: (msg)-> do->
+  warn: (msg)-> do->
     msg = 'Ext plugin ('+NAME+') says: '+msg
     ext._.log.warn msg
 
@@ -95,7 +140,7 @@ if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], (ext)->
     BROWSER = ext._.browser
     #load ExtJS meets VERSION requirements
-    if !PLUGIN._.min? or PLUGIN._.min <= window.ext.version
+    if !PLUGIN._.min? or PLUGIN._.min <= window.ext._.version
       ext._.load(ID,PLUGIN)
     else
       VERSION = PLUGIN._.min

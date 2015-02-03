@@ -6,43 +6,6 @@
   };
 
   ext = {
-    browser: '',
-    version: '0.1.0',
-    _onload: function() {
-      ext._.options = defultOptions;
-      $.each(ext, function(item) {
-        var alias, _i, _len, _ref;
-        item = ext[item];
-        if ((item._ != null) && (item._.aliases != null)) {
-          _ref = item._.aliases;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            alias = _ref[_i];
-            ext[alias] = item;
-          }
-        }
-        if ((item._ != null) && (item._.onload != null)) {
-          return item._.onload();
-        }
-      });
-      if ((localStorage.options == null) && ext._.browser === 'chrome') {
-        localStorage.options = JSON.stringify({});
-      }
-      ext._.log = {};
-      if (ext._.options.silent !== true) {
-        ext._.log.info = (function() {
-          return Function.prototype.bind.call(console.info, console);
-        })();
-        ext._.log.warn = (function() {
-          return Function.prototype.bind.call(console.warn, console);
-        })();
-      } else {
-        ext._.log.info = function() {};
-        ext._.log.warn = function() {};
-      }
-      return ext._.log.error = (function() {
-        return Function.prototype.bind.call(console.error, console);
-      })();
-    },
     chrome: function(callback) {
       var ok, usage;
       usage = 'callback function';
@@ -56,13 +19,13 @@
     },
     ini: function(options) {
       options = $.extend(defultOptions, options);
-      ext._config = options;
       ext._.options = options;
-      ext._onload();
+      ext._.onload();
       return window.ext;
     },
     _: {
-      _load: function() {},
+      version: '0.1.0',
+      internal: [],
       browser: (function() {
         var browser, userAgent, vendor;
         userAgent = navigator.userAgent;
@@ -76,6 +39,62 @@
         }
         return browser;
       })(),
+      onbeforeload: function(ext) {
+        var Keys, alias, item, msg, name, _i, _j, _len, _len1, _ref, _ref1, _results;
+        Keys = Object.keys(ext);
+        Keys.splice(Keys.indexOf('_'), 1);
+        ext._.internal = Keys;
+        if ((localStorage.options == null) && ext._.browser === 'chrome') {
+          localStorage.options = JSON.stringify({});
+        }
+        ext._.options = defultOptions;
+        _ref = ext._.internal;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          item = _ref[_i];
+          if (item !== '_') {
+            item = ext[item];
+            if ((item._ != null) && (item._.aliases != null)) {
+              name = item._.name;
+              _ref1 = item._.aliases;
+              for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                alias = _ref1[_j];
+                if (ext[alias] == null) {
+                  ext[alias] = item;
+                } else {
+                  msg = 'ExtJS can\'t define alias "' + alias + '"';
+                  ext._.log.warn(msg);
+                }
+              }
+            }
+            if ((item._ != null) && (item._.onload != null)) {
+              _results.push(item._.onload());
+            } else {
+              _results.push(void 0);
+            }
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      },
+      onload: function() {
+        ext._.log = {};
+        if (ext._.options.silent !== true) {
+          ext._.log.info = (function() {
+            return Function.prototype.bind.call(console.info, console);
+          })();
+          ext._.log.warn = (function() {
+            return Function.prototype.bind.call(console.warn, console);
+          })();
+        } else {
+          ext._.log.info = function() {};
+          ext._.log.warn = function() {};
+        }
+        return ext._.log.error = (function() {
+          return Function.prototype.bind.call(console.error, console);
+        })();
+      },
       validateArg: function(args, expected, usage) {
         var arg, i, type, types, valid, _i, _j, _len, _len1;
         usage = 'does not match usage function(' + usage + ')';
@@ -140,31 +159,68 @@
         output['16'] = json.menuIcon['16'];
         return output;
       },
+      getBackground: function() {
+        var bk;
+        bk = '';
+        if (ext._.browser === 'chrome') {
+          bk = chrome.extension.getBackgroundPage().window;
+        }
+        if (ext._.browser === 'safari') {
+          bk = safari.extension.globalPage.contentWindow;
+        }
+        return bk;
+      },
       load: function(id, plugin) {
-        var alias, msg, name, ok, usage, _i, _len, _ref;
+        var alias, bk, compatibility, msg, name, ok, usage, _i, _len, _ref;
         usage = 'id string, plugin object';
         ok = ext._.validateArg(arguments, ['string', 'object'], usage);
         if (ok != null) {
           throw new Error(ok);
         }
+        if (plugin._ == null) {
+          ext._.log.error('plugin missing header');
+          return false;
+        }
         name = plugin._.name;
+        bk = ext._.getBackground();
+        if (bk.window !== window && plugin._.background === true) {
+          bk.ext._.load(id, plugin);
+        }
+        if (plugin._.onbeforeload != null) {
+          plugin._.onbeforeload(plugin);
+        }
         ext[id] = plugin;
+        if (plugin._.onload != null) {
+          plugin._.onload(ext._.options);
+        }
         if (plugin._.aliases != null) {
           _ref = plugin._.aliases;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             alias = _ref[_i];
             if (ext[alias] == null) {
               ext[alias] = ext[id];
-              delete plugin._.aliases;
             } else {
               msg = 'Ext plugin "' + name + '" can\'t define alias "' + alias + '"';
               ext._.log.warn(msg);
             }
           }
         }
-        if (plugin._.onload != null) {
-          plugin._.onload(ext._.options);
-          return delete plugin._.onload;
+        if (plugin._.compatibility != null) {
+          compatibility = plugin._.compatibility;
+          if (compatibility.chrome === 'none') {
+            msg = 'Ext plugin "' + name + '" is Safari only';
+            ext._.log.warn(msg);
+          } else if (compatibility.chrome !== 'full') {
+            msg = 'Ext plugin "' + name + '" may contain some Safari only functions';
+            ext._.log.warn(msg);
+          }
+          if (compatibility.safari === 'none') {
+            msg = 'Ext plugin "' + name + '" is Chrome only';
+            return ext._.log.warn(msg);
+          } else if (compatibility.safari !== 'full') {
+            msg = 'Ext plugin "' + name + '" may contain some Chrome only functions';
+            return ext._.log.warn(msg);
+          }
         }
       },
       log: {
@@ -437,16 +493,17 @@
     options: {
       _: {
         aliases: ['ops', 'opts'],
+        background: true,
         changeBindings: [],
         bindChange: function(callback) {
-          ext.options._changeBindings.push(callback);
-          console.log(ext.options._changeBindings);
+          ext.options._.changeBindings.push(callback);
+          console.log(ext.options._.changeBindings);
           return console.log(callback);
         },
         callChangeBindings: function() {
           var fun, _i, _len, _ref, _results;
-          console.log(ext.options._changeBindings);
-          _ref = ext.options._changeBindings;
+          console.log(ext.options._.changeBindings);
+          _ref = ext.options._.changeBindings;
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             fun = _ref[_i];
@@ -454,9 +511,8 @@
           }
           return _results;
         },
-        load: function() {
+        onload: function() {
           var data, option, _i, _len, _ref, _results;
-          alert();
           if (ext._.browser === 'chrome') {
             data = ext._.getConfig();
             _ref = data.options;
@@ -476,7 +532,7 @@
       set: function(key, value) {
         var ok, options, usage;
         usage = 'key string, value';
-        ok = ext._.validateArg(arguments, ['string', 'string,number,object'], usage);
+        ok = ext._.validateArg(arguments, ['string', 'string,number,boolean,object'], usage);
         if (ok != null) {
           throw new Error(ok);
         }
@@ -810,8 +866,10 @@
 
   if (typeof window.define === 'function' && window.define.amd) {
     window.define('ext', ['jquery'], function() {
-      ext._onload();
-      return window.ext;
+      ext._.onbeforeload(ext);
+      window.ext;
+      ext._.onload();
+      return ext;
     });
   }
 
