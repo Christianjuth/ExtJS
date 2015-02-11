@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/christianjuth/extjs_framework.png?label=ready&title=Ready)](https://waffle.io/christianjuth/extjs_framework)
 ### Quick Descrption
 ExtJS is a framwork for building Chrome and Safari extensions in one, as well as providing a file structure with grunt setup and ready to go. [Learn more...](http://ext-js.org/)
 
