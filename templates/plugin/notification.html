@@ -1,0 +1,38 @@
+<h1 id="notification-plugin">Notification Plugin</h1>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="http://code.ext-js.org/plugins/notification/notification.coffee">Coffeescript</a></li>
+<li><a href="http://code.ext-js.org/plugins/notification/notification.js">Unminified</a></li>
+<li><a href="http://code.ext-js.org/plugins/notification/notification.min.js">Minified</a></li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>This plugin gives the user a Chrome or Safari notification depending on the browser.  Both notification types work in and outside of the browser.  If the user is using a different application the notification will popup for a brief amount of time.</p>
+<pre><code class="lang-javascript">//This function simply gives the
+//user a notification.
+ext.notification.basic(&quot;Title&quot;,&quot;Message...&quot;)
+
+//This function will wait a inputed
+//amount of time then notify then user.
+//The max time is 50000 milliseconds.
+ext.notification.delay (&quot;Title&quot;,&quot;Message...&quot;, 50000)
+</code></pre>
+<h2 id="change-log">Change log</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xx-xx-2015</td>
+<td>0.1.0</td>
+<td>Release</td>
+</tr>
+</tbody>
+</table>
+<h2 id="licence">Licence</h2>
+<p>MIT Open source</p>
+

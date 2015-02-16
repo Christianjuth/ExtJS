@@ -1,0 +1,39 @@
+<div>
+
+  <script type="text/html" class="view">
+    <h1>My Plugin</h1>
+    <br>
+    <div class="plugins"></div>
+    <button class="newPlugin">New Plugin</button>
+  </script>
+
+
+  <script type="text/html" class="item">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <form class="plugin">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" class="form-control name" placeholder="Plugin name">
+          </div>
+          <div class="form-group">
+            <label>Unminified</label>
+            <input type="text" class="form-control unminified-link" placeholder="Raw coffeescript of javascript file url">
+          </div>
+          <div class="form-group">
+            <label>Minified</label>
+            <input type="text" class="form-control minified-link" placeholder="Raw minified javascript link">
+          </div>
+          <div class="form-group">
+            <label>Readme</label>
+            <textarea class="form-control readme" rows="10"></textarea>
+          </div>
+          <button type="submit" class="btn btn-default">Update</button>
+          <button class="delete btn btn-default">Delete</button>
+        </form>
+      </div>
+    </div>
+  </script>
+
+
+</div>

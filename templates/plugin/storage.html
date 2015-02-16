@@ -1,0 +1,52 @@
+<h1 id="storage-plugin">Storage Plugin</h1>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="http://code.ext-js.org/plugins/storage/storage.coffee">Coffeescript</a></li>
+<li><a href="http://code.ext-js.org/plugins/storage/storage.js">Unminified</a></li>
+<li><a href="http://code.ext-js.org/plugins/storage/storage.min.js">Minified</a></li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>This is a small set of functions for storing, getting, resetting, and removing items. The items are stored in a single localStorage element. Because the items are stored as a string and parsed as a JSON object on the fly this allows you to store values other then strings. This should be used as an alternative to localStorage and not along with it.</p>
+<pre><code class="lang-javascript">//This will set the target
+//storage item and return storage
+//JSON object.
+ext.storage.set(&quot;Key&quot;,&quot;Value&quot;)
+
+//This will return the
+//target storage item.
+ext.storage.get(&quot;Key&quot;)
+
+//This will remove the target
+//storage item from the storage
+//object
+ext.storage.remove(&quot;key&quot;)
+
+//This will remove all storage
+//items in the storage object
+ext.storage.removeAll([&quot;exception1&quot;,&quot;exception2&quot;])
+
+//This will return an array of all
+//storage item keys in the storage
+//object
+ext.storage.dump()
+</code></pre>
+<h2 id="change-log">Change log</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xx-xx-2015</td>
+<td>0.1.0</td>
+<td>Release</td>
+</tr>
+</tbody>
+</table>
+<h2 id="licence">Licence</h2>
+<p>MIT Open source</p>
+

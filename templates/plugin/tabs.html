@@ -1,0 +1,50 @@
+<h1 id="tabs-plugin">Tabs Plugin</h1>
+<p>This plugin is used for creating, getting, and searching browser tabs.</p>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="http://code.ext-js.org/plugins/tabs/tabs.coffee">Coffeescript</a></li>
+<li><a href="http://code.ext-js.org/plugins/tabs/tabs.js">Unminified</a></li>
+<li><a href="http://code.ext-js.org/plugins/tabs/tabs.min.js">Minified</a></li>
+</ul>
+<h2 id="usage">Usage</h2>
+<pre><code class="lang-javascript">//This will search the browser
+//for a google.com tab.
+ext.tabs.indexOf(&quot;**google.*&quot;, function(tabs){
+  console.log(tabs);
+});
+
+//This will return and array
+//containing all tabs
+ext.tabs.dump(function(tabs){
+  console.log(tabs);
+});
+
+//This function will go
+//to an imputed target url
+ext.tabs.create(&quot;http://google.com&quot;)
+
+//If the second parameter is
+//true the url will be opened
+//in a new tab
+ext.tabs.create(&quot;http://google.com&quot;,true)
+</code></pre>
+<h2 id="changelog">Changelog</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xx-xx-2015</td>
+<td>0.1.0</td>
+<td>Release</td>
+</tr>
+</tbody>
+</table>
+<h2 id="licence">Licence</h2>
+<p>MIT Open source</p>
+

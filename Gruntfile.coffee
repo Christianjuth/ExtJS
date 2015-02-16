@@ -1,66 +1,47 @@
-
 module.exports = (grunt) ->
-
-
   #require it at the top and pass in the grunt instance
   require('time-grunt')(grunt)
   require('load-grunt-tasks')(grunt)
 
-
-  #Load extension config file
-  config =             grunt.file.readJSON("app/configure.json")
-
   #Project functions
   grunt.initConfig {
+    markdown :
+      options :
+        template: 'markdown.jst'
+      all :
+        files: [
+          {
+            expand: true,
+            cwd: 'markdown/'
+            src: '**/*.md',
+            dest: 'templates/<%= srcDir %>/',
+            ext: '.html'
+          }
+        ]
 
-  pkg: grunt.file.readJSON('package.json'),
+    coffee :
+      options :
+        bare: true
+      default :
+        expand: true,
+        cwd: 'coffee',
+        src: ['**/*.coffee'],
+        dest: 'assets/js/<%= srcDir %>/',
+        ext: '.js'
 
-  #styles
-  less:                 grunt.file.readJSON('grunt/less.json')
-
-  #scripts
-  coffee:               grunt.file.readJSON('grunt/coffee.json')
-  uglify:               grunt.file.readJSON('grunt/uglify.json')
-  coffeelint:           grunt.file.readJSON('grunt/coffeelint.json')
-
-  #manage files
-  clean:                grunt.file.readJSON('grunt/clean.json')
-
-  rsync:                grunt.file.readJSON('grunt/rsync.json')
-
-  #assets
-  imagemin :            grunt.file.readJSON('grunt/imagemin.json')
-  multiresize:          grunt.file.readJSON('grunt/multiresize.json')
-  browserDependencies:  grunt.file.readJSON('grunt/browserDependencies.json')
-
-  #other
-  extension_manifest :  grunt.file.readJSON('grunt/extension_manifest.json')
-  notify_hooks:         grunt.file.readJSON('grunt/notify_hooks.json')
-  compress :            grunt.file.readJSON('grunt/compress.json')
-
+    less :
+      options :
+        compress : true
+      default :
+        expand: true,
+        cwd: 'less',
+        src: ['**/*.less'],
+        dest: 'assets/css/<%= srcDir %>/',
+        ext: '.css'
   }
 
-  #register tasks
-  grunt.registerTask 'test', [
-    'coffeelint'
-  ]
-
-  grunt.registerTask 'build', [
-#    'clean'
-#    'browserDependencies'
-    'extension_manifest'
-    'rsync'
-    'multiresize'
-    'less'
-    'coffee'
-    'uglify'
-    'imagemin'
-    'compress'
-  ]
-
-  #default task
   grunt.registerTask 'default', [
-    'build'
+    'markdown',
+    'coffee',
+    'less'
   ]
-
-  grunt.task.run('notify_hooks')

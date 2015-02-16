@@ -1,0 +1,36 @@
+<div>
+  <script type="text/html" class="view">
+    <h1>Search Plugins</h1>
+
+    <form class="form-horizontal">
+      <div class="form-group">
+        <div class="col-xs-12">
+          <input type="text" class="form-control search" placeholder="Search" value="{{search}}">
+        </div>
+      </div>
+    </form>
+
+    <table class="plugins col-xs-12">
+      <thead>
+        <tr>
+          <th>Plugins</th>
+          <th>File</th>
+          <th>File</th>
+          <th>Developer</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </script>
+
+
+  <script type="text/html" class="item">
+    <tr>
+      <td><a href='//ext-js.org/plugin/{{name}}'>{{name}}</a></td>
+      <td><a href='{{unmin}}'>Unminified</a></td>
+      <td><a href='{{min}}'>Minified</a></td>
+      <td><a href='//ext-js.org/search/plugins?{{developer}}'>{{developer}}</a></td>
+    </tr>
+  </script>
+</div>

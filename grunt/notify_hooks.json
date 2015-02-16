@@ -1,9 +1,0 @@
-{
-  "options" : {
-    "enabled" : true,
-    "max_jshint_notifications" : 5,
-    "title" : "Extension Framework",
-    "success" : true,
-    "duration" : 3
-  }
-}

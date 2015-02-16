@@ -1,0 +1,61 @@
+<h1 id="building-your-extension">Building Your Extension</h1>
+<h1 id="the-breakdown">The Breakdown</h1>
+<ul>
+<li><a href="https://github.com/Christianjuth/ExtJS_Framework/wiki/Building-Your-Extension#icons">Icons</a></li>
+<li><a href="https://github.com/Christianjuth/ExtJS_Framework/wiki/Building-Your-Extension#popup-vs-action">Popup vs Action</a></li>
+<li><a href="https://github.com/Christianjuth/ExtJS_Framework/wiki/Building-Your-Extension#pages">Pages</a></li>
+</ul>
+<h1 id="icons">Icons</h1>
+<p><em>All icons must be in png format.</em></p>
+<p>The <em>app/icon.png</em> is the icon that will be displayed on the install banner, the settings panel of both browsers, and other places.  The only place, it will not be displayed, is on the menu bar. These icons are located in the <code>app/menu-icons/</code> folder.</p>
+<p><strong>Default Icons</strong></p>
+<ul>
+<li><code>app/icon.png</code></li>
+<li><code>app/menu-icons/icon-16.png</code></li>
+<li><code>app/menu-icons/icon-19.png</code></li>
+</ul>
+<p>When adding custom icons you must upload a <code>16x16</code> and <code>19x19</code> version and add <code>-16</code> and <code>-19</code> to the end of the files.  This is because Chrome and Safari ask for two different sizes.  We know this is a little tedious and we are planning on changing this in the future.</p>
+<p><strong>Adding Icons</strong></p>
+<ul>
+<li><code>app/menu-icons/your_icon_name-16.png</code></li>
+<li><code>app/menu-icons/your_icon_name-19.png</code></li>
+</ul>
+<h1 id="popup-vs-action">Popup vs Action</h1>
+<p><em>The default is action</em></p>
+<h3 id="popup">Popup</h3>
+<p>You must add this line of code to <code>app/configure.json</code></p>
+<pre><code class="lang-json">{
+  &quot;popup&quot; : &quot;pages/popup/popup.html&quot;
+}
+</code></pre>
+<h3 id="action">Action</h3>
+<p><strong>Chrome</strong></p>
+<p>You must remove this line of code from <code>app/configure.json</code></p>
+<pre><code class="lang-json">{
+  &quot;popup&quot; : &quot;pages/popup/popup.html&quot;
+}
+</code></pre>
+<p>And to actually define an action use the <code>ext.menu.click()</code> function to define a callback function
+<strong>Coffeescript</strong></p>
+<pre><code class="lang-coffeescript">#test
+ext.menu.click -&gt;
+  #your code here
+</code></pre>
+<p><strong>Javascript</strong></p>
+<pre><code class="lang-javascript">ext.menu.click(function(){
+  //your code here
+});
+</code></pre>
+<h1 id="pages">Pages</h1>
+<p>Adding pages is simple.  You simply add a new folder in the <code>app/pages/</code> dir. Your file structure should look like this...</p>
+<pre><code>pages
+|
+`-- new_page
+    |
+    |-- new_page.html
+    |-- new_page.coffee
+    `-- new_page.less
+</code></pre><p>Linking to a page is simple.  Just add this to the pages HTML file, but replace <code>new_page</code> with your page&#39;s name.</p>
+<pre><code class="lang-html">&lt;a href=&quot;../new_page/new_page.html&quot;&gt;new page&lt;/a&gt;
+</code></pre>
+

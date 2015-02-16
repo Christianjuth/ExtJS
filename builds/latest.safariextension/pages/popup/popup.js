@@ -1,1 +1,0 @@
-(function(){require(["jquery","underscore","ext","extPlugin/popup","extPlugin/tabs"],function(a,b,c){return c.ini()})}).call(this);

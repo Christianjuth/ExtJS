@@ -1,0 +1,74 @@
+<h1 id="getting-started">Getting Started</h1>
+<h3 id="skills-required">Skills required</h3>
+<ul>
+<li><strong>HTML</strong></li>
+<li><strong>CSS</strong> - <em>LESS is also suggested</em></li>
+<li><strong>Javascript</strong> - <em>Coffeescript is also suggested</em></li>
+<li><strong>jQuery</strong> - <em>although this is not a direct requirement it is strongly suggested</em></li>
+<li><strong>requireJS</strong></li>
+<li><strong>Chrome Extensions</strong> - this will be a lot less confusing if you have some past experience</li>
+</ul>
+<p><em>I am only saying Chrome Extensions is because I am a Chrome Developer.  This framework is done the way I thing extensions should be built.  Because I prefer the Chrome method this whole framework is more Chrome oriented and requires very little Safari experience.</em></p>
+<h3 id="tools-needed">Tools needed</h3>
+<ul>
+<li><strong>IDE</strong> - I suggest brackats.io</li>
+<li><strong>Terminal</strong> - any UNIX-based terminal should work</li>
+</ul>
+<p><em>Personally, I use a Mac for development.  You can use Linux, but you will not be able to use Safari for obvious reasons.</em></p>
+<h3 id="get-the-framework">Get the framework</h3>
+<p>Start by cloning the hello world extension.  In an empty folder.</p>
+<pre><code>git clone https://github.com/Christianjuth/ExtJS_Framework.git
+</code></pre><h3 id="first-commit">First commit</h3>
+<p>We recommend doing an &quot;ini&quot; commit before making any changes.</p>
+<pre><code>git add .
+git commit -m &quot;ini&quot;
+git push origin master
+</code></pre><h3 id="start-building">Start building</h3>
+<p>Now you can start editing your extension.  The actual extension in the app folder.  You have the choice between Javascript and Coffeescript.  The same goes for CSS and LESS.  You can even mix the two, but keep in mind, you can not have two files with the same name that are Javascript and Coffeescript <em>(e.g. main.js and main.coffee)</em>.  Again, the same goes for CSS and LESS.  The app will compile 1:1. This means the build folder is a complete copy of the app folder except your <em>.coffeescript</em> and <em>.less</em> files will be compiled to <em>.js</em> and <em>.css</em>.  In addition to that, all Javascript files in the build folder will be minified using UglifyJS, and images will be compressed using the Grunt image minify plugin.</p>
+<p>When linking to a LESS file you can add the path with a <code>&lt;link&gt;</code> tag keeping in mind you replace <em>.less</em> with <em>.css</em>. You should not be using any <code>&lt;script&gt;</code> tags except for the one linking to the requireJS library.  All <em>.js</em> files should be loaded through requireJS.</p>
+<p><em>Here is a very basic example of everything I have explained.</em></p>
+<pre><code>|-- app
+|   |-- js
+|   |   `-- main.coffee
+|   |
+|   |-- css
+|   |   `-- style.less
+|   |
+|   `-- pages
+|       `-- background
+|           |-- background.html
+|           `-- background.coffee
+|
+`-- builds
+    `-- (compiled app)
+</code></pre><p><em>This is only scraping the surface. For more documentation reference the advanced guide.</em></p>
+<h3 id="how-do-i-compile-my-extension-">How do I compile my extension?</h3>
+<p>In the terminal run <code>grunt</code>. No joke that is literally all you do.</p>
+<p>This will update your <code>builds</code> folder and the libraries packaged with this framework (<em>ext.js</em>, <em>jquery.js</em>, <em>require.js</em>, and <em>underscore.js</em>).</p>
+<h3 id="how-do-i-test-my-extension-">How do I test my extension?</h3>
+<p><strong>Chrome</strong></p>
+<ol>
+<li>Go to <code>chrome://extensions/</code> in the address bar</li>
+<li>Check the box in the top right-hand corner that says <code>Developer Mode</code></li>
+<li>Click <code>Load Unpacked Extension</code> and select the <code>builds/latest.safariextension</code> folder</li>
+</ol>
+<p><em>The reason, it has .safariextension, is so it can be loaded into Chrome or Safari for testing.</em></p>
+<p><strong>Safari</strong></p>
+<p>This is a little trickier than Chrome, but I will try and explain this best I can step by step.</p>
+<ol>
+<li>Open Safari&#39;s preferences</li>
+<li>Click on the Advanced tab - (Last tab on the right and a gear icon)</li>
+<li>Select the <code>Show Develop menu in menu bar</code> checkbox</li>
+<li>Close preferences</li>
+<li>Click the new dropdown, located in the menubar, that says <code>Develop</code></li>
+<li>Click <code>Show Extension Builder</code> - (About half way down the dropdown)</li>
+<li>Click the plus in the bottom left and click <code>Add Extension</code></li>
+<li>Select the <code>builds/latest.safariextension</code> and click <code>Select</code></li>
+<li>Hit the install  button - (Located in the top right)</li>
+<li>You are basically done. Click reload to update the extension as you code it.</li>
+</ol>
+<p><em>You may also need to restart Safari for some updates. This is probably a bug, but I find it has to be done some times</em></p>
+<h3 id="uploading-to-store">Uploading to store</h3>
+<p><strong>Chrome</strong></p>
+<p>Assuming you already have a Google developer account, create a new extension, and upload the <em>.zip</em> file found in the <code>builds</code> folder. <em>The name of the file should be a version number followed by <code>-chrome.zip</code></em> e.g. <code>0.1.0-chrome.zip</code>.</p>
+

@@ -1,6 +1,0 @@
-{
-  "default": {
-    "file": "app/configure.json",
-    "dest": "builds/latest.safariextension/"
-  }
-}
