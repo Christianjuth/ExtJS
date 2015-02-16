@@ -1,1 +1,83 @@
-(function(){require(["jquery","underscore","mustache","bootstrap","ext"],function(a,b,c,d,e){var f,g;return e.ini(),f=function(){return console.log("Settings saved...")},g={create:function(b){var d,g,h;h=b.type.toLocaleLowerCase();try{g=this.types[h](b)}catch(i){throw'Setting type "'+b.type+'" does not exsist'}return d=c.render(a("#option").html(),{title:b.title,option:g}),d=a(d).appendTo("#settings"),d.find("input[type=text], textarea").keyup(function(){return e.options.set(b.key,a(this).val()),f()}),d.find("select").change(function(){return e.options.set(b.key,a(this).val()),f()}),d.find("input[type=checkbox]").change(function(){return e.options.set(b.key,a(this).is(":checked")),f()})},types:{text:function(b){var d;return d=c.render(a("#text").html(),{value:e.options.get(b.key)})},textarea:function(b){var d;return d=c.render(a("#textarea").html(),{text:e.options.get(b.key)})},checkbox:function(b){var d,f;return d="true"===String(e.options.get(b.key)),f=c.render(a("#checkbox").html(),{sel:d})},list:function(d){var f,g,h;return f=e.options.get(d.key),h=0,b.find(d.options,function(a,b){return String(a.val)===f?h=b:void 0}),d.options[h].sel=!0,g=c.render(a("#select").html(),{current:f,options:d.options})}}},a.getJSON("../../configure.json",function(a){var b,c,d,e,f;for(e=a.options,f=[],c=0,d=e.length;d>c;c++)b=e[c],f.push(g.create(b));return f})})}).call(this);
+(function() {
+  require(["jquery", "underscore", "mustache", "bootstrap", "ext", "extPlugin/notification"], function($, _, Mustache, bootstrap, ext) {
+    var change, option;
+    change = function() {
+      return console.log('Settings saved...');
+    };
+    option = {
+      create: function(json) {
+        var elm, item, type;
+        type = json.type.toLocaleLowerCase();
+        try {
+          item = this.types[type](json);
+        } catch (_error) {
+          throw 'Setting type "' + json.type + '" does not exsist';
+        }
+        elm = Mustache.render($("#option").html(), {
+          title: json.title,
+          option: item
+        });
+        elm = $(elm).appendTo("#settings");
+        elm.find("input[type=text], textarea").keyup(function() {
+          ext.options.set(json.key, $(this).val());
+          return change();
+        });
+        elm.find("select").change(function() {
+          ext.options.set(json.key, $(this).val());
+          return change();
+        });
+        return elm.find("input[type=checkbox]").change(function() {
+          ext.options.set(json.key, $(this).is(':checked'));
+          return change();
+        });
+      },
+      types: {
+        text: function(json) {
+          var elm;
+          return elm = Mustache.render($("#text").html(), {
+            value: ext.options.get(json.key)
+          });
+        },
+        textarea: function(json) {
+          var elm;
+          return elm = Mustache.render($("#textarea").html(), {
+            text: ext.options.get(json.key)
+          });
+        },
+        checkbox: function(json) {
+          var checked, elm;
+          checked = String(ext.options.get(json.key)) === "true";
+          return elm = Mustache.render($("#checkbox").html(), {
+            sel: checked
+          });
+        },
+        list: function(json) {
+          var current, elm, inx;
+          current = ext.options.get(json.key);
+          inx = 0;
+          _.find(json.options, function(obj, INX) {
+            if (String(obj.val) === current) {
+              return inx = INX;
+            }
+          });
+          json.options[inx].sel = true;
+          return elm = Mustache.render($("#select").html(), {
+            current: current,
+            options: json.options
+          });
+        }
+      }
+    };
+    return ext._.getConfig(function(data) {
+      var item, _i, _len, _ref, _results;
+      _ref = data.options;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        _results.push(option.create(item));
+      }
+      return _results;
+    });
+  });
+
+}).call(this);

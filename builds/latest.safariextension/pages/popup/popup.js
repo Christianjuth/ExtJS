@@ -1,1 +1,8 @@
-(function(){require(["jquery","underscore","ext","extPlugin/popup","extPlugin/tabs"],function(a,b,c){return c.ini()})}).call(this);
+(function() {
+  require(["jquery", "underscore", "ext", "extPlugin/popup", "extPlugin/tabs", "extPlugin/notification"], function($, _, ext) {
+    return ext.popup.codeWrap(function() {
+      return alert();
+    });
+  });
+
+}).call(this);

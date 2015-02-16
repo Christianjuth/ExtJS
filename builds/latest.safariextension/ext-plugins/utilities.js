@@ -1,3 +1,4 @@
+
 /*!
 The MIT License (MIT)
 
@@ -21,4 +22,105 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-(function(){var a,b,c,d,e;d={_:{authors:["Christian Juth"],name:"Utilities",version:"0.1.0",min:"0.1.0",compatibility:{chrome:"full",safari:"partial"}},run:function(){var b;return"chrome"===a?(b=chrome.extension.getBackgroundPage(),b.test=function(){return alert(window.message)},b.test(),delete b.test):void 0},reload:function(){return"chrome"===a?chrome.runtime.reload():"safari"===a?(safari.extension.globalPage.contentWindow.reload=function(){return window.console.clear(),location.reload()},safari.extension.globalPage.contentWindow.reload()):void 0},update:function(){return"chrome"===a?chrome.runtime.requestUpdateCheck():void 0}},a="",c=d._.name,b=c.toLowerCase().replace(/\ /g,"_"),e={error:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.error(a)}()},warm:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.warn(a)}()},info:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.info(a)}()}},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(e){var f;return a=e._.browser,null==d._.min||d._.min<=window.ext.version?e._.load(b,d):(f=d._.min,console.error("Ext plugin ("+c+") requires ExtJS v"+f+"+"))})}).call(this);
+
+(function() {
+  var BROWSER, ID, NAME, PLUGIN, log;
+
+  PLUGIN = {
+    _: {
+      authors: ['Christian Juth'],
+      name: 'Utilities',
+      version: '0.1.0',
+      min: '0.1.0',
+      compatibility: {
+        chrome: 'full',
+        safari: 'partial'
+      }
+    },
+    run: function() {
+      var bkPage;
+      if (BROWSER === 'chrome') {
+        bkPage = chrome.extension.getBackgroundPage();
+        bkPage.test = function() {
+          return alert(window.message);
+        };
+        bkPage.test();
+        return delete bkPage.test;
+      }
+    },
+    reload: function() {
+      if (BROWSER === 'chrome') {
+        return chrome.runtime.reload();
+      } else if (BROWSER === 'safari') {
+        safari.extension.globalPage.contentWindow.reload = function() {
+          window.console.clear();
+          return location.reload();
+        };
+        return safari.extension.globalPage.contentWindow.reload();
+      }
+    },
+    update: function() {
+      if (BROWSER === 'chrome') {
+        return chrome.runtime.requestUpdateCheck();
+      }
+    }
+  };
+
+
+  /*
+  From the ExtJS team
+  -------------------
+  The code below was designed by the ExtJS team to providing useful info to the
+  developers. We ask you do not change this code unless necessary. By keeping
+  this standard on all plugins, we hope to make development easy by providing
+  useful info to developers.  In addition to logging, the code below also
+  contains the AMD function for defining the plugin.  This waits for the ExtJS
+  AMD module to define the library itself, and then your plugin is defined
+  which prevents any undefined errors.  Although not suggested, plugins can be
+  loaded before the ExtJS library.  The functionality below assures ease of
+  use.
+  
+  https://github.com/Christianjuth/extension_framework/tree/plugin
+   */
+
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
+
+  ID = NAME.toLowerCase().replace(/\ /g, "_");
+
+  log = {
+    error: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
+      })();
+    },
+    warn: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
+      })();
+    },
+    info: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
+      })();
+    }
+  };
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(['ext'], function(ext) {
+      var VERSION;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
+        return ext._.load(ID, PLUGIN);
+      } else {
+        VERSION = PLUGIN._.min;
+        return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
+      }
+    });
+  }
+
+}).call(this);

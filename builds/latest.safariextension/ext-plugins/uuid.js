@@ -1,3 +1,4 @@
+
 /*!
 The MIT License (MIT)
 
@@ -21,4 +22,117 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-(function(){var a,b,c,d,e;d={_:{authors:["Christian Juth"],name:"UUID",aliases:["UUID"],version:"0.1.0",compatibility:{chrome:"full",safari:"full"},onload:function(a){var b,c,d,e;if(null==localStorage.uuid){for(d=[],b="0123456789abcdef",c=0;36>=c;)c++,d[c]=b.substr(Math.floor(16*Math.random()),1);return d[14]="4",d[19]=b.substr(3&d[19]|8,1),d[9]=d[14]=d[19]=d[23]="-",e=d.join(""),a.silent!==!0&&console.info('UUID "'+e+'" was created'),localStorage.uuid=e}}},reset:function(){var a,b,c,d,e;for(c=window.ext._config,d=[],a="0123456789abcdef",b=0;36>=b;)b++,d[b]=a.substr(Math.floor(16*Math.random()),1);return d[14]="4",d[19]=a.substr(3&d[19]|8,1),d[9]=d[14]=d[19]=d[23]="-",e=d.join(""),c.silent!==!0&&console.info('UUID was reset to "'+e+'"'),localStorage.uuid=e},get:function(){return localStorage.uuid}},a="",c=d._.name,b=c.toLowerCase().replace(/\ /g,"_"),e={error:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.error(a)}()},warm:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.warn(a)}()},info:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.info(a)}()}},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(e){var f;return a=e._.browser,null==d._.min||d._.min<=window.ext.version?e._.load(b,d):(f=d._.min,console.error("Ext plugin ("+c+") requires ExtJS v"+f+"+"))})}).call(this);
+
+(function() {
+  var BACKGROUND, BROWSER, ID, NAME, PLUGIN, log;
+
+  PLUGIN = {
+    _: {
+      authors: ['Christian Juth'],
+      name: 'UUID',
+      aliases: ['UUID'],
+      version: '0.1.0',
+      libMin: '0.1.0',
+      background: true,
+      compatibility: {
+        chrome: 'full',
+        safari: 'full'
+      },
+      onload: function(options) {
+        if (localStorage.uuid == null) {
+          return ext.uuid.reset();
+        }
+      }
+    },
+    reset: function() {
+      var hexDigits, i, s, uuid;
+      s = [];
+      hexDigits = '0123456789abcdef';
+      i = 0;
+      while (i <= 36) {
+        i++;
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+      }
+      s[14] = '4';
+      s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+      s[9] = s[14] = s[19] = s[23] = '-';
+      uuid = s.join('');
+      log.info('UUID was reset to "' + uuid + '"');
+      return localStorage.uuid = uuid;
+    },
+    get: function() {
+      return localStorage.uuid;
+    }
+  };
+
+
+  /*
+  From the ExtJS team
+  -------------------
+  The code below was designed by the ExtJS team to providing useful info to the
+  developers. We ask you do not change this code unless necessary. By keeping
+  this standard on all plugins, we hope to make development easy by providing
+  useful info to developers.  In addition to logging, the code below also
+  contains the AMD function for defining the plugin.  This waits for the ExtJS
+  AMD module to define the library itself, and then your plugin is defined
+  which prevents any undefined errors.  Although not suggested, plugins can be
+  loaded before the ExtJS library.  The functionality below assures ease of
+  use.
+  
+  https://github.com/Christianjuth/ExtJS_Library/tree/plugin
+   */
+
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
+
+  ID = NAME.toLowerCase().replace(/\ /g, "_");
+
+  log = {
+    error: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
+      })();
+    },
+    warn: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
+      })();
+    },
+    info: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
+      })();
+    }
+  };
+
+  if (PLUGIN._.background === true) {
+    BACKGROUND = (function() {
+      var bk;
+      if (ext._.browser === 'chrome') {
+        bk = chrome.extension.getBackgroundPage().window;
+      }
+      if (ext._.browser === 'safari') {
+        bk = safari.extension.globalPage.contentWindow;
+      }
+      return bk;
+    })();
+  }
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(['ext'], function(ext) {
+      var VERSION;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.minLib == null) || PLUGIN._.minLib <= window.ext._.version) {
+        return ext._.load(ID, PLUGIN);
+      } else {
+        VERSION = PLUGIN._.min;
+        return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
+      }
+    });
+  }
+
+}).call(this);

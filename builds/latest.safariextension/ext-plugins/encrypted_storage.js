@@ -1,3 +1,4 @@
+
 /*!
 The MIT License (MIT)
 
@@ -21,4 +22,223 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-(function(){var a,b,c,d,e,f,g=[].indexOf||function(a){for(var b=0,c=this.length;c>b;b++)if(b in this&&this[b]===a)return b;return-1};d={_:{authors:["Christian Juth"],name:"Encrypted Storage",aliases:["enStore","enStorage"],version:"0.1.0",min:"0.1.0",compatibility:{chrome:"full",safari:"full"},github:"",onload:function(){var a,b,c,d,e,g;for(null==localStorage.encryptedStorage&&(localStorage.encryptedStorage=JSON.stringify({})),a=ext._.getConfig().encryptedStorage,c=JSON.parse(localStorage.encryptedStorage),g=[],d=0,e=a.length;e>d;d++)b=a[d],"undefined"==typeof c[b.key]?(f.info('storage item "'+b.key+'" default password is "password"'),g.push(ext.encrypted_storage.set(b.key,b["default"],"password"))):g.push(void 0);return g}},set:function(a,b,c){var d,e,f,g;if(g="key string, passwd string, value string",d=["string","string","string"],e=ext._.validateArg(arguments,d,g),null!=e)throw new Error(e);return f=$.parseJSON(localStorage.encryptedStorage),f[a]=sjcl.encrypt(b,c),localStorage.encryptedStorage=JSON.stringify(f)},get:function(a,b){var c,d,e,g,h,i;if(i="key string, passwd string",d=["string","string"],e=ext._.validateArg(arguments,d,i),g="",h=$.parseJSON(localStorage.encryptedStorage),"undefined"!=typeof h[a]){try{g=sjcl.decrypt(b,h[a])}catch(j){c=j,f.warn(c.message),g=!1}return g}},changePasswd:function(a,b,c){var d,e,f,g;return f="key string, oldPasswd string, newPasswd string",d=["string","string","string"],e=ext._.validateArg(arguments,d,f),g=ext.encrypted_storage.get(a,b),ext.encrypted_storage.set(a,g,c)},remove:function(a){var b,c,d,f;return f="key string",b=["string"],c=ext._.validateArg(arguments,b,f),d=$.parseJSON(localStorage.encryptedStorage),delete d[a],localStorage.encryptedStorage=JSON.stringify(e)},removeAll:function(a){var b,c,d,e,f,h,i;for(e="exceptions array",b=["object"],d=ext._.validateArg(arguments,b,e),i=ext.encrypted_storage.dump(),f=0,h=i.length;h>f;f++)c=i[f],g.call(a,c)<0&&ext.encrypted_storage.remove(c);return ext.encrypted_storage.dump()},dump:function(){var a;return a=[],$.each($.parseJSON(localStorage.encryptedStorage),function(b){return a.push(b)}),a}},e=[],a="",c=d._.name,b=c.toLowerCase().replace(/\ /g,"_"),f={error:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.error(a)}()},warm:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.warn(a)}()},info:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.info(a)}()}},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(e){var f;return a=e._.browser,null==d._.min||d._.min<=window.ext.version?e._.load(b,d):(f=d._.min,console.error("Ext plugin ("+c+") requires ExtJS v"+f+"+"))})}).call(this);
+
+(function() {
+  var BROWSER, ID, NAME, PLUGIN, encryptedStorage, log,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  PLUGIN = {
+    _: {
+      authors: ['Christian Juth'],
+      name: 'Encrypted Storage',
+      aliases: ['enStore', 'enStorage'],
+      version: '0.1.0',
+      min: '0.1.0',
+      compatibility: {
+        chrome: 'full',
+        safari: 'full'
+      },
+      github: '',
+      onload: function() {
+        var Default, encryptedStorage, item, storage, _i, _len, _results;
+        Default = JSON.stringify({});
+        encryptedStorage = ext._.getConfig().encryptedStorage;
+        storage = {};
+        if (localStorage.encryptedStorage == null) {
+          localStorage.encryptedStorage = sjcl.encrypt('password', Default);
+          _results = [];
+          for (_i = 0, _len = encryptedStorage.length; _i < _len; _i++) {
+            item = encryptedStorage[_i];
+            log.info('storage item "' + item.key + '" default password is "password"');
+            _results.push(ext.encrypted_storage.set(item.key, 'password', item["default"]));
+          }
+          return _results;
+        }
+      }
+    },
+    set: function(key, passwd, value) {
+      var err, expected, ok, storage, usage;
+      usage = 'key string, passwd string, value string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      storage = localStorage.encryptedStorage;
+      try {
+        storage = sjcl.decrypt(passwd, storage);
+      } catch (_error) {
+        err = _error;
+        throw Error(err.message);
+      }
+      storage = $.parseJSON(storage);
+      storage[key] = value;
+      storage = sjcl.encrypt(passwd, JSON.stringify(storage));
+      localStorage.encryptedStorage = storage;
+      return void 0;
+    },
+    get: function(key, passwd) {
+      var err, expected, ok, output, storage, usage;
+      usage = 'key string, passwd string, value string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      output = '';
+      storage = localStorage.encryptedStorage;
+      try {
+        storage = sjcl.decrypt(passwd, storage);
+      } catch (_error) {
+        err = _error;
+        throw Error(err.message);
+      }
+      storage = $.parseJSON(storage);
+      if (storage[key] == null) {
+        throw Error('undefined item');
+      }
+      output = storage[key];
+      return output;
+    },
+    changePasswd: function(Old, New) {
+      var err, expected, ok, storage, usage;
+      usage = 'oldPasswd string, newPasswd string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      storage = localStorage.encryptedStorage;
+      try {
+        storage = sjcl.decrypt(Old, storage);
+      } catch (_error) {
+        err = _error;
+        throw Error(err.message);
+      }
+      storage = sjcl.encrypt(New, storage);
+      return localStorage.encryptedStorage = storage;
+    },
+    remove: function(key, passwd) {
+      var err, expected, ok, storage, usage;
+      usage = 'key string, passwd string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      storage = localStorage.encryptedStorage;
+      try {
+        storage = sjcl.decrypt(passwd, storage);
+      } catch (_error) {
+        err = _error;
+        throw Error(err.message);
+      }
+      storage = $.parseJSON(storage);
+      delete storage[key];
+      storage = sjcl.encrypt(passwd, JSON.stringify(storage));
+      return localStorage.encryptedStorage = storage;
+    },
+    removeAll: function(passwd, exceptions) {
+      var expected, item, ok, usage, _i, _len, _ref, _results;
+      usage = 'passwd string, exceptions array';
+      expected = ['string', 'object,undefined'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      _ref = ext.encrypted_storage.dump(passwd);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        if ((exceptions == null) || __indexOf.call(exceptions, item) < 0) {
+          _results.push(ext.encrypted_storage.remove(item, passwd));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    },
+    dump: function(passwd) {
+      var err, expected, ok, output, storage, usage;
+      usage = 'passwd string';
+      expected = ['string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      storage = localStorage.encryptedStorage;
+      try {
+        storage = sjcl.decrypt(passwd, storage);
+      } catch (_error) {
+        err = _error;
+        throw Error(err.message);
+      }
+      storage = $.parseJSON(storage);
+      output = [];
+      $.each(storage, function(key, val) {
+        return output.push(key);
+      });
+      return output;
+    }
+  };
+
+  encryptedStorage = [];
+
+
+  /*
+  From the ExtJS team
+  -------------------
+  The code below was designed by the ExtJS team to providing useful info to the
+  developers. We ask you do not change this code unless necessary. By keeping
+  this standard on all plugins, we hope to make development easy by providing
+  useful info to developers.  In addition to logging, the code below also
+  contains the AMD function for defining the plugin.  This waits for the ExtJS
+  AMD module to define the library itself, and then your plugin is defined
+  which prevents any undefined errors.  Although not suggested, plugins can be
+  loaded before the ExtJS library.  The functionality below assures ease of
+  use.
+  
+  https://github.com/Christianjuth/extension_framework/tree/plugin
+   */
+
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
+
+  ID = NAME.toLowerCase().replace(/\ /g, "_");
+
+  log = {
+    error: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
+      })();
+    },
+    warn: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
+      })();
+    },
+    info: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
+      })();
+    }
+  };
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(['ext'], function(ext) {
+      var VERSION;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
+        return ext._.load(ID, PLUGIN);
+      } else {
+        VERSION = PLUGIN._.min;
+        return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
+      }
+    });
+  }
+
+}).call(this);

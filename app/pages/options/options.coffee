@@ -7,10 +7,9 @@ require [
   "mustache",
   "bootstrap",
 
-  "ext"
+  "ext",
+  "extPlugin/notification"
 ], ($,_,Mustache,bootstrap,ext) ->
-
-  ext.ini()
 
   change = ->
     console.log('Settings saved...')
@@ -62,6 +61,6 @@ require [
         }
 
 
-  $.getJSON "../../configure.json", (data) ->
+  ext._.getConfig (data)->
     for item in data.options
       option.create(item)

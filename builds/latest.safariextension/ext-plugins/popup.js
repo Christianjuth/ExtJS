@@ -1,3 +1,4 @@
+
 /*!
 The MIT License (MIT)
 
@@ -21,4 +22,148 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-(function(){var a,b,c,d,e;d={_:{authors:["Christian Juth"],name:"Popup",version:"0.1.0",min:"0.1.0",compatibility:{chrome:"full",safari:"full"}},setWidth:function(b){return"chrome"===a&&$("html, body").width(b),"safari"===a?safari.self.width=b:void 0},setHeight:function(b){return"chrome"===a&&$("body").height(b),"safari"===a?safari.self.height=b:void 0}},a="",c=d._.name,b=c.toLowerCase().replace(/\ /g,"_"),e={error:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.error(a)}()},warm:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.warn(a)}()},info:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.info(a)}()}},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(e){var f;return a=e._.browser,null==d._.min||d._.min<=window.ext.version?e._.load(b,d):(f=d._.min,console.error("Ext plugin ("+c+") requires ExtJS v"+f+"+"))})}).call(this);
+
+(function() {
+  var BROWSER, ID, NAME, PLUGIN, log, validateLocation;
+
+  PLUGIN = {
+    _: {
+      authors: ['Christian Juth'],
+      name: 'Popup',
+      version: '0.1.0',
+      min: '0.1.0',
+      compatibility: {
+        chrome: 'full',
+        safari: 'full'
+      }
+    },
+    setWidth: function(width) {
+      var expected, ok, usage;
+      usage = 'width number';
+      expected = ['number'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      validateLocation();
+      if (BROWSER === 'chrome') {
+        $('html, body').width(width);
+      }
+      if (BROWSER === 'safari') {
+        return safari.self.width = width;
+      }
+    },
+    setHeight: function(height) {
+      var expected, ok, usage;
+      usage = 'height number';
+      expected = ['number'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      validateLocation();
+      if (BROWSER === 'chrome') {
+        $('html, body').height(height);
+      }
+      if (BROWSER === 'safari') {
+        return safari.self.height = height;
+      }
+    },
+    codeWrap: function(callback) {
+      var expected, ok, usage;
+      usage = 'callback function';
+      expected = ['function'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      validateLocation();
+      if (BROWSER === 'chrome') {
+        callback();
+      }
+      if (BROWSER === 'safari') {
+        return safari.application.addEventListener("popover", callback, true);
+      }
+    }
+  };
+
+  validateLocation = function() {
+    var details, popup, valid;
+    valid = false;
+    if (BROWSER === 'safari') {
+      details = safari.extension;
+      if (details.popovers[0] != null) {
+        popup = safari.extension.popovers[0].contentWindow;
+        valid = window === popup.window;
+      }
+    }
+    if (BROWSER === 'chrome') {
+      details = chrome.app.getDetails();
+      if (details.browser_action != null) {
+        popup = chrome.app.getDetails().browser_action.default_popup;
+        valid = ext.match.url(location.pathname, '{/,}' + popup);
+      }
+    }
+    if (!valid) {
+      throw Error('ext.popup.codeWrap() must be run from a popup');
+    }
+  };
+
+
+  /*
+  From the ExtJS team
+  -------------------
+  The code below was designed by the ExtJS team to providing useful info to the
+  developers. We ask you do not change this code unless necessary. By keeping
+  this standard on all plugins, we hope to make development easy by providing
+  useful info to developers.  In addition to logging, the code below also
+  contains the AMD function for defining the plugin.  This waits for the ExtJS
+  AMD module to define the library itself, and then your plugin is defined
+  which prevents any undefined errors.  Although not suggested, plugins can be
+  loaded before the ExtJS library.  The functionality below assures ease of
+  use.
+  
+  https://github.com/Christianjuth/extension_framework/tree/plugin
+   */
+
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
+
+  ID = NAME.toLowerCase().replace(/\ /g, "_");
+
+  log = {
+    error: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
+      })();
+    },
+    warn: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
+      })();
+    },
+    info: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
+      })();
+    }
+  };
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(['ext'], function(ext) {
+      var VERSION;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
+        return ext._.load(ID, PLUGIN);
+      } else {
+        VERSION = PLUGIN._.min;
+        return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
+      }
+    });
+  }
+
+}).call(this);

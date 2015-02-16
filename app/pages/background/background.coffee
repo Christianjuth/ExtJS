@@ -11,9 +11,9 @@ require [
   #Load framework plugins
   "extPlugin/storage",
   "extPlugin/clipboard",
-  "extPlugin/extension",
-  "extPlugin/notification",
+  "extPlugin/utilities",
   "extPlugin/tabs",
+  "extPlugin/popup"
 ], ($, _, yolo, ext) ->
   ext.ini({
     silent : false

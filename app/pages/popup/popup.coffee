@@ -8,7 +8,9 @@ require [
 
   "extPlugin/popup",
   "extPlugin/tabs",
+  "extPlugin/notification"
 ], ($,_,ext) ->
 
-  ext.ini()
   #your code here
+  ext.popup.codeWrap ->
+    alert()

@@ -1,3 +1,4 @@
+
 /*!
 The MIT License (MIT)
 
@@ -21,4 +22,159 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-(function(){var a,b,c,d,e,f=[].indexOf||function(a){for(var b=0,c=this.length;c>b;b++)if(b in this&&this[b]===a)return b;return-1};d={_:{authors:["Christian Juth"],name:"Storage",aliases:["localStorage","local"],version:"0.1.0",min:"0.1.0",compatibility:{chrome:"full",safari:"full"},onload:function(){var a,b,c,d,f,g;for(null==localStorage.storage&&(localStorage.storage=JSON.stringify({})),a=ext._.getConfig(),f=a.storage,g=[],c=0,d=f.length;d>c;c++)b=f[c],"undefined"==typeof ext.storage.get(b.key)?(e.info('storage item "'+b.key+'" was created'),g.push(ext.storage.set(b.key,b["default"]))):g.push(void 0);return g}},set:function(a,b){var c;return c=$.parseJSON(localStorage.storage),c[a]=b,localStorage.storage=JSON.stringify(c)},get:function(a){var b;return b=$.parseJSON(localStorage.storage),b[a]},remove:function(a){var b;return b=$.parseJSON(localStorage.storage),delete b[a],localStorage.storage=JSON.stringify(b)},removeAll:function(a){var b,c,d,e;for(e=ext.storage.dump(),c=0,d=e.length;d>c;c++)b=e[c],f.call(a,b)<0&&ext.storage.remove(b);return ext.storage.dump()},dump:function(){var a;return a=[],$.each($.parseJSON(localStorage.storage),function(b){return a.push(b)}),a}},a="",c=d._.name,b=c.toLowerCase().replace(/\ /g,"_"),e={error:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.error(a)}()},warm:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.warn(a)}()},info:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.info(a)}()}},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(e){var f;return a=e._.browser,null==d._.min||d._.min<=window.ext.version?e._.load(b,d):(f=d._.min,console.error("Ext plugin ("+c+") requires ExtJS v"+f+"+"))})}).call(this);
+
+(function() {
+  var BROWSER, ID, NAME, PLUGIN, log,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  PLUGIN = {
+    _: {
+      authors: ['Christian Juth'],
+      name: 'Storage',
+      aliases: ['localStorage', 'local'],
+      version: '0.1.0',
+      min: '0.1.0',
+      compatibility: {
+        chrome: 'full',
+        safari: 'full'
+      },
+      onload: function() {
+        var data, item, _i, _len, _ref, _results;
+        if (localStorage.storage == null) {
+          localStorage.storage = JSON.stringify({});
+        }
+        data = ext._.getConfig();
+        _ref = data.storage;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          item = _ref[_i];
+          if (typeof ext.storage.get(item.key) === 'undefined') {
+            log.info('storage item "' + item.key + '" was created');
+            _results.push(ext.storage.set(item.key, item["default"]));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      }
+    },
+    set: function(key, value) {
+      var expected, ok, storage, usage;
+      usage = 'key string, value string';
+      expected = ['string', 'string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      storage = $.parseJSON(localStorage.storage);
+      storage[key] = value;
+      return localStorage.storage = JSON.stringify(storage);
+    },
+    get: function(key) {
+      var expected, ok, storage, usage;
+      usage = 'key string';
+      expected = ['string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      storage = $.parseJSON(localStorage.storage);
+      return storage[key];
+    },
+    remove: function(key) {
+      var expected, ok, storage, usage;
+      usage = 'key string';
+      expected = ['string'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      storage = $.parseJSON(localStorage.storage);
+      delete storage[key];
+      return localStorage.storage = JSON.stringify(storage);
+    },
+    removeAll: function(exceptions) {
+      var expected, item, ok, usage, _i, _len, _ref;
+      usage = 'exceptions array';
+      expected = ['object'];
+      ok = ext._.validateArg(arguments, expected, usage);
+      if (ok != null) {
+        throw new Error(ok);
+      }
+      _ref = ext.storage.dump();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        item = _ref[_i];
+        if (__indexOf.call(exceptions, item) < 0) {
+          ext.storage.remove(item);
+        }
+      }
+      return ext.storage.dump();
+    },
+    dump: function() {
+      var output;
+      output = [];
+      $.each($.parseJSON(localStorage.storage), function(key, val) {
+        return output.push(key);
+      });
+      return output;
+    }
+  };
+
+
+  /*
+  From the ExtJS team
+  -------------------
+  The code below was designed by the ExtJS team to providing useful info to the
+  developers. We ask you do not change this code unless necessary. By keeping
+  this standard on all plugins, we hope to make development easy by providing
+  useful info to developers.  In addition to logging, the code below also
+  contains the AMD function for defining the plugin.  This waits for the ExtJS
+  AMD module to define the library itself, and then your plugin is defined
+  which prevents any undefined errors.  Although not suggested, plugins can be
+  loaded before the ExtJS library.  The functionality below assures ease of
+  use.
+  
+  https://github.com/Christianjuth/extension_framework/tree/plugin
+   */
+
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
+
+  ID = NAME.toLowerCase().replace(/\ /g, "_");
+
+  log = {
+    error: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
+      })();
+    },
+    warn: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
+      })();
+    },
+    info: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
+      })();
+    }
+  };
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(['ext'], function(ext) {
+      var VERSION;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
+        return ext._.load(ID, PLUGIN);
+      } else {
+        VERSION = PLUGIN._.min;
+        return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
+      }
+    });
+  }
+
+}).call(this);

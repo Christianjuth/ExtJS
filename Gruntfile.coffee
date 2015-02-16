@@ -53,7 +53,7 @@ module.exports = (grunt) ->
     'multiresize'
     'less'
     'coffee'
-    'uglify'
+#    'uglify'
     'imagemin'
     'compress'
   ]

@@ -1,3 +1,4 @@
+
 /*!
 The MIT License (MIT)
 
@@ -21,4 +22,103 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-(function(){var a,b,c,d,e;d={_:{authors:["Christian Juth"],name:"Clipboard",aliases:["clippy"],version:"0.5.0",min:"0.1.0",compatibility:{chrome:"full",safari:"none"}},write:function(a){var b,c,d;return c=a,d=c,b=$("<input/>"),b.val(c),$("body").append(b),b.select(),document.execCommand("copy"),b.remove(),d},read:function(){var a,b,c;return a="",b="",c=$("<input/>"),$("body").append(c),c.select(),document.execCommand("paste"),b=c.val(),c.remove(),b}},a="",c=d._.name,b=c.toLowerCase().replace(/\ /g,"_"),e={error:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.error(a)}()},warm:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.warn(a)}()},info:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.info(a)}()}},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(e){var f;return a=e._.browser,null==d._.min||d._.min<=window.ext.version?e._.load(b,d):(f=d._.min,console.error("Ext plugin ("+c+") requires ExtJS v"+f+"+"))})}).call(this);
+
+(function() {
+  var BROWSER, ID, NAME, PLUGIN, log;
+
+  PLUGIN = {
+    _: {
+      authors: ['Christian Juth'],
+      name: 'Clipboard',
+      aliases: ['clippy'],
+      version: '0.5.0',
+      min: '0.1.0',
+      compatibility: {
+        chrome: 'full',
+        safari: 'none'
+      }
+    },
+    write: function(text) {
+      var copyFrom, input, output;
+      input = text;
+      output = input;
+      copyFrom = $('<input/>');
+      copyFrom.val(input);
+      $('body').append(copyFrom);
+      copyFrom.select();
+      document.execCommand('copy');
+      copyFrom.remove();
+      return output;
+    },
+    read: function() {
+      var input, output, pasteTo;
+      input = "";
+      output = "";
+      pasteTo = $('<input/>');
+      $('body').append(pasteTo);
+      pasteTo.select();
+      document.execCommand('paste');
+      output = pasteTo.val();
+      pasteTo.remove();
+      return output;
+    }
+  };
+
+
+  /*
+  From the ExtJS team
+  -------------------
+  The code below was designed by the ExtJS team to providing useful info to the
+  developers. We ask you do not change this code unless necessary. By keeping
+  this standard on all plugins, we hope to make development easy by providing
+  useful info to developers.  In addition to logging, the code below also
+  contains the AMD function for defining the plugin.  This waits for the ExtJS
+  AMD module to define the library itself, and then your plugin is defined
+  which prevents any undefined errors.  Although not suggested, plugins can be
+  loaded before the ExtJS library.  The functionality below assures ease of
+  use.
+  
+  https://github.com/Christianjuth/extension_framework/tree/plugin
+   */
+
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
+
+  ID = NAME.toLowerCase().replace(/\ /g, "_");
+
+  log = {
+    error: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
+      })();
+    },
+    warn: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
+      })();
+    },
+    info: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
+      })();
+    }
+  };
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(['ext'], function(ext) {
+      var VERSION;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
+        return ext._.load(ID, PLUGIN);
+      } else {
+        VERSION = PLUGIN._.min;
+        return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
+      }
+    });
+  }
+
+}).call(this);

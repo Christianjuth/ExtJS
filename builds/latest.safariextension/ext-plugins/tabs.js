@@ -1,3 +1,4 @@
+
 /*!
 The MIT License (MIT)
 
@@ -21,4 +22,424 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-(function(){var a,b,c,d,e,f,g;d={_:{authors:["Christian Juth"],name:"Tabs",version:"0.1.0",min:"0.1.0",compatibility:{chrome:"full",safari:"full"},onload:function(){var b,c,d,e,f,g,h,i,j;if("safari"===a){for(c=0,e=[],j=safari.application.browserWindows,f=0,h=j.length;h>f;f++){for(b=j[f],e=e.concat(b.tabs),g=0,i=e.length;i>g;g++)d=e[g],null==d.id&&(d.id=c++);e=e}return ext.tabs.onCreate(function(a){var d,f,g,h,i,j;for(e=[],i=safari.application.browserWindows,j=[],d=0,g=i.length;g>d;d++){for(b=i[d],e=e.concat(b.tabs),f=0,h=e.length;h>f;f++)a=e[f],null==a.id&&(a.id=c++);j.push(e=e)}return j})}}},get:function(b,c){return"chrome"===a&&chrome.tabs.get(b,function(a){return null!=a&&null!=c?c(new e(a)):void 0}),"safari"===a?ext.tabs.all(function(a){var d,f,g,h;for(h=[],f=0,g=a.length;g>f;f++)d=a[f],h.push(d.id===b&&null!=c?c(new e(d)):void 0);return h}):void 0},create:function(b,c){var d,e;if(d={url:"**",pinned:!1,active:!1},"object"!=typeof b?b={url:ext.parse.url(b)}:b.url=ext.parse.url(b.url),e=$.extend(d,b),"chrome"===a){if(chrome.tabs.create({url:e.url,pinned:e.pinned,active:e.active}),null!=c)return c()}else if("safari"===a&&(safari.application.activeBrowserWindow.openTab().url=e.url,null!=c))return c()},duplicate:function(a,b){return ext.tabs.get(a,function(a){return ext.tabs.create(a,b)})},query:function(b,c){var d,g,h,i,j,k,l,m,n,o,p,q,r;if(null==c)throw Error("Function requires a callback");if(h={url:"**"},"object"!=typeof b&&(b={url:b}),i=$.extend(h,b),g={windowType:"normal"},null!=i.pinned&&(g.pinned=i.pinned),l=[],j=[],"chrome"===a)chrome.tabs.query(g,function(a){var b,d,g,h;for(g=0,h=a.length;h>g;g++)b=a[g],d=b.url.replace(/(\/)$/,""),ext.match.url(d,i.url)!==!1&&(j.push(new e(b)),j.sort(f));return c(j)});else if("safari"===a){for(r=safari.application.browserWindows,n=0,p=r.length;p>n;n++)d=r[n],l=l.concat(d.tabs);for(o=0,q=l.length;q>o;o++)k=l[o],m=l.url,null==m&&(m=""),m=m.replace(/(\/)$/,""),ext.match.url(m,i.url)!==!1&&(j.push(new e(k)),j.sort(f));c(j)}return i.url},all:function(a){if(null==a)throw Error("Function requires a callback");return ext.tabs.query("**",function(b){return a(b)})},active:function(b){var c;if(null==b)throw Error("Function requires a callback");return"chrome"===a&&chrome.tabs.query({active:!0},function(a){return b(new e(a[0]))}),"safari"===a?(c=safari.application.activeBrowserWindow.activeTab,b(new e(c))):void 0},oldest:function(a,b){var c,d;if(null==a)throw Error("Function requires a callback");return c={url:"**"},b=$.extend(c,b),d=ext.tabs.query(b,function(b){var c,d,e,f,g,h,i;for(c=9007199254740992,e=0,g=b.length;g>e;e++)d=b[e],d.id<c&&(c=d.id);for(i=[],f=0,h=b.length;h>f;f++)d=b[f],i.push(d.id===c?a(d):void 0);return i})},newest:function(a,b){var c,d;if(null==a)throw Error("Function requires a callback");return c={url:"**"},b=$.extend(c,b),d=ext.tabs.query(b,function(b){var c,d,e,f,g,h,i;for(c=-1,e=0,g=b.length;g>e;e++)d=b[e],d.id>c&&(c=d.id);for(i=[],f=0,h=b.length;h>f;f++)d=b[f],i.push(d.id===c?a(d):void 0);return i})},onCreate:function(b){if(null==b)throw Error("Function requires a callback");return"chrome"===a&&chrome.tabs.onCreated.addListener(function(a){return b(new e(a))}),"safari"===a?safari.application.addEventListener("open",function(a){var c;return c=a.target,b(new e(c))},!0):void 0},onDestroy:function(b){if(null==b)throw Error("Function requires a callback");return"chrome"===a&&chrome.tabs.onRemoved.addListener(function(a){return b(new e(a))}),"safari"===a?safari.application.addEventListener("close",function(a){var c;return c=a.target,b(new e(c))},!0):void 0}},f=function(a,b){return a.id<b.id?-1:a.id>b.id?1:0},e=function(b){var c;return this.url=b.url,this.title=b.title,this.id=b.id,this.pinned=b.pinned,c=function(){return function(a){return a.close()}(b)},this.duplicate=function(){return ext.tabs.duplicate(this.id)},this.destroy=function(){return"chrome"===a&&chrome.tabs.remove(this.id),"safari"===a?c():void 0},this.onActive=function(c){var d;return d=this.id,"chrome"===a&&chrome.tabs.onActivated.addListener(function(a){return a.tabId===d?ext.tabs.get(a.tabId,c):void 0}),"safari"===a?safari.application.addEventListener("activate",function(a){return b=a.target,b.id===d?c(new e(b)):void 0},!0):void 0},this},a="",c=d._.name,b=c.toLowerCase().replace(/\ /g,"_"),g={error:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.error(a)}()},warm:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.warn(a)}()},info:function(a){return function(){return a="Ext plugin ("+c+") says: "+a,ext._.log.info(a)}()}},"function"==typeof window.define&&window.define.amd&&window.define(["ext"],function(e){var f;return a=e._.browser,null==d._.min||d._.min<=window.ext.version?e._.load(b,d):(f=d._.min,console.error("Ext plugin ("+c+") requires ExtJS v"+f+"+"))})}).call(this);
+
+(function() {
+  var BROWSER, ID, NAME, PLUGIN, Tab, compare, log;
+
+  PLUGIN = {
+    _: {
+      authors: ['Christian Juth'],
+      name: 'Tabs',
+      version: '0.1.0',
+      min: '0.1.0',
+      compatibility: {
+        chrome: 'full',
+        safari: 'full'
+      },
+      onload: function() {
+        var TabWindow, id, tab, tabs, _i, _j, _len, _len1, _ref;
+        if (BROWSER === 'safari') {
+          id = 0;
+          tabs = [];
+          _ref = safari.application.browserWindows;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            TabWindow = _ref[_i];
+            tabs = tabs.concat(TabWindow.tabs);
+            for (_j = 0, _len1 = tabs.length; _j < _len1; _j++) {
+              tab = tabs[_j];
+              if (tab.id == null) {
+                tab.id = id++;
+              }
+            }
+            tabs = tabs;
+          }
+          return ext.tabs.onCreate(function(tab) {
+            var _k, _l, _len2, _len3, _ref1, _results;
+            tabs = [];
+            _ref1 = safari.application.browserWindows;
+            _results = [];
+            for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+              TabWindow = _ref1[_k];
+              tabs = tabs.concat(TabWindow.tabs);
+              for (_l = 0, _len3 = tabs.length; _l < _len3; _l++) {
+                tab = tabs[_l];
+                if (tab.id == null) {
+                  tab.id = id++;
+                }
+              }
+              _results.push(tabs = tabs);
+            }
+            return _results;
+          });
+        }
+      }
+    },
+    get: function(id, callback) {
+      if (BROWSER === 'chrome') {
+        chrome.tabs.get(id, function(tab) {
+          if (tab != null) {
+            if (callback != null) {
+              return callback(new Tab(tab));
+            }
+          }
+        });
+      }
+      if (BROWSER === 'safari') {
+        return ext.tabs.all(function(tabs) {
+          var t, _i, _len, _results;
+          _results = [];
+          for (_i = 0, _len = tabs.length; _i < _len; _i++) {
+            t = tabs[_i];
+            if (t.id === id && (callback != null)) {
+              _results.push(callback(new Tab(t)));
+            } else {
+              _results.push(void 0);
+            }
+          }
+          return _results;
+        });
+      }
+    },
+    create: function(url, callback) {
+      var defultOptions, options;
+      defultOptions = {
+        url: '**',
+        pinned: false,
+        active: false
+      };
+      if (typeof url !== "object") {
+        url = {
+          url: ext.parse.url(url)
+        };
+      } else {
+        url.url = ext.parse.url(url.url);
+      }
+      options = $.extend(defultOptions, url);
+      if (BROWSER === 'chrome') {
+        chrome.tabs.create({
+          url: options.url,
+          pinned: options.pinned,
+          active: options.active
+        });
+        if (callback != null) {
+          return callback();
+        }
+      } else if (BROWSER === 'safari') {
+        safari.application.activeBrowserWindow.openTab().url = options.url;
+        if (callback != null) {
+          return callback();
+        }
+      }
+    },
+    duplicate: function(id, callback) {
+      return ext.tabs.get(id, function(tab) {
+        return ext.tabs.create(tab, callback);
+      });
+    },
+    query: function(urlSearch, callback) {
+      var TabWindow, chromeQuery, defultOptions, options, outputTabs, tab, tabs, url, _i, _j, _len, _len1, _ref;
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      defultOptions = {
+        url: '**'
+      };
+      if (typeof urlSearch !== "object") {
+        urlSearch = {
+          url: urlSearch
+        };
+      }
+      options = $.extend(defultOptions, urlSearch);
+      chromeQuery = {
+        windowType: "normal"
+      };
+      if (options.pinned != null) {
+        chromeQuery.pinned = options.pinned;
+      }
+      tabs = [];
+      outputTabs = [];
+      if (BROWSER === 'chrome') {
+        chrome.tabs.query(chromeQuery, function(tabs) {
+          var tab, url, _i, _len;
+          for (_i = 0, _len = tabs.length; _i < _len; _i++) {
+            tab = tabs[_i];
+            url = tab.url.replace(/(\/)$/, '');
+            if (ext.match.url(url, options.url) !== false) {
+              outputTabs.push(new Tab(tab));
+              outputTabs.sort(compare);
+            }
+          }
+          return callback(outputTabs);
+        });
+      } else if (BROWSER === 'safari') {
+        _ref = safari.application.browserWindows;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          TabWindow = _ref[_i];
+          tabs = tabs.concat(TabWindow.tabs);
+        }
+        for (_j = 0, _len1 = tabs.length; _j < _len1; _j++) {
+          tab = tabs[_j];
+          url = tabs.url;
+          if (url == null) {
+            url = '';
+          }
+          url = url.replace(/(\/)$/, '');
+          if (ext.match.url(url, options.url) !== false) {
+            outputTabs.push(new Tab(tab));
+            outputTabs.sort(compare);
+          }
+        }
+        callback(outputTabs);
+      }
+      return options.url;
+    },
+    all: function(callback) {
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      return ext.tabs.query('**', function(tabs) {
+        return callback(tabs);
+      });
+    },
+    active: function(callback) {
+      var tab;
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      if (BROWSER === 'chrome') {
+        chrome.tabs.query({
+          active: true
+        }, function(tab) {
+          return callback(new Tab(tab[0]));
+        });
+      }
+      if (BROWSER === 'safari') {
+        tab = safari.application.activeBrowserWindow.activeTab;
+        return callback(new Tab(tab));
+      }
+    },
+    oldest: function(callback, search) {
+      var defaultSearch, tabs;
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      defaultSearch = {
+        url: '**'
+      };
+      search = $.extend(defaultSearch, search);
+      return tabs = ext.tabs.query(search, function(tabs) {
+        var oldest, tab, _i, _j, _len, _len1, _results;
+        oldest = 9007199254740992;
+        for (_i = 0, _len = tabs.length; _i < _len; _i++) {
+          tab = tabs[_i];
+          if (tab.id < oldest) {
+            oldest = tab.id;
+          }
+        }
+        _results = [];
+        for (_j = 0, _len1 = tabs.length; _j < _len1; _j++) {
+          tab = tabs[_j];
+          if (tab.id === oldest) {
+            _results.push(callback(tab));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      });
+    },
+    newest: function(callback, search) {
+      var defaultSearch, tabs;
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      defaultSearch = {
+        url: '**'
+      };
+      search = $.extend(defaultSearch, search);
+      return tabs = ext.tabs.query(search, function(tabs) {
+        var oldest, tab, _i, _j, _len, _len1, _results;
+        oldest = -1;
+        for (_i = 0, _len = tabs.length; _i < _len; _i++) {
+          tab = tabs[_i];
+          if (tab.id > oldest) {
+            oldest = tab.id;
+          }
+        }
+        _results = [];
+        for (_j = 0, _len1 = tabs.length; _j < _len1; _j++) {
+          tab = tabs[_j];
+          if (tab.id === oldest) {
+            _results.push(callback(tab));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      });
+    },
+    go: function(id, url) {
+      return ext.tabs.get(id, function(tab) {
+        return tab.go(url);
+      });
+    },
+    onCreate: function(callback) {
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      if (BROWSER === 'chrome') {
+        chrome.tabs.onCreated.addListener(function(tab) {
+          return callback(new Tab(tab));
+        });
+      }
+      if (BROWSER === 'safari') {
+        return safari.application.addEventListener('open', function(e) {
+          var tab;
+          tab = e.target;
+          return callback(new Tab(tab));
+        }, true);
+      }
+    },
+    onDestroy: function(callback) {
+      if (callback == null) {
+        throw Error('Function requires a callback');
+      }
+      if (BROWSER === 'chrome') {
+        chrome.tabs.onRemoved.addListener(function(tab) {
+          return callback(new Tab(tab));
+        });
+      }
+      if (BROWSER === 'safari') {
+        return safari.application.addEventListener('close', function(e) {
+          var tab;
+          tab = e.target;
+          return callback(new Tab(tab));
+        }, true);
+      }
+    }
+  };
+
+  compare = function(a, b) {
+    if (a.id < b.id) {
+      return -1;
+    }
+    if (a.id > b.id) {
+      return 1;
+    }
+    return 0;
+  };
+
+  Tab = function(tab) {
+    var close;
+    this.url = tab.url;
+    this.title = tab.title;
+    this.id = tab.id;
+    this.pinned = tab.pinned;
+    close = function() {
+      return (function(tab) {
+        return tab.close();
+      })(tab);
+    };
+    this.duplicate = function() {
+      return ext.tabs.duplicate(this.id);
+    };
+    this.destroy = function(force) {
+      if (BROWSER === 'chrome') {
+        chrome.tabs.remove(this.id);
+      }
+      if (BROWSER === 'safari') {
+        return close();
+      }
+    };
+    this.onActive = function(callback) {
+      var id;
+      id = this.id;
+      if (BROWSER === 'chrome') {
+        chrome.tabs.onActivated.addListener(function(e) {
+          if (e.tabId === id) {
+            return ext.tabs.get(e.tabId, callback);
+          }
+        });
+      }
+      if (BROWSER === 'safari') {
+        return safari.application.addEventListener('activate', function(e) {
+          tab = e.target;
+          if (tab.id === id) {
+            return callback(new Tab(tab));
+          }
+        }, true);
+      }
+    };
+    this.go = function(url) {
+      url = ext.parse.url(url);
+      if (BROWSER === 'chrome') {
+        chrome.tabs.update(this.id, {
+          url: url
+        });
+      }
+      if (BROWSER === 'safari') {
+        tab.url = url;
+      }
+      return this.url = tab.url;
+    };
+    return this;
+  };
+
+
+  /*
+  From the ExtJS team
+  -------------------
+  The code below was designed by the ExtJS team to providing useful info to the
+  developers. We ask you do not change this code unless necessary. By keeping
+  this standard on all plugins, we hope to make development easy by providing
+  useful info to developers.  In addition to logging, the code below also
+  contains the AMD function for defining the plugin.  This waits for the ExtJS
+  AMD module to define the library itself, and then your plugin is defined
+  which prevents any undefined errors.  Although not suggested, plugins can be
+  loaded before the ExtJS library.  The functionality below assures ease of
+  use.
+  
+  https://github.com/Christianjuth/extension_framework/tree/plugin
+   */
+
+  BROWSER = '';
+
+  NAME = PLUGIN._.name;
+
+  ID = NAME.toLowerCase().replace(/\ /g, "_");
+
+  log = {
+    error: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.error(msg);
+      })();
+    },
+    warn: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.warn(msg);
+      })();
+    },
+    info: function(msg) {
+      return (function() {
+        msg = 'Ext plugin (' + NAME + ') says: ' + msg;
+        return ext._.log.info(msg);
+      })();
+    }
+  };
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(['ext'], function(ext) {
+      var VERSION;
+      BROWSER = ext._.browser;
+      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
+        return ext._.load(ID, PLUGIN);
+      } else {
+        VERSION = PLUGIN._.min;
+        return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
+      }
+    });
+  }
+
+}).call(this);

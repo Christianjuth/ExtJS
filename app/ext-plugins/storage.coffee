@@ -55,6 +55,12 @@ onload : ->
 #FUNCTIONS
 
 set : (key, value) ->
+  #check usage
+  usage = 'key string, value string'
+  expected = ['string','string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
+  #logic
   storage = $.parseJSON localStorage.storage
   storage[key] = value
   localStorage.storage = JSON.stringify storage
@@ -62,12 +68,22 @@ set : (key, value) ->
 
 
 get : (key) ->
+  #check usage
+  usage = 'key string'
+  expected = ['string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
   storage = $.parseJSON localStorage.storage
   storage[key]
 
 
 
 remove : (key) ->
+  #check usage
+  usage = 'key string'
+  expected = ['string']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
   storage = $.parseJSON localStorage.storage
   delete storage[key]
   localStorage.storage = JSON.stringify storage
@@ -75,6 +91,11 @@ remove : (key) ->
 
 
 removeAll : (exceptions) ->
+  #check usage
+  usage = 'exceptions array'
+  expected = ['object']
+  ok = ext._.validateArg(arguments,expected,usage)
+  throw new Error(ok) if ok?
   for item in ext.storage.dump()
     if item not in exceptions
       ext.storage.remove(item)
@@ -95,9 +116,9 @@ dump : ->
 ###
 From the ExtJS team
 -------------------
-The code below was designed by the ExtJS team to provIDe useful info to the
+The code below was designed by the ExtJS team to providing useful info to the
 developers. We ask you do not change this code unless necessary. By keeping
-this standard on all plugins, we hope to make development easy by provIDing
+this standard on all plugins, we hope to make development easy by providing
 useful info to developers.  In addition to logging, the code below also
 contains the AMD function for defining the plugin.  This waits for the ExtJS
 AMD module to define the library itself, and then your plugin is defined
@@ -116,7 +137,7 @@ log = {
     msg = 'Ext plugin ('+NAME+') says: '+msg
     ext._.log.error msg
 
-  warm: (msg)-> do->
+  warn: (msg)-> do->
     msg = 'Ext plugin ('+NAME+') says: '+msg
     ext._.log.warn msg
 
@@ -129,7 +150,7 @@ if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], (ext)->
     BROWSER = ext._.browser
     #load ExtJS meets VERSION requirements
-    if !PLUGIN._.min? or PLUGIN._.min <= window.ext.version
+    if !PLUGIN._.min? or PLUGIN._.min <= window.ext._.version
       ext._.load(ID,PLUGIN)
     else
       VERSION = PLUGIN._.min
