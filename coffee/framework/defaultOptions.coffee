@@ -2,5 +2,5 @@
 
 #set default options
 defultOptions = {
-  silent : false
+  verbose : true
 }

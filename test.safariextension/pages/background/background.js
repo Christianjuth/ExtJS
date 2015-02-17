@@ -29,7 +29,7 @@ require([
   "plugins/encrypted_storage/encrypted_storage"
 ], function($,_,sljc,ext, test){
   ext.ini({
-    silent : false
+    verbose : true
   });
   errors = test.ini();
   if( errors === 0 ){

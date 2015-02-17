@@ -29,33 +29,22 @@ PLUGIN = {
 _: {
 
 #INFO
-authors : ['Christian Juth']
-name : 'UUID'
-aliases : ['UUID']
-version : '0.1.0'
-compatibility :
-  chrome : 'full'
-  safari : 'full'
+authors:   ['Christian Juth']
+name:       'UUID'
+aliases:   ['UUID']
+version:    '0.1.0'
+libMin:     '0.1.0'
+background:  true
+compatibility:
+  chrome :  'full'
+  safari :  'full'
 
 
 
 #EVENTS
 onload : (options) ->
   if !localStorage.uuid?
-    s = []
-    hexDigits = '0123456789abcdef'
-    i=0
-    while i <= 36
-      i++
-      s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
-    s[14] = '4'
-    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1)
-    s[9] = s[14] = s[19] = s[23] = '-'
-    uuid = s.join('');
-    #log reset
-    if options.silent isnt true
-      console.info('UUID "' + uuid + '" was created')
-    localStorage.uuid = uuid
+    ext.uuid.reset()
 
 }
 
@@ -63,7 +52,6 @@ onload : (options) ->
 
 #FUNCTIONS
 reset : ->
-  options = window.ext._config
   s = []
   hexDigits = '0123456789abcdef'
   i=0
@@ -75,8 +63,7 @@ reset : ->
   s[9] = s[14] = s[19] = s[23] = '-'
   uuid = s.join('');
   #log reset
-  if options.silent isnt true
-    console.info('UUID was reset to "' + uuid + '"')
+  log.info('UUID was reset to "'+uuid+'"')
   localStorage.uuid = uuid
 
 
@@ -101,11 +88,23 @@ which prevents any undefined errors.  Although not suggested, plugins can be
 loaded before the ExtJS library.  The functionality below assures ease of
 use.
 
-https://github.com/Christianjuth/extension_framework/tree/plugin
+https://github.com/Christianjuth/ExtJS_Library/tree/plugin
 ###
+
+#set vars
 BROWSER = ''
 NAME = PLUGIN._.name
 ID = NAME.toLowerCase().replace(/\ /g,"_")
+if PLUGIN._.options
+  PLGDEFAULTOPTIONS = PLUGIN._.options
+PLGOPTIONS = ->
+  if PLUGIN._.defaultOptions
+    output = $.extend(PLGDEFAULTOPTIONS, PLUGIN._.options)
+  else
+    throw Error 'Plugin does not have options'
+  return optput
+PLUGIN.configure = (opts)->
+  PLUGIN._.options = $.extend(PLGDEFAULTOPTIONS,opts)
 #console logging
 log = {
   error: (msg)-> do->
@@ -120,13 +119,21 @@ log = {
     msg = 'Ext plugin ('+NAME+') says: '+msg
     ext._.log.info msg
   }
+#set background var
+if PLUGIN._.background is true
+  BACKGROUND = do ->
+    if ext._.browser is 'chrome'
+      bk = chrome.extension.getBackgroundPage().window
+    if ext._.browser is 'safari'
+      bk = safari.extension.globalPage.contentWindow
+    return bk
 #setup AMD support if browser supports the AMD define function
 if typeof window.define is 'function' && window.define.amd
   window.define ['ext'], (ext)->
     BROWSER = ext._.browser
     #load ExtJS meets VERSION requirements
-    if !PLUGIN._.min? or PLUGIN._.min <= window.ext._.version
+    if !PLUGIN._.minLib? or PLUGIN._.minLib <= window.ext._.version
       ext._.load(ID,PLUGIN)
     else
       VERSION = PLUGIN._.min
-      console.error 'Ext plugin ('+NAME+') requires ExtJS v'+VERSION+'+'
+      log.error 'Ext plugin ('+NAME+') requires ExtJS v'+VERSION+'+'

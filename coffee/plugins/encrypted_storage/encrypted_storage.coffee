@@ -6,15 +6,20 @@ PLUGIN = {
 _: {
 
 #INFO
-authors : ['Christian Juth']
-name : 'Encrypted Storage'
-aliases : ['enStore','enStorage']
-version : '0.1.0'
-min : '0.1.0'
-compatibility :
-  chrome : 'full'
-  safari : 'full'
-github : ''
+authors:    ['Christian Juth']
+name:        'Encrypted Storage'
+aliases:    ['enStore','enStorage']
+version:     '0.1.0'
+libMin:      '0.1.0'
+background:   false
+compatibility:
+  chrome:    'full'
+  safari:    'full'
+github:     'https://github.com/Christianjuth/ExtJS_Library/tree/master'
+
+#OPTIONS
+options:
+  silent: false
 
 #EVENTS
 onload : ->

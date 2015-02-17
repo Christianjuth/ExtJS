@@ -10,7 +10,7 @@ authors : ['Christian Juth']
 name : 'Notification'
 aliases : ['noti']
 version : '0.1.0'
-min : '0.1.0'
+libMin : '0.1.0'
 background: true
 compatibility :
   chrome : 'full'
@@ -50,7 +50,8 @@ delay : (title,message,milliseconds) ->
   #
   if 50000 < parseInt milliseconds
     throw new Error 'timeout too long'
-  setTimeout ->
+  BACKGROUND.setTimeout ->
+    window = BACKGROUND
     if BROWSER is 'chrome'
       chrome.notifications.create '', {
         iconUrl : chrome.extension.getURL('icon-128.png')

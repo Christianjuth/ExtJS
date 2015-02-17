@@ -2,7 +2,7 @@
 
 #set default options
 defultOptions = {
-  silent : false
+  verbose : true
 }
 
 #top of extjs object container
@@ -86,7 +86,7 @@ _:
     #define ext log object
     ext._.log = {}
     #log
-    if ext._.options.silent isnt true
+    if ext._.options.verbose is true
       ext._.log.info = do ->
         Function.prototype.bind.call(console.info, console)
       ext._.log.warn = do ->
@@ -162,6 +162,14 @@ _:
 
 
 
+
+  run: (fun)->
+    bk = ext._.getBackground()
+    fun = fun.bind(fun)
+    fun.call(bk.window)
+
+
+
   getBackground: ->
     bk = ''
     if ext._.browser is 'chrome'
@@ -169,6 +177,12 @@ _:
     if ext._.browser is 'safari'
       bk = safari.extension.globalPage.contentWindow
     return bk
+
+
+
+  backgroundProxy: (fun)->
+    bk = ext._.getBackground()
+    bk.ext._.run(fun)
 
 
 

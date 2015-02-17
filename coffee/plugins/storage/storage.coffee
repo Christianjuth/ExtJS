@@ -9,7 +9,8 @@ authors : ['Christian Juth']
 name : 'Storage'
 aliases : ['localStorage','local']
 version : '0.1.0'
-min : '0.1.0'
+libMin : '0.1.0'
+background:  false
 compatibility :
   chrome : 'full'
   safari : 'full'

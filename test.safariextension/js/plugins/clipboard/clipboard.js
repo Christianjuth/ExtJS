@@ -24,7 +24,7 @@ SOFTWARE.
  */
 
 (function() {
-  var BROWSER, ID, NAME, PLUGIN, log;
+  var BACKGROUND, BROWSER, ID, NAME, PLGDEFAULTOPTIONS, PLGOPTIONS, PLUGIN, log;
 
   PLUGIN = {
     _: {
@@ -78,7 +78,7 @@ SOFTWARE.
   loaded before the ExtJS library.  The functionality below assures ease of
   use.
   
-  https://github.com/Christianjuth/extension_framework/tree/plugin
+  https://github.com/Christianjuth/ExtJS_Library/tree/plugin
    */
 
   BROWSER = '';
@@ -86,6 +86,24 @@ SOFTWARE.
   NAME = PLUGIN._.name;
 
   ID = NAME.toLowerCase().replace(/\ /g, "_");
+
+  if (PLUGIN._.options) {
+    PLGDEFAULTOPTIONS = PLUGIN._.options;
+  }
+
+  PLGOPTIONS = function() {
+    var output;
+    if (PLUGIN._.defaultOptions) {
+      output = $.extend(PLGDEFAULTOPTIONS, PLUGIN._.options);
+    } else {
+      throw Error('Plugin does not have options');
+    }
+    return optput;
+  };
+
+  PLUGIN.configure = function(opts) {
+    return PLUGIN._.options = $.extend(PLGDEFAULTOPTIONS, opts);
+  };
 
   log = {
     error: function(msg) {
@@ -108,15 +126,28 @@ SOFTWARE.
     }
   };
 
+  if (PLUGIN._.background === true) {
+    BACKGROUND = (function() {
+      var bk;
+      if (ext._.browser === 'chrome') {
+        bk = chrome.extension.getBackgroundPage().window;
+      }
+      if (ext._.browser === 'safari') {
+        bk = safari.extension.globalPage.contentWindow;
+      }
+      return bk;
+    })();
+  }
+
   if (typeof window.define === 'function' && window.define.amd) {
     window.define(['ext'], function(ext) {
       var VERSION;
       BROWSER = ext._.browser;
-      if ((PLUGIN._.min == null) || PLUGIN._.min <= window.ext._.version) {
+      if ((PLUGIN._.minLib == null) || PLUGIN._.minLib <= window.ext._.version) {
         return ext._.load(ID, PLUGIN);
       } else {
         VERSION = PLUGIN._.min;
-        return console.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
+        return log.error('Ext plugin (' + NAME + ') requires ExtJS v' + VERSION + '+');
       }
     });
   }

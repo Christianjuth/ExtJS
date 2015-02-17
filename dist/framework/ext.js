@@ -2,7 +2,7 @@
   var defultOptions, ext;
 
   defultOptions = {
-    silent: false
+    verbose: true
   };
 
   ext = {
@@ -80,7 +80,7 @@
       },
       onload: function() {
         ext._.log = {};
-        if (ext._.options.silent !== true) {
+        if (ext._.options.verbose === true) {
           ext._.log.info = (function() {
             return Function.prototype.bind.call(console.info, console);
           })();
@@ -159,6 +159,12 @@
         output['16'] = json.menuIcon['16'];
         return output;
       },
+      run: function(fun) {
+        var bk;
+        bk = ext._.getBackground();
+        fun = fun.bind(fun);
+        return fun.call(bk.window);
+      },
       getBackground: function() {
         var bk;
         bk = '';
@@ -169,6 +175,11 @@
           bk = safari.extension.globalPage.contentWindow;
         }
         return bk;
+      },
+      backgroundProxy: function(fun) {
+        var bk;
+        bk = ext._.getBackground();
+        return bk.ext._.run(fun);
       },
       load: function(id, plugin) {
         var alias, bk, compatibility, msg, name, ok, usage, _i, _len, _ref;
