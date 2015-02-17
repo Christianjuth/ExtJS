@@ -1,6 +1,6 @@
-define(["jquery", "underscore", "parse", "highlight", "text!templates/404.html"], function($, _, Parse, hljs, Err) {
+define(["jquery", "underscore", "backbone", "parse", "highlight", "text!templates/404.html"], function($, _, Backbone, Parse, hljs, Err) {
   var View;
-  View = Parse.View.extend({
+  View = Backbone.View.extend({
     el: $('.content'),
     render: function(file) {
       var Template, compiledTemplate, data;

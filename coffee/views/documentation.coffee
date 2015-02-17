@@ -1,13 +1,14 @@
 define [
   "jquery",
   "underscore",
+  "backbone",
   "parse",
   "highlight",
   "text!templates/404.html"
-], ($, _, Parse, hljs, Err) ->
+], ($, _, Backbone, Parse, hljs, Err) ->
 
 
-  View = Parse.View.extend {
+  View = Backbone.View.extend {
     el: $('.content'),
 
     render: (file) ->

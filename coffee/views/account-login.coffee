@@ -1,15 +1,20 @@
 define [
   "jquery",
   "underscore",
+  "backbone"
   "parse",
   "text!templates/login.html"
-], ($, _, Parse, Template) ->
+], ($, _, Backbone, Parse, Template) ->
 
-  View = Parse.View.extend({
+  View = Backbone.View.extend({
     el: $('.content')
 
     events :
       'submit .login' : 'login'
+
+    initilize: (url)->
+      this.url = url
+      this.render()
 
     render: ->
       #Using Underscore we can compile our template with data
@@ -27,16 +32,18 @@ define [
 
     login : (e) ->
       e.preventDefault()
+      self = this
+
       $form = $(".login");
       username = $form.find(".username").val()
       password = $form.find(".password").val()
 
-      Parse.User.logIn username,password, {
+      Parse.User.logIn(username, password, {
         success: (user) ->
-          Parse.history.navigate "account/plugins", {trigger: true, replace: true}
+          Backbone.history.navigate self.url, {trigger: true}
         error: (user, error) ->
           alert("Error: " + JSON.stringify error);
-      }
+      })
 
   });
 

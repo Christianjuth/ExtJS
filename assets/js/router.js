@@ -1,6 +1,6 @@
-define(['jquery', 'underscore', 'parse', 'assets/js/views/404', 'assets/js/views/documentation', 'assets/js/views/plugin', 'assets/js/views/home', 'assets/js/views/account-plugins', 'assets/js/views/account-login', 'assets/js/views/account-settings', 'assets/js/views/search-plugins'], function($, _, Parse, NotFound, Doc, Plugin, Home, AccountPlugins, AccountLogin, AccountSettings, SearchPlugins) {
+define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/documentation', 'js/views/plugin', 'js/views/home', 'js/views/account-plugins', 'js/views/account-login', 'js/views/account-settings', 'js/views/search-plugins'], function($, _, Backbone, Parse, NotFound, Doc, Plugin, Home, AccountPlugins, AccountLogin, AccountSettings, SearchPlugins) {
   var AppRouter, initialize;
-  Parse.View.prototype.close = function() {
+  Backbone.View.prototype.close = function() {
     console.log('Unbinding events for ' + this.cid);
     this.$el.empty().unbind();
     $('.loader').show();
@@ -8,13 +8,13 @@ define(['jquery', 'underscore', 'parse', 'assets/js/views/404', 'assets/js/views
       return this.onClose();
     }
   };
-  AppRouter = Parse.Router.extend({
+  AppRouter = Backbone.Router.extend({
     routes: {
       '': 'home',
       'documentation/*path': 'doc',
       'plugin/*path': 'plugin',
-      'search/plugins?:query': 'searchPlugins',
-      'account/login': 'accountLogin',
+      'search/plugins(?:query)': 'searchPlugins',
+      'account/login(?redirect=*path)': 'accountLogin',
       'account/plugins': 'accountPlugins',
       'account/settings': 'accountSettings',
       '*splat': 'defaultAction'
@@ -66,9 +66,10 @@ define(['jquery', 'underscore', 'parse', 'assets/js/views/404', 'assets/js/views
       return this.openView(searchPlugins);
     });
     app_router.on('route:accountPlugins', function() {
-      var accountPlugins;
+      var accountPlugins, login;
       if (Parse.User.current() === null) {
-        return Parse.history.navigate("account/login", {
+        login = "account/login?redirect=" + Backbone.history.fragment;
+        return Backbone.history.navigate(login, {
           trigger: true
         });
       } else {
@@ -78,23 +79,24 @@ define(['jquery', 'underscore', 'parse', 'assets/js/views/404', 'assets/js/views
         return this.openView(accountPlugins);
       }
     });
-    app_router.on('route:accountLogin', function() {
+    app_router.on('route:accountLogin', function(path) {
       var accountLogin;
       if (Parse.User.current() !== null) {
-        return Parse.history.navigate("account/plugins", {
+        return Backbone.history.navigate("", {
           trigger: true
         });
       } else {
         this.closeView();
         accountLogin = new AccountLogin();
-        accountLogin.render();
+        accountLogin.initilize(path);
         return this.openView(accountLogin);
       }
     });
     app_router.on('route:accountSettings', function(actions) {
-      var accountSettings;
+      var accountSettings, login;
       if (Parse.User.current() === null) {
-        return Parse.history.navigate("account/login", {
+        login = "account/login?redirect=" + Backbone.history.fragment;
+        return Backbone.history.navigate(login, {
           trigger: true
         });
       } else {
@@ -111,7 +113,7 @@ define(['jquery', 'underscore', 'parse', 'assets/js/views/404', 'assets/js/views
       notFound.render();
       return this.openView(notFound);
     });
-    Parse.history.start({
+    Backbone.history.start({
       pushState: true,
       root: '/'
     });
@@ -123,7 +125,7 @@ define(['jquery', 'underscore', 'parse', 'assets/js/views/404', 'assets/js/views
       if (url) {
         event.preventDefault();
         href = href.replace(local, '');
-        return Parse.history.navigate(href, {
+        return Backbone.history.navigate(href, {
           trigger: true
         });
       }

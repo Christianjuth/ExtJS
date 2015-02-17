@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "parse", "highlight", "marked", "text!templates/404.html"], function($, _, Parse, hljs, marked, Err) {
+define(["jquery", "underscore", "backbone", "parse", "highlight", "marked", "text!templates/404.html"], function($, _, Backbone, Parse, hljs, marked, Err) {
   var PluginCollection, PluginModle, View;
   PluginModle = Parse.Object.extend("Plugin", {});
   PluginCollection = Parse.Collection.extend({});

@@ -1,11 +1,12 @@
 define [
   "jquery",
   "underscore",
+  "backbone",
   "parse",
   "text!templates/account-settings.html"
-], ($, _, Parse, Template) ->
+], ($, _, Backbone, Parse, Template) ->
 
-  View = Parse.View.extend({
+  View = Backbone.View.extend({
     el: $('.content')
 
     events :

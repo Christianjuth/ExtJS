@@ -1,11 +1,12 @@
 define [
   "jquery",
   "underscore",
+  "backbone",
   "parse",
   "highlight",
   "marked",
   "text!templates/404.html"
-], ($, _, Parse, hljs, marked , Err) ->
+], ($, _, Backbone, Parse, hljs, marked , Err) ->
 
   PluginModle = Parse.Object.extend "Plugin", {}
   PluginCollection = Parse.Collection.extend {}

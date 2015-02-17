@@ -1,6 +1,6 @@
-define(["jquery", "underscore", "parse", "text!templates/account-settings.html"], function($, _, Parse, Template) {
+define(["jquery", "underscore", "backbone", "parse", "text!templates/account-settings.html"], function($, _, Backbone, Parse, Template) {
   var View;
-  View = Parse.View.extend({
+  View = Backbone.View.extend({
     el: $('.content'),
     events: {
       'click .logout': 'logout'

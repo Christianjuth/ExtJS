@@ -1,11 +1,12 @@
 define [
   "jquery",
   "underscore",
+  "backbone",
   "parse",
   "text!templates/404.html"
-], ($, _, Parse, Template) ->
+], ($, _, Backbone, Parse, Template) ->
 
-  View = Parse.View.extend({
+  View = Backbone.View.extend({
     el: $('.content'),
     render: ->
       #Using Underscore we can compile our template with data

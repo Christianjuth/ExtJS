@@ -1,14 +1,14 @@
-define(["jquery", "underscore", "mustache", "parse", "highlight", "text!templates/search-plugins.html"], function($, _, Mustache, Parse, hljs, Template) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "highlight", "text!templates/search-plugins.html"], function($, _, Mustache, Backbone, Parse, hljs, Template) {
   var PluginCollection, PluginModle, View;
   PluginModle = Parse.Object.extend("Plugin", {});
   PluginCollection = Parse.Collection.extend({});
-  View = Parse.View.extend({
+  View = Backbone.View.extend({
     el: $('.content'),
-    initialize: function() {
+    initialize: function(options) {
       var search, self;
       self = this;
       _.bindAll(this, 'render');
-      search = this.options.search;
+      search = options.search;
       return self.render(search);
     },
     render: function(search) {
@@ -35,6 +35,9 @@ define(["jquery", "underscore", "mustache", "parse", "highlight", "text!template
       var $el, developerQuery, nameQuery, self;
       self = this;
       $el = this.$el;
+      if (search === null) {
+        search = '';
+      }
       this.plugins = new PluginCollection;
       nameQuery = new Parse.Query(PluginModle);
       nameQuery.contains("search", search);
@@ -49,7 +52,7 @@ define(["jquery", "underscore", "mustache", "parse", "highlight", "text!template
         }
       });
       $el = this.$el;
-      return Parse.history.navigate("search/plugins?" + search, {
+      return Backbone.history.navigate("search/plugins?" + search, {
         replace: true
       });
     },

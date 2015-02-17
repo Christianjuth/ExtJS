@@ -1,9 +1,13 @@
-define(["jquery", "underscore", "parse", "text!templates/login.html"], function($, _, Parse, Template) {
+define(["jquery", "underscore", "backbone", "parse", "text!templates/login.html"], function($, _, Backbone, Parse, Template) {
   var View;
-  View = Parse.View.extend({
+  View = Backbone.View.extend({
     el: $('.content'),
     events: {
       'submit .login': 'login'
+    },
+    initilize: function(url) {
+      this.url = url;
+      return this.render();
     },
     render: function() {
       var compiledTemplate, data;
@@ -17,16 +21,16 @@ define(["jquery", "underscore", "parse", "text!templates/login.html"], function(
       return $('.loader').fadeOut(100);
     },
     login: function(e) {
-      var $form, password, username;
+      var $form, password, self, username;
       e.preventDefault();
+      self = this;
       $form = $(".login");
       username = $form.find(".username").val();
       password = $form.find(".password").val();
       return Parse.User.logIn(username, password, {
         success: function(user) {
-          return Parse.history.navigate("account/plugins", {
-            trigger: true,
-            replace: true
+          return Backbone.history.navigate(self.url, {
+            trigger: true
           });
         },
         error: function(user, error) {

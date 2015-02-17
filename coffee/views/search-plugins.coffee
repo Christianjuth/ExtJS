@@ -2,10 +2,11 @@ define [
   "jquery",
   "underscore",
   "mustache",
+  "backbone",
   "parse",
   "highlight",
   "text!templates/search-plugins.html"
-], ($, _, Mustache, Parse, hljs, Template) ->
+], ($, _, Mustache, Backbone, Parse, hljs, Template) ->
 
 
   #define modle and collection
@@ -15,16 +16,16 @@ define [
 
 
   #define view
-  View = Parse.View.extend {
+  View = Backbone.View.extend {
 
 
     el: $('.content')
 
 
-    initialize: () ->
+    initialize: (options) ->
       self = this
       _.bindAll(this, 'render')
-      search = this.options.search
+      search = options.search
       self.render(search)
 
 
@@ -56,6 +57,9 @@ define [
       self = this
       $el = this.$el
 
+      if search is null
+        search = ''
+
       this.plugins = new PluginCollection
       #name query
       nameQuery = new Parse.Query(PluginModle)
@@ -72,7 +76,7 @@ define [
       }
       #vars
       $el = this.$el
-      Parse.history.navigate "search/plugins?" + search, {replace: true}
+      Backbone.history.navigate "search/plugins?" + search, {replace: true}
 
 
 
