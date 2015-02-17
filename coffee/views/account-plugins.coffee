@@ -152,5 +152,6 @@ define [
 
   })
 
+
   #Our module now returns our view
-  return View;
+  return View

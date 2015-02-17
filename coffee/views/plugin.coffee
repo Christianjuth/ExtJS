@@ -1,25 +1,25 @@
 define [
   "jquery",
   "underscore",
+  "mustache",
   "backbone",
   "parse",
   "highlight",
   "marked",
   "text!templates/404.html"
-], ($, _, Backbone, Parse, hljs, marked , Err) ->
+], ($, _, Mustache, Backbone, Parse, hljs, marked , Err) ->
 
   PluginModle = Parse.Object.extend "Plugin", {}
   PluginCollection = Parse.Collection.extend {}
 
-  View = Parse.View.extend {
+  View = Backbone.View.extend {
 
     el: $('.content'),
 
-    initialize: () ->
+    initialize: (options) ->
       self = this
-
+      name = options.plugin
       _.bindAll(this, 'render')
-      name = this.options.plugin
 
       this.plugin = new PluginCollection
       this.plugin.query = new Parse.Query(PluginModle)
@@ -34,12 +34,8 @@ define [
       Template = plug.get('readme')
 
       #Append our compiled template to this Views "el"
-      Template = marked  Template
-      $el.html( Template )
-
-      if window.innerWidth < 850
-        $(".sidebar .links").slideUp()
-        $(".sidebar").attr "toggle","false"
+      compiledTemplate = marked(Template)
+      $el.html( compiledTemplate )
 
       $('pre > code').each (i, block) ->
         hljs.highlightBlock(block)
@@ -49,4 +45,4 @@ define [
   }
 
   #Our module now returns our view
-  return View;
+  return View

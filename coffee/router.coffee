@@ -48,6 +48,9 @@ define [
 
     app_router.openView = (view) ->
       this.currentView = view
+      if window.innerWidth < 850
+        $(".sidebar .links").slideUp()
+        $(".sidebar").attr("toggle","false")
       $(window).scrollTop(0)
 
     app_router.on 'route:home', () ->
@@ -129,7 +132,7 @@ define [
 
     #on every click, check if it's an href that can be handled by the router
     $(document.body).on 'click', 'a', (event) ->
-      local = /^((http:|https:|)(\/\/|)dev\.ext-js\.org)/
+      local = /^((http:|https:|)(\/\/|)ext-js\.org)/
       href = $(this).attr('href')
       url = local.test(href)
 

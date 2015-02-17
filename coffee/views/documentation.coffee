@@ -1,11 +1,12 @@
 define [
   "jquery",
   "underscore",
+  "mustache",
   "backbone",
   "parse",
   "highlight",
   "text!templates/404.html"
-], ($, _, Backbone, Parse, hljs, Err) ->
+], ($, _, Mustache, Backbone, Parse, hljs, Err) ->
 
 
   View = Backbone.View.extend {
@@ -30,8 +31,7 @@ define [
       if /^(<html>|<body>|<!doctype)/i.test(Template)
         Template = Err
 
-      compiledTemplate = _.template( Template , data )
-      #Append our compiled template to this Views "el"
+      compiledTemplate = Mustache.render( Template , {})
       this.$el.html( compiledTemplate )
 
       if window.innerWidth < 850

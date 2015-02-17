@@ -1,10 +1,11 @@
 define [
   "jquery",
   "underscore",
+  "mustache",
   "backbone",
   "parse",
   "text!templates/account-settings.html"
-], ($, _, Backbone, Parse, Template) ->
+], ($, _, Mustache, Backbone, Parse, Template) ->
 
   View = Backbone.View.extend({
     el: $('.content')
@@ -38,7 +39,7 @@ define [
     logout : (e) ->
       e.preventDefault()
       Parse.User.logOut()
-      Parse.history.navigate "account/login", {trigger: true, replace: true}
+      Backbone.history.navigate "account/login", {trigger: true}
 
   });
 

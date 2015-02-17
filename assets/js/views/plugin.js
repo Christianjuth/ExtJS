@@ -1,14 +1,14 @@
-define(["jquery", "underscore", "backbone", "parse", "highlight", "marked", "text!templates/404.html"], function($, _, Backbone, Parse, hljs, marked, Err) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "highlight", "marked", "text!templates/404.html"], function($, _, Mustache, Backbone, Parse, hljs, marked, Err) {
   var PluginCollection, PluginModle, View;
   PluginModle = Parse.Object.extend("Plugin", {});
   PluginCollection = Parse.Collection.extend({});
-  View = Parse.View.extend({
+  View = Backbone.View.extend({
     el: $('.content'),
-    initialize: function() {
+    initialize: function(options) {
       var name, self;
       self = this;
+      name = options.plugin;
       _.bindAll(this, 'render');
-      name = this.options.plugin;
       this.plugin = new PluginCollection;
       this.plugin.query = new Parse.Query(PluginModle);
       this.plugin.query.equalTo("search", name.toLowerCase());
@@ -19,16 +19,12 @@ define(["jquery", "underscore", "backbone", "parse", "highlight", "marked", "tex
       });
     },
     render: function(name) {
-      var $el, Template, plug;
+      var $el, Template, compiledTemplate, plug;
       $el = this.$el;
       plug = this.plugin.at(0);
       Template = plug.get('readme');
-      Template = marked(Template);
-      $el.html(Template);
-      if (window.innerWidth < 850) {
-        $(".sidebar .links").slideUp();
-        $(".sidebar").attr("toggle", "false");
-      }
+      compiledTemplate = marked(Template);
+      $el.html(compiledTemplate);
       $('pre > code').each(function(i, block) {
         return hljs.highlightBlock(block);
       });

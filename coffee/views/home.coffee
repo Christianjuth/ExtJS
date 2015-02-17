@@ -1,27 +1,22 @@
 define [
   "jquery",
   "underscore",
+  "mustache",
   "backbone",
   "parse",
   "text!templates/home.html"
-], ($, _, Backbone, Parse, Template) ->
+], ($, _, Mustache, Backbone, Parse, Template) ->
 
   View = Backbone.View.extend({
     el: $('.content'),
     render: ->
       #Using Underscore we can compile our template with data
-      data = {}
-      compiledTemplate = _.template( Template , data )
-      #Append our compiled template to this Views "el"
+      compiledTemplate = Mustache.render( Template , {})
       this.$el.html( compiledTemplate )
-
-      if window.innerWidth < 850
-        $(".sidebar .links").slideUp()
-        $(".sidebar").attr "toggle","false"
-
+      #hide loader
       $('.loader').fadeOut(100)
 
-  });
+  })
 
   #Our module now returns our view
-  return View;
+  return View

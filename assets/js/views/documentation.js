@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "backbone", "parse", "highlight", "text!templates/404.html"], function($, _, Backbone, Parse, hljs, Err) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "highlight", "text!templates/404.html"], function($, _, Mustache, Backbone, Parse, hljs, Err) {
   var View;
   View = Backbone.View.extend({
     el: $('.content'),
@@ -20,7 +20,7 @@ define(["jquery", "underscore", "backbone", "parse", "highlight", "text!template
       if (/^(<html>|<body>|<!doctype)/i.test(Template)) {
         Template = Err;
       }
-      compiledTemplate = _.template(Template, data);
+      compiledTemplate = Mustache.render(Template, {});
       this.$el.html(compiledTemplate);
       if (window.innerWidth < 850) {
         $(".sidebar .links").slideUp();

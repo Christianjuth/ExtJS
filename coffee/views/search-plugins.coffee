@@ -34,17 +34,14 @@ define [
       self = this
       $el = this.$el
 
-      self.$el.html( $(Template).find('.view').html() )
+      compiledTemplate = Mustache.render( $(Template).find('.view').html(), {} )
+      self.$el.html( compiledTemplate )
       $el.find('.plugins tbody').empty()
 
       $el.find('.search').val(search)
       $el.find('.search').keyup ->
         self.search($(this).val())
       self.search(search)
-
-      if window.innerWidth < 850
-        $(".sidebar .links").slideUp()
-        $(".sidebar").attr "toggle","false"
 
       $('pre > code').each (i, block) ->
         hljs.highlightBlock(block)

@@ -1,16 +1,11 @@
-define(["jquery", "underscore", "backbone", "parse", "text!templates/404.html"], function($, _, Backbone, Parse, Template) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "text!templates/404.html"], function($, _, Mustache, Backbone, Parse, Template) {
   var View;
   View = Backbone.View.extend({
     el: $('.content'),
     render: function() {
-      var compiledTemplate, data;
-      data = {};
-      compiledTemplate = _.template(Template, data);
+      var compiledTemplate;
+      compiledTemplate = Mustache.render(Template, {});
       this.$el.html(compiledTemplate);
-      if (window.innerWidth < 850) {
-        $(".sidebar .links").slideUp();
-        $(".sidebar").attr("toggle", "false");
-      }
       return $('.loader').fadeOut(100);
     }
   });

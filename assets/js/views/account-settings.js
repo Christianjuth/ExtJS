@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "backbone", "parse", "text!templates/account-settings.html"], function($, _, Backbone, Parse, Template) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "text!templates/account-settings.html"], function($, _, Mustache, Backbone, Parse, Template) {
   var View;
   View = Backbone.View.extend({
     el: $('.content'),
@@ -25,9 +25,8 @@ define(["jquery", "underscore", "backbone", "parse", "text!templates/account-set
     logout: function(e) {
       e.preventDefault();
       Parse.User.logOut();
-      return Parse.history.navigate("account/login", {
-        trigger: true,
-        replace: true
+      return Backbone.history.navigate("account/login", {
+        trigger: true
       });
     }
   });

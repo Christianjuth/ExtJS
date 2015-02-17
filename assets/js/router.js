@@ -30,6 +30,10 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/d
     };
     app_router.openView = function(view) {
       this.currentView = view;
+      if (window.innerWidth < 850) {
+        $(".sidebar .links").slideUp();
+        $(".sidebar").attr("toggle", "false");
+      }
       return $(window).scrollTop(0);
     };
     app_router.on('route:home', function() {
@@ -119,7 +123,7 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/d
     });
     return $(document.body).on('click', 'a', function(event) {
       var href, local, url;
-      local = /^((http:|https:|)(\/\/|)dev\.ext-js\.org)/;
+      local = /^((http:|https:|)(\/\/|)ext-js\.org)/;
       href = $(this).attr('href');
       url = local.test(href);
       if (url) {
