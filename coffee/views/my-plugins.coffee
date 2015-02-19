@@ -5,7 +5,7 @@ define [
   "backbone",
   "parse",
   "sweetalert",
-  "text!templates/account-plugins.html"
+  "text!templates/my-plugins.html"
 ], ($, _, Mustache, Backbone, Parse, swal, Template) ->
 
   PluginModle = Parse.Object.extend "Plugin", {
@@ -123,13 +123,7 @@ define [
   newPlugin : (e) ->
     #vars
     self = this
-    user = Parse.User.current()
-    username = Parse.User.current().getUsername()
-
-    plugin = new PluginModle({
-      user: user
-      developer: username
-    })
+    plugin = new PluginModle({})
 
     #encrypt
     pluginACL = new Parse.ACL(Parse.User.current());

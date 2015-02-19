@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/documentation', 'js/views/plugin', 'js/views/home', 'js/views/account-plugins', 'js/views/account-login', 'js/views/account-settings', 'js/views/search-plugins'], function($, _, Backbone, Parse, NotFound, Doc, Plugin, Home, AccountPlugins, AccountLogin, AccountSettings, SearchPlugins) {
+define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/documentation', 'js/views/plugin', 'js/views/home', 'js/views/my-plugins', 'js/views/account-login', 'js/views/my-account', 'js/views/search-plugins'], function($, _, Backbone, Parse, NotFound, Doc, Plugin, Home, AccountPlugins, AccountLogin, AccountSettings, SearchPlugins) {
   var AppRouter, initialize;
   Backbone.View.prototype.close = function() {
     console.log('Unbinding events for ' + this.cid);
@@ -13,7 +13,7 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/d
       '': 'home',
       'documentation/*path': 'doc',
       'plugin/*path': 'plugin',
-      'search/plugins(?:query)': 'searchPlugins',
+      'search/plugins(?search=:query)': 'searchPlugins',
       'account/login(?redirect=*path)': 'accountLogin',
       'account/plugins': 'accountPlugins',
       'account/settings': 'accountSettings',

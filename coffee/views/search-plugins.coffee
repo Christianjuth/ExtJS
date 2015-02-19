@@ -73,7 +73,7 @@ define [
       }
       #vars
       $el = this.$el
-      Backbone.history.navigate "search/plugins?" + search, {replace: true}
+      Backbone.history.navigate "search/plugins?search=" + search, {replace: true}
 
 
 

@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "mustache", "backbone", "parse", "text!templates/login.html"], function($, _, Mustache, Backbone, Parse, Template) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "text!templates/login.html"], function($, _, Mustache, Backbone, Parse, swal, Template) {
   var View;
   View = Backbone.View.extend({
     el: $('.content'),
@@ -30,7 +30,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "text!templates
           });
         },
         error: function(user, error) {
-          return alert(error.message);
+          return swal("Error!", error.message, "error");
         }
       });
     },
@@ -53,7 +53,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "text!templates
           });
         },
         error: function(user, error) {
-          return alert(error.message);
+          return swal("Error!", error.message, "error");
         }
       });
     }

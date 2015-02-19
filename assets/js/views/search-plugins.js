@@ -49,7 +49,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "highlight", "t
         }
       });
       $el = this.$el;
-      return Backbone.history.navigate("search/plugins?" + search, {
+      return Backbone.history.navigate("search/plugins?search=" + search, {
         replace: true
       });
     },

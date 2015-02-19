@@ -10,9 +10,9 @@ define [
   'js/views/documentation',
   'js/views/plugin',
   'js/views/home'
-  'js/views/account-plugins'
+  'js/views/my-plugins'
   'js/views/account-login'
-  'js/views/account-settings'
+  'js/views/my-account'
   'js/views/search-plugins'
 
 ], ($, _, Backbone, Parse, NotFound, Doc, Plugin, Home, AccountPlugins, AccountLogin, AccountSettings, SearchPlugins) ->
@@ -30,7 +30,7 @@ define [
       '': 'home',
       'documentation/*path':         'doc'
       'plugin/*path':                'plugin'
-      'search/plugins(?:query)':       'searchPlugins'
+      'search/plugins(?search=:query)':       'searchPlugins'
       'account/login(?redirect=*path)':  'accountLogin'
       'account/plugins' :            'accountPlugins'
       'account/settings' :           'accountSettings'

@@ -4,8 +4,9 @@ define [
   "mustache",
   "backbone"
   "parse",
+  "sweetalert"
   "text!templates/login.html"
-], ($, _, Mustache, Backbone, Parse, Template) ->
+], ($, _, Mustache, Backbone, Parse, swal, Template) ->
 
   View = Backbone.View.extend({
 
@@ -39,7 +40,7 @@ define [
         success: (user) ->
           Backbone.history.navigate self.url, {trigger: true}
         error: (user, error) ->
-          alert(error.message)
+          swal("Error!", error.message, "error")
       })
 
 
@@ -61,9 +62,8 @@ define [
         success: (user) ->
           Backbone.history.navigate self.url, {trigger: true}
         error: (user, error) ->
-          alert(error.message)
+          swal("Error!", error.message, "error")
       })
-
 
   })
 
