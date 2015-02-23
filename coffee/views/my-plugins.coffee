@@ -89,12 +89,18 @@ define [
       readme = $this.find(".readme").val()
       unmin = $this.find(".unminified-link").val()
       min = $this.find(".minified-link").val()
+      fileUploadControl = $this.find(".file")[0]
+      if fileUploadControl.files.length > 0
+        file = fileUploadControl.files[0]
+        fileName = "plugin.js"
+        parseFile = new Parse.File(fileName, file)
+        parseFile.save()
 
       plug.set("developer", username)
       plug.set("name", name )
       plug.set("readme", readme)
-      plug.set("unminified", unmin)
-      plug.set("minified", min)
+
+      plug.set("file", parseFile)
       plug.save {
         success: ->
           swal("Updated!", "", "success")

@@ -4,7 +4,7 @@
     <h1>My Plugins</h1>
     <br>
     <div class="plugins"></div>
-    <button class="newPlugin">New Plugin</button>
+    <button class="btn btn-default newPlugin">New Plugin</button>
   </script>
 
 
@@ -12,24 +12,22 @@
     <div class="panel panel-default">
       <div class="panel-body">
         <form class="plugin">
+
           <div class="form-group">
             <label>Name</label>
             <input type="text" class="form-control name" placeholder="Plugin name" value="{{name}}">
           </div>
           <div class="form-group">
-            <label>Unminified</label>
-            <input type="text" class="form-control unminified-link" placeholder="Raw coffeescript of javascript file url" value="{{unmin}}">
+            <label>File</label>
+            <input type="file" class="form-control file">
           </div>
-          <div class="form-group">
-            <label>Minified</label>
-            <input type="text" class="form-control minified-link" placeholder="Raw minified javascript link" value="{{min}}">
-          </div>
+
           <div class="form-group">
             <label>Readme</label>
             <textarea class="form-control readme" rows="10">{{readme}}</textarea>
           </div>
           <button type="submit" class="btn btn-default">Update</button>
-          <button class="delete btn btn-default">Delete</button>
+          <button class="delete btn btn-danger pull-right">Delete</button>
         </form>
       </div>
     </div>

@@ -42,6 +42,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "highlight", "t
       developerQuery.contains("developer", search);
       this.plugins.query = Parse.Query.or(nameQuery, developerQuery);
       this.plugins.query.notEqualTo("name", "");
+      this.plugins.query.notEqualTo("file", null);
       this.plugins.query.ascending("name");
       this.plugins.fetch({
         success: function() {
@@ -60,6 +61,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "highlight", "t
       $el.find('.plugins tbody').empty();
       return self.plugins.each(function(plug) {
         var plugTemplate;
+        console.log(plug.get("plugin"));
         plugTemplate = Mustache.render($(Template).find('.item').html(), {
           name: plug.get('name'),
           min: plug.get('minified'),

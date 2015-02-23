@@ -58,17 +58,23 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       });
       $this = $(plugTemplage).appendTo(self.$el.find('.plugins'));
       $this.submit(function(e) {
-        var min, name, readme, unmin;
+        var file, fileName, fileUploadControl, min, name, parseFile, readme, unmin;
         e.preventDefault();
         name = $this.find(".name").val();
         readme = $this.find(".readme").val();
         unmin = $this.find(".unminified-link").val();
         min = $this.find(".minified-link").val();
+        fileUploadControl = $this.find(".file")[0];
+        if (fileUploadControl.files.length > 0) {
+          file = fileUploadControl.files[0];
+          fileName = "plugin.js";
+          parseFile = new Parse.File(fileName, file);
+          parseFile.save();
+        }
         plug.set("developer", username);
         plug.set("name", name);
         plug.set("readme", readme);
-        plug.set("unminified", unmin);
-        plug.set("minified", min);
+        plug.set("file", parseFile);
         return plug.save({
           success: function() {
             return swal("Updated!", "", "success");
