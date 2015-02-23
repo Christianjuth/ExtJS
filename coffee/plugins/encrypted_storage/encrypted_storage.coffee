@@ -32,7 +32,6 @@ onload : ->
       log.info('storage item "'+item.key+'" default password is "password"')
       ext.encrypted_storage.set(item.key, 'password', item.default)
 
-
 }
 
 
@@ -60,7 +59,7 @@ set : (key, passwd, value) ->
 
 get : (key, passwd) ->
   #check usage
-  usage = 'key string, passwd string, value string'
+  usage = 'key string, passwd string'
   expected = ['string','string']
   ok = ext._.validateArg(arguments,expected,usage)
   throw new Error(ok) if ok?
@@ -148,5 +147,3 @@ dump : (passwd)->
 
 
 }
-
-encryptedStorage = []

@@ -73,20 +73,7 @@ SOFTWARE.
         throw new Error('timeout too long');
       }
       return BACKGROUND.setTimeout(function() {
-        var window;
-        window = BACKGROUND;
-        if (BROWSER === 'chrome') {
-          return chrome.notifications.create('', {
-            iconUrl: chrome.extension.getURL('icon-128.png'),
-            type: 'basic',
-            title: title,
-            message: message
-          }, function() {});
-        } else if (BROWSER === 'safari') {
-          return new Notification(title, {
-            body: message
-          });
-        }
+        return BACKGROUND.ext.notification.basic(title, message);
       }, milliseconds);
     }
   };

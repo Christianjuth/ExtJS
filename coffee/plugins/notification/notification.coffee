@@ -22,7 +22,7 @@ github : ''
 
 
 #FUNCTIONS
-basic : (title,message) ->
+basic : (title, message)->
   #check usage
   usage = 'title string, msg string'
   expected = ['string','string']
@@ -37,11 +37,11 @@ basic : (title,message) ->
       message: message
     }, () ->
   else if BROWSER is 'safari'
-    new Notification(title,{body : message})
+    new Notification(title, {body : message})
 
 
 
-delay : (title,message,milliseconds) ->
+delay : (title, message, milliseconds)->
   #check usage
   usage = 'title string, msg string, delay number'
   expected = ['string','string','number']
@@ -51,17 +51,8 @@ delay : (title,message,milliseconds) ->
   if 50000 < parseInt milliseconds
     throw new Error 'timeout too long'
   BACKGROUND.setTimeout ->
-    window = BACKGROUND
-    if BROWSER is 'chrome'
-      chrome.notifications.create '', {
-        iconUrl : chrome.extension.getURL('icon-128.png')
-        type: 'basic'
-        title:title
-        message: message
-      }, () ->
-    else if BROWSER is 'safari'
-      new Notification(title,{body : message})
-  ,milliseconds
+    BACKGROUND.ext.notification.basic(title, message)
+  , milliseconds
 
 
 

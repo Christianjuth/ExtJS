@@ -24,7 +24,7 @@ SOFTWARE.
  */
 
 (function() {
-  var BACKGROUND, BROWSER, ID, NAME, PLGDEFAULTOPTIONS, PLGOPTIONS, PLUGIN, encryptedStorage, log,
+  var BACKGROUND, BROWSER, ID, NAME, PLGDEFAULTOPTIONS, PLGOPTIONS, PLUGIN, log,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   PLUGIN = {
@@ -83,7 +83,7 @@ SOFTWARE.
     },
     get: function(key, passwd) {
       var err, expected, ok, output, storage, usage;
-      usage = 'key string, passwd string, value string';
+      usage = 'key string, passwd string';
       expected = ['string', 'string'];
       ok = ext._.validateArg(arguments, expected, usage);
       if (ok != null) {
@@ -185,8 +185,6 @@ SOFTWARE.
       return output;
     }
   };
-
-  encryptedStorage = [];
 
 
   /*

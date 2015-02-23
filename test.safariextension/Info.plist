@@ -21,14 +21,25 @@
       <key>Global Page</key>
       <string>pages/background/background.html</string>
       <key>Popovers</key>
-      <array/>
+      <array>
+        <dict>
+          <key>Filename</key>
+          <string>pages/popup/popup.html</string>
+          <key>Height</key>
+          <real>400</real>
+          <key>Width</key>
+          <real>400</real>
+          <key>Identifier</key>
+          <string>popup</string>
+        </dict>
+      </array>
       <key>Toolbar Items</key>
       <array>
         <dict>
           <key>Command</key>
-          <string>icon-clicked</string>
-          <key>Popover</key>
           <string></string>
+          <key>Popover</key>
+          <string>popup</string>
           <key>Identifier</key>
           <string>popupID</string>
           <key>Image</key>
