@@ -1,7 +1,7 @@
 (function() {
   window.message = "hey";
 
-  require(["jquery", "underscore", "extPlugin/uuid", "ext", "extPlugin/storage", "extPlugin/clipboard", "extPlugin/utilities", "extPlugin/tabs", "extPlugin/popup"], function($, _, yolo, ext) {
+  require(["jquery", "underscore", "ext", "extPlugin/uuid", "extPlugin/storage", "extPlugin/clipboard", "extPlugin/utilities", "extPlugin/tabs", "extPlugin/popup"], function($, _, ext) {
     ext.ini({
       silent: false
     });
