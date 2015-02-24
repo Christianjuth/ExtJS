@@ -2,6 +2,13 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "text!templates
   var View;
   View = Backbone.View.extend({
     el: $('.content'),
+    initialize: function(options) {
+      var self;
+      self = this;
+      self.options = options;
+      _.bindAll(this, 'render');
+      return this.render();
+    },
     render: function() {
       var compiledTemplate;
       compiledTemplate = Mustache.render(Template, {});

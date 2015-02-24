@@ -5,19 +5,22 @@ define [
   "backbone"
   "parse",
   "sweetalert"
-  "text!templates/login.html"
+  "text!templates/account/signup.html"
 ], ($, _, Mustache, Backbone, Parse, swal, Template) ->
 
   View = Backbone.View.extend({
 
     el: $('.content')
 
-    events :
-      'submit .login':   'login'
-      'submit .sign-up': 'signup'
 
-    initilize: (url)->
-      this.url = url
+    events :
+      'submit .sign-up':       'signup'
+
+
+   initialize: (options)->
+      self = this
+      self.options = options
+      _.bindAll(this, 'render')
       this.render()
 
     render: ->
@@ -26,22 +29,6 @@ define [
       this.$el.html( compiledTemplate )
       #hide loader
       $('.loader').fadeOut(100)
-
-
-    login : (e) ->
-      e.preventDefault()
-      self = this
-
-      $form = $(".login");
-      username = $form.find(".username").val()
-      password = $form.find(".password").val()
-
-      Parse.User.logIn(username, password, {
-        success: (user) ->
-          Backbone.history.navigate self.url, {trigger: true}
-        error: (user, error) ->
-          swal("Error!", error.message, "error")
-      })
 
 
     signup : (e) ->
@@ -60,10 +47,11 @@ define [
 
       user.signUp( null, {
         success: (user) ->
-          Backbone.history.navigate self.url, {trigger: true}
+          Backbone.history.navigate self.options.redirect, {trigger: true}
         error: (user, error) ->
           swal("Error!", error.message, "error")
       })
+
 
   })
 

@@ -8,7 +8,15 @@ define [
 ], ($, _, Mustache, Backbone, Parse, Template) ->
 
   View = Backbone.View.extend({
-    el: $('.content'),
+
+    el: $('.content')
+
+    initialize: (options)->
+      self = this
+      self.options = options
+      _.bindAll(this, 'render')
+      this.render()
+
     render: ->
       #Using Underscore we can compile our template with data
       compiledTemplate = Mustache.render( Template , {})

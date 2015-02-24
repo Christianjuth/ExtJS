@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "text!templates/my-plugins.html"], function($, _, Mustache, Backbone, Parse, swal, Template) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "text!templates/account/my-plugins.html"], function($, _, Mustache, Backbone, Parse, swal, Template) {
   var PluginCollection, PluginModle, View;
   PluginModle = Parse.Object.extend("Plugin", {
     defaults: {
@@ -14,12 +14,13 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
     events: {
       'click .newPlugin': 'newPlugin'
     },
-    initialize: function() {
+    initialize: function(options) {
       var self, user, username;
       self = this;
+      self.options = options;
+      _.bindAll(this, 'render');
       user = Parse.User.current();
       username = user.getUsername();
-      _.bindAll(this, 'render');
       self.plugin = new PluginCollection;
       self.plugin.query = new Parse.Query(PluginModle);
       self.plugin.query.equalTo("user", user);

@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "text!templates/my-account.html"], function($, _, Mustache, Backbone, Parse, swal, Template) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "text!templates/account/my-account.html"], function($, _, Mustache, Backbone, Parse, swal, Template) {
   var View;
   View = Backbone.View.extend({
     el: $('.content'),
@@ -6,6 +6,13 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       'click .logout': 'logout',
       'click .update': 'update',
       'click .reset-passwd': 'resetPassword'
+    },
+    initialize: function(options) {
+      var self;
+      self = this;
+      self.options = options;
+      _.bindAll(this, 'render');
+      return this.render();
     },
     render: function() {
       var compiledTemplate, email, user, username;

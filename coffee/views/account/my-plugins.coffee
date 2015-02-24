@@ -5,7 +5,7 @@ define [
   "backbone",
   "parse",
   "sweetalert",
-  "text!templates/my-plugins.html"
+  "text!templates/account/my-plugins.html"
 ], ($, _, Mustache, Backbone, Parse, swal, Template) ->
 
   PluginModle = Parse.Object.extend "Plugin", {
@@ -28,17 +28,23 @@ define [
     'click .newPlugin' : 'newPlugin'
 
 
-  initialize: () ->
+
+  initialize: (options)->
     self = this
+    self.options = options
+    _.bindAll(this, 'render')
+
     user = Parse.User.current()
     username = user.getUsername()
-    _.bindAll(this, 'render')
 
     self.plugin = new PluginCollection
     self.plugin.query = new Parse.Query(PluginModle)
     self.plugin.query.equalTo("user", user)
+    self.plugin.query.ascending("search");
     self.plugin.fetch {
-      success: -> self.render(name)
+      success: ->
+        self.render(name)
+        $('.loader').fadeOut(100)
     }
 
 
@@ -56,13 +62,6 @@ define [
     #get users plugins
     self.plugin.each (plug)->
       self.renderPlugin(plug)
-
-    #reset UI
-    if window.innerWidth < 850
-      $(".sidebar .links").slideUp()
-      $(".sidebar").attr "toggle","false"
-
-    $('.loader').fadeOut(100)
 
 
 

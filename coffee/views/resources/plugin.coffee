@@ -16,19 +16,19 @@ define [
 
     el: $('.content'),
 
-    initialize: (options) ->
+    initialize: (options)->
       self = this
-      name = options.plugin
+      self.options = options
       _.bindAll(this, 'render')
 
       this.plugin = new PluginCollection
       this.plugin.query = new Parse.Query(PluginModle)
-      this.plugin.query.equalTo("search", name.toLowerCase())
+      this.plugin.query.equalTo("search", options.name.toLowerCase())
       this.plugin.fetch {
-        success: -> self.render(name)
+        success: -> self.render()
       }
 
-    render: (name) ->
+    render: () ->
       $el = this.$el
       plug = this.plugin.at 0
       Template = plug.get('readme')

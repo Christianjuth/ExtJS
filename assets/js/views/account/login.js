@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "text!templates/login.html"], function($, _, Mustache, Backbone, Parse, swal, Template) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "text!templates/account/login.html"], function($, _, Mustache, Backbone, Parse, swal, Template) {
   var View;
   View = Backbone.View.extend({
     el: $('.content'),
@@ -7,8 +7,11 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       'click .signup': 'redirectSignup',
       'click .reset-password': 'resetPassword'
     },
-    initilize: function(url) {
-      this.redirect = url;
+    initialize: function(options) {
+      var self;
+      self = this;
+      self.options = options;
+      _.bindAll(this, 'render');
       return this.render();
     },
     render: function() {
@@ -26,7 +29,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       password = $form.find(".password").val();
       Parse.User.logIn(username, password, {
         success: function(user) {
-          return Backbone.history.navigate(self.redirect, {
+          return Backbone.history.navigate(self.options.redirect, {
             trigger: true
           });
         },
@@ -40,7 +43,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       var self, url;
       e.preventDefault();
       self = this;
-      url = "account/signup?redirect=" + self.redirect;
+      url = "account/signup?redirect=" + self.options.redirect;
       return Backbone.history.navigate(url, {
         trigger: true,
         replace: true
@@ -50,7 +53,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       var self, url;
       e.preventDefault();
       self = this;
-      url = "account/password-reset?redirect=" + self.redirect;
+      url = "account/password-reset?redirect=" + self.options.redirect;
       return Backbone.history.navigate(url, {
         trigger: true
       });

@@ -1,7 +1,6 @@
-define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/documentation', 'js/views/plugin', 'js/views/home', 'js/views/my-plugins', 'js/views/account-login', 'js/views/my-account', 'js/views/search-plugins'], function($, _, Backbone, Parse, NotFound, Doc, Plugin, Home, AccountPlugins, AccountLogin, AccountSettings, SearchPlugins) {
+define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/home', 'js/views/documentation', 'js/views/resources/search-plugins', 'js/views/resources/plugin', 'js/views/account/login', 'js/views/account/signup', 'js/views/account/password-reset', 'js/views/account/my-account', 'js/views/account/my-plugins'], function($, _, Backbone, Parse, NotFound, Home, Doc, SearchPlugins, Plugin, AccountLogin, AccountSignup, AccountPasswordReset, AccountSettings, AccountPlugins) {
   var AppRouter, initialize;
   Backbone.View.prototype.close = function() {
-    console.log('Unbinding events for ' + this.cid);
     this.$el.empty().unbind();
     $('.loader').show();
     if (this.onClose) {
@@ -12,9 +11,11 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/d
     routes: {
       '': 'home',
       'documentation/*path': 'doc',
-      'plugin/*path': 'plugin',
-      'search/plugins(?search=:query)': 'searchPlugins',
+      'resources/plugin/*path': 'plugin',
+      'resources/search-plugins(?search=:query)': 'searchPlugins',
       'account/login(?redirect=*path)': 'accountLogin',
+      'account/signup(?redirect=*path)': 'accountSignup',
+      'account/password-reset(?redirect=*path)': 'passwordReset',
       'account/plugins': 'accountPlugins',
       'account/settings': 'accountSettings',
       '*splat': 'defaultAction'
@@ -39,15 +40,15 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/d
     app_router.on('route:home', function() {
       var home;
       this.closeView();
-      home = new Home();
-      home.render();
+      home = new Home({});
       return this.openView(home);
     });
     app_router.on('route:doc', function(path) {
       var doc;
       this.closeView();
-      doc = new Doc();
-      doc.render(path);
+      doc = new Doc({
+        file: path
+      });
       return this.openView(doc);
     });
     app_router.on('route:plugin', function(path) {
@@ -56,7 +57,6 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/d
       plugin = new Plugin({
         plugin: path
       });
-      plugin.initialize();
       $('.loader').hide();
       return this.openView(plugin);
     });
@@ -64,9 +64,8 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/d
       var searchPlugins;
       this.closeView();
       searchPlugins = new SearchPlugins({
-        search: query
+        query: query
       });
-      searchPlugins.initialize();
       return this.openView(searchPlugins);
     });
     app_router.on('route:accountPlugins', function() {
@@ -91,9 +90,38 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/d
         });
       } else {
         this.closeView();
-        accountLogin = new AccountLogin();
-        accountLogin.initilize(path);
+        accountLogin = new AccountLogin({
+          redirect: path
+        });
         return this.openView(accountLogin);
+      }
+    });
+    app_router.on('route:accountSignup', function(path) {
+      var accountSignup;
+      if (Parse.User.current() !== null) {
+        return Backbone.history.navigate("", {
+          trigger: true
+        });
+      } else {
+        this.closeView();
+        accountSignup = new AccountSignup({
+          redirect: path
+        });
+        return this.openView(accountSignup);
+      }
+    });
+    app_router.on('route:passwordReset', function(path) {
+      var accountPasswordReset;
+      if (Parse.User.current() !== null) {
+        return Backbone.history.navigate("account/settings", {
+          trigger: true
+        });
+      } else {
+        this.closeView();
+        accountPasswordReset = new AccountPasswordReset({
+          redirect: path
+        });
+        return this.openView(accountPasswordReset);
       }
     });
     app_router.on('route:accountSettings', function(actions) {
@@ -105,8 +133,7 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/d
         });
       } else {
         this.closeView();
-        accountSettings = new AccountSettings();
-        accountSettings.render();
+        accountSettings = new AccountSettings({});
         return this.openView(accountSettings);
       }
     });

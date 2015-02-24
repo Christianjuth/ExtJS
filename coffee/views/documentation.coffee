@@ -4,26 +4,34 @@ define [
   "mustache",
   "backbone",
   "parse",
+  "marked",
   "highlight",
   "text!templates/404.html"
-], ($, _, Mustache, Backbone, Parse, hljs, Err) ->
+], ($, _, Mustache, Backbone, Parse, marked, hljs, Err) ->
 
 
   View = Backbone.View.extend {
-    el: $('.content'),
 
-    render: (file) ->
+    el: $('.content')
 
-      #Using Underscore we can compile our template with data
+    initialize: (options)->
+      self = this
+      self.options = options
+      _.bindAll(this, 'render')
+      this.render()
+
+    render: ->
+      self = this
+      options = self.options
       data = {}
       Template = ""
 
       $.ajax {
         type: "GET",
-        url: "//ext-js.org/templates/docs/" + file + ".html"
+        url: "//ext-js.org/collections/documentation/"+options.file+".md"
         async: false,
         success : (data) ->
-          Template = data
+          Template = marked(data)
         error : ->
           Template = Err
       }
@@ -33,10 +41,6 @@ define [
 
       compiledTemplate = Mustache.render( Template , {})
       this.$el.html( compiledTemplate )
-
-      if window.innerWidth < 850
-        $(".sidebar .links").slideUp()
-        $(".sidebar").attr "toggle","false"
 
       $('pre > code').each (i, block) ->
         hljs.highlightBlock(block)

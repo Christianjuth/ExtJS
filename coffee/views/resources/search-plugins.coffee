@@ -5,7 +5,7 @@ define [
   "backbone",
   "parse",
   "highlight",
-  "text!templates/search-plugins.html"
+  "text!templates/resources/search-plugins.html"
 ], ($, _, Mustache, Backbone, Parse, hljs, Template) ->
 
 
@@ -18,15 +18,18 @@ define [
   #define view
   View = Backbone.View.extend {
 
+    events :
+      'submit .search-form' : 'submit'
+
 
     el: $('.content')
 
 
-    initialize: (options) ->
+    initialize: (options)->
       self = this
       _.bindAll(this, 'render')
-      search = options.search
-      self.render(search)
+      self.query = options.query
+      self.render(self.query)
 
 
 
@@ -39,14 +42,23 @@ define [
       $el.find('.plugins tbody').empty()
 
       $el.find('.search').val(search)
-      $el.find('.search').keyup ->
-        self.search($(this).val())
+      $el.find('.search').on('keydown', (e)->
+        if e.code is 13 || e. which  is 13
+          return
+        $el.find('.plugins tbody').html($(Template).find('.empty').html())
+      )
       self.search(search)
 
-      $('pre > code').each (i, block) ->
-        hljs.highlightBlock(block)
-
       $('.loader').fadeOut(100)
+
+
+
+    submit: (e)->
+      e.preventDefault()
+      self = this
+      $el = this.$el
+      search = $el.find('.search').val()
+      self.search(search)
 
 
 
@@ -56,6 +68,13 @@ define [
 
       if search is null
         search = ''
+
+      #dissable duplicate searches
+      if search is self.currentSearch
+        return
+      self.currentSearch = search
+
+      $el.find('.search').val(search)
 
       this.plugins = new PluginCollection
       #name query
@@ -74,7 +93,7 @@ define [
       }
       #vars
       $el = this.$el
-      Backbone.history.navigate "search/plugins?search=" + search, {replace: true}
+      Backbone.history.navigate "resources/search-plugins?search=" + search, {replace: true}
 
 
 
@@ -84,14 +103,18 @@ define [
 
       $el.find('.plugins tbody').empty()
       self.plugins.each (plug)->
-        console.log plug.get("plugin")
+        name =        plug.get('name')
+        developer =   plug.get('developer')
+
         plugTemplate = Mustache.render( $(Template).find('.item').html(), {
-          name:       plug.get('name')
-          min:        plug.get('minified')
-          unmin:      plug.get('unminified')
-          developer:  plug.get('developer')
+          name:       name
+          developer:  developer
         })
-        $el.find('.plugins tbody').append(plugTemplate)
+        $this = $(plugTemplate).appendTo($el.find('.plugins tbody'))
+
+        $this.find('.link').click (e)->
+          e.preventDefault()
+          self.search(developer)
 
 
 
