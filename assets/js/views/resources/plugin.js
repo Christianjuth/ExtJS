@@ -11,7 +11,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "highlight", "m
       _.bindAll(this, 'render');
       this.plugin = new PluginCollection;
       this.plugin.query = new Parse.Query(PluginModle);
-      this.plugin.query.equalTo("search", options.name.toLowerCase());
+      this.plugin.query.equalTo("search", options.plugin.toLowerCase());
       return this.plugin.fetch({
         success: function() {
           return self.render();

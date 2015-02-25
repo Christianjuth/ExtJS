@@ -23,7 +23,7 @@ define [
 
       this.plugin = new PluginCollection
       this.plugin.query = new Parse.Query(PluginModle)
-      this.plugin.query.equalTo("search", options.name.toLowerCase())
+      this.plugin.query.equalTo("search", options.plugin.toLowerCase())
       this.plugin.fetch {
         success: -> self.render()
       }

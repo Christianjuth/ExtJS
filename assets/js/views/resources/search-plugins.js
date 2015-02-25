@@ -81,6 +81,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "highlight", "t
         developer = plug.get('developer');
         plugTemplate = Mustache.render($(Template).find('.item').html(), {
           name: name,
+          link: name.toLowerCase(),
           developer: developer
         });
         $this = $(plugTemplate).appendTo($el.find('.plugins tbody'));
