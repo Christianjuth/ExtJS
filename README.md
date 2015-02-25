@@ -15,7 +15,7 @@ _for more documentation please refer to [our site](http://ext-js.org)_
 
 
 ### Reporting Issues
-Please submit issues with this framwork on github.  Any issues with "ext.js" or any plugins from the ExtJS team should be reported [here](https://github.com/Christianjuth/ExtJS_Library/issues). Plugins by the ExtJS team include...
+Please submit issues with this framwork on github.
 
 * Clipboard
 * Notification
