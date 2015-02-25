@@ -1,7 +1,9 @@
 {
-  "name" : "Plugin name",
+  "name" : "Demo 2",
   "author" : "John Smith",
   "version": "0.1.0",
+
+  "extUsername": "username",
 
   "description" : "A plugin"
 }

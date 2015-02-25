@@ -7,6 +7,7 @@ module.exports = (grunt) ->
   #set config vars
   config = grunt.file.readJSON('configure.json')
   name = config.name
+  plg = name.replace(/\ /,'-').toLowerCase()
 
   #Project functions
   grunt.initConfig {
@@ -17,7 +18,6 @@ module.exports = (grunt) ->
   #scripts
   coffeelint:           grunt.file.readJSON('grunt/coffeelint.json')
   coffee:               grunt.file.readJSON('grunt/coffee.json')
-  uglify:               grunt.file.readJSON('grunt/uglify.json')
 
   #other
   clean:                grunt.file.readJSON('grunt/clean.json')
@@ -34,19 +34,14 @@ module.exports = (grunt) ->
 
   #grunt coffee
   coffeeFiles = {}
-  coffeeFiles['dist/'+name+'.js'] = ["plugin/licence.coffee", "plugin/plugin.coffee", "plugin/define.coffee"]
+  coffeeFiles['dist/'+plg+'.js'] = ["plugin/licence.coffee", "plugin/plugin.coffee", "plugin/define.coffee"]
   grunt.config.set 'coffee.default.files', coffeeFiles
 
   #grunt copy
   grunt.config.set 'copy.default.rename', (dest, src) ->
     if ! /\.(map|coffee)$/.test src
-      src = src.replace(name,'plugin')
+      src = src.replace(plg,'plugin')
     return dest + src
-
-  #grunt uglify
-  uglifyFiles = {}
-  uglifyFiles['dist/'+name+'.min.js'] = 'dist/'+name+'.js'
-  grunt.config.set 'uglify.default.files', uglifyFiles
 
 
   #define tasks
@@ -59,7 +54,6 @@ module.exports = (grunt) ->
     'browserDependencies'
     'extension_manifest'
     'coffee'
-    'uglify'
     'copy'
   ]
 
