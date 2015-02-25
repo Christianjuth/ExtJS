@@ -1,0 +1,16 @@
+{
+  "options": {
+    "preserveComments": "some"
+  },
+  "default": {
+    "files": [
+      {
+        "expand": true,
+        "cwd": "dist/",
+        "src": ["**/*.js"],
+        "dest": "dist/<%= srcDir %>",
+        "ext": ".min.js"
+      }
+    ]
+  }
+}

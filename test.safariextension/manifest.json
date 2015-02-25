@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "extension_library",
+  "author": "Christian Juth",
+  "version": "0.1.1",
+  "description": "This is for testing ExtJS",
+  "homepage_url": "https://github.com/Christianjuth/ExtJS_Library",
+  "browser_action": {
+    "default_icon": {
+      "19": "menu-icons/icon-19.png",
+      "38": "icon-38.png"
+    },
+    "default_popup": "pages/popup/popup.html"
+  },
+  "background": {
+    "page": "pages/background/background.html"
+  },
+  "permissions": [
+    "tabs",
+    "notifications"
+  ],
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  }
+}
