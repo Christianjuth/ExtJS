@@ -1,36 +1,92 @@
 <div>
 
   <script type="text/html" class="view">
+
     <h1>My Plugins</h1>
-    <br>
-    <div class="plugins"></div>
-    <button class="btn btn-default newPlugin">New Plugin</button>
+    <table class="col-xs-12">
+      <thead>
+        <tr>
+          <th>Click to edit</th>
+        </tr>
+      </thead>
+      <tbody class="plugins">
+      </tbody>
+    </table>
+    <button class="btn btn-default newPlugin">Create Plugin</button>
+
+
+    <!--edit plugin-->
+    <div class="modal fade edit-plugin">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Plugin</h4>
+          </div>
+          <div class="modal-body">
+
+            <form class="plugin">
+              <div class="form-group">
+                <input type="text" class="form-control name" placeholder="Plugin name">
+              </div>
+              <div class="form-group">
+                <input type="file" class="form-control file">
+              </div>
+              <div class="form-group">
+                <textarea class="form-control readme" rows="15"></textarea>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button class="delete btn btn-danger pull-left">Delete</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button class="save btn btn-primary">Save changes</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <!--new plugin-->
+    <div class="modal fade new-plugin">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Plugin</h4>
+          </div>
+          <div class="modal-body">
+
+            <form class="plugin">
+              <div class="form-group">
+                <input type="text" class="form-control name" placeholder="Plugin name">
+              </div>
+              <div class="form-group">
+                <input type="file" class="form-control file">
+              </div>
+              <div class="form-group">
+                <textarea class="form-control readme" rows="15"></textarea>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button class="save btn btn-primary">Save changes</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
   </script>
 
 
+
   <script type="text/html" class="item">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <form class="plugin">
-
-          <div class="form-group">
-            <label>Name</label>
-            <input type="text" class="form-control name" placeholder="Plugin name" value="{{name}}">
-          </div>
-          <div class="form-group">
-            <label>File</label>
-            <input type="file" class="form-control file">
-          </div>
-
-          <div class="form-group">
-            <label>Readme</label>
-            <textarea class="form-control readme" rows="10">{{readme}}</textarea>
-          </div>
-          <button type="submit" class="btn btn-default">Update</button>
-          <button class="delete btn btn-danger pull-right">Delete</button>
-        </form>
-      </div>
-    </div>
+    <tr>
+      <td><a href="#">{{name}}</a></td>
+    </tr>
   </script>
 
 

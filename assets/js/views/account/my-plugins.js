@@ -43,76 +43,110 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       });
     },
     renderPlugin: function(plug) {
-      var $el, $this, plugTemplage, self, user, username;
+      var $el, $this, plugName, plugReadme, plugTemplage, self, user, username;
       self = this;
       $el = this.$el;
       user = Parse.User.current();
       username = user.getUsername();
+      plugName = plug.get("name");
+      plugReadme = plug.get("readme");
       plugTemplage = Mustache.render($(Template).find('.item').html(), {
-        name: plug.get("name"),
-        unmin: plug.get("unminified"),
-        min: plug.get("minified"),
-        readme: plug.get("readme")
+        name: plugName
       });
-      $this = $(plugTemplage).appendTo(self.$el.find('.plugins'));
-      $this.submit(function(e) {
-        var file, fileName, fileUploadControl, min, name, parseFile, readme, unmin;
-        e.preventDefault();
-        name = $this.find(".name").val();
-        readme = $this.find(".readme").val();
-        unmin = $this.find(".unminified-link").val();
-        min = $this.find(".minified-link").val();
-        fileUploadControl = $this.find(".file")[0];
-        if (fileUploadControl.files.length > 0) {
-          file = fileUploadControl.files[0];
-          fileName = "plugin.js";
-          parseFile = new Parse.File(fileName, file);
-          parseFile.save();
-        }
-        plug.set("developer", username);
-        plug.set("name", name);
-        plug.set("readme", readme);
-        plug.set("file", parseFile);
-        return plug.save({
-          success: function() {
-            return swal("Updated!", "", "success");
-          },
-          error: function(user, error) {
-            return swal("Error!", error.message, "error");
-          }
+      $this = $(plugTemplage).appendTo($el.find('.plugins'));
+      return $this.click(function() {
+        var $modal;
+        $modal = $el.find(".edit-plugin");
+        $modal.find('.name').val(plugName);
+        $modal.find('.readme').val(plugReadme);
+        $modal.modal('show');
+        $modal.find('form').unbind().submit(function(e) {
+          e.preventDefault();
+          return $modal.find('.save').click();
         });
-      });
-      return $this.find(".delete").click(function(e) {
-        e.preventDefault();
-        return swal({
-          title: "Are you sure?",
-          text: "This action can not be undone!",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonClass: "btn-danger",
-          confirmButtonText: "Yes, delete it!"
-        }, function() {
-          plug.destroy();
-          return $this.fadeOut(function() {
+        $modal.find('.save').unbind().click(function(e) {
+          var file, fileName, fileUploadControl, parseFile;
+          e.preventDefault();
+          $modal.modal('hide');
+          plugName = $modal.find(".name").val();
+          plugReadme = $modal.find(".readme").val();
+          $this.find('a').text(plugName);
+          fileUploadControl = $modal.find(".file")[0];
+          if (fileUploadControl.files.length > 0) {
+            file = fileUploadControl.files[0];
+            fileName = "plugin.js";
+            parseFile = new Parse.File(fileName, file);
+            parseFile.save();
+          }
+          plug.set("name", plugName);
+          plug.set("readme", plugReadme);
+          plug.set("file", parseFile);
+          return plug.save({
+            success: function() {
+              return swal("Updated!", "", "success");
+            },
+            error: function(user, error) {
+              return swal("Error!", error.message, "error");
+            }
+          });
+        });
+        return $modal.find('.delete').unbind().click(function(e) {
+          e.preventDefault();
+          $modal.modal('hide');
+          return swal({
+            title: "Are you sure?",
+            text: "This action can not be undone!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes, delete it!"
+          }, function() {
+            plug.destroy();
             return $this.remove();
           });
         });
       });
     },
     newPlugin: function(e) {
-      var plugin, pluginACL, self;
+      var $el, $modal, plugin, self;
       self = this;
+      $el = this.$el;
       plugin = new PluginModle({});
-      pluginACL = new Parse.ACL(Parse.User.current());
-      pluginACL.setPublicReadAccess(true);
-      plugin.setACL(pluginACL);
-      return plugin.save(null, {
-        success: function(plug) {
-          return self.renderPlugin(plug);
-        },
-        error: function(user, error) {
-          return swal("Error!", error.message, "error");
-        }
+      $modal = $el.find(".new-plugin");
+      $modal.find('.name').val('');
+      $modal.find('.readme').val('');
+      $modal.modal('show');
+      $modal.find('form').unbind().submit(function(e) {
+        e.preventDefault();
+        return $modal.find('.save').click();
+      });
+      return $modal.find('.save').unbind().click(function(e) {
+        var pluginACL;
+        $modal.modal('hide');
+        pluginACL = new Parse.ACL(Parse.User.current());
+        pluginACL.setPublicReadAccess(true);
+        plugin.setACL(pluginACL);
+        plugin.set('name', $modal.find('.name').val());
+        plugin.set('readme', $modal.find('.readme').val());
+        return plugin.save(null, {
+          success: function(plug) {
+            return self.renderPlugin(plug);
+          },
+          error: function(user, error) {
+            swal("Error!", error.message, "error");
+            return swal({
+              title: "Error!",
+              text: error.message,
+              type: "error",
+              showCancelButton: false,
+              confirmButtonClass: "btn-primary",
+              confirmButtonText: "Ok",
+              closeOnConfirm: true
+            }, function() {
+              return $modal.modal('show');
+            });
+          }
+        });
       });
     },
     remove: function() {

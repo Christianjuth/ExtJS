@@ -28,7 +28,6 @@ define [
     'click .newPlugin' : 'newPlugin'
 
 
-
   initialize: (options)->
     self = this
     self.options = options
@@ -71,55 +70,69 @@ define [
     $el = this.$el
     user = Parse.User.current()
     username = user.getUsername()
+    plugName = plug.get("name")
+    plugReadme = plug.get("readme")
 
+    #render table row
     plugTemplage = Mustache.render( $(Template).find('.item').html() , {
-      name: plug.get("name")
-      unmin: plug.get("unminified")
-      min: plug.get("minified")
-      readme: plug.get("readme")
+      name: plugName
     })
-    $this = $(plugTemplage).appendTo(self.$el.find('.plugins'))
+    $this = $(plugTemplage).appendTo($el.find('.plugins'))
 
-    #form submit function update plugin
-    $this.submit (e) ->
-      e.preventDefault()
+    #edit readme popup
+    $this.click  ->
+      #vars
+      $modal = $el.find(".edit-plugin")
+      $modal.find('.name').val(plugName)
+      $modal.find('.readme').val(plugReadme)
 
-      name = $this.find(".name").val()
-      readme = $this.find(".readme").val()
-      unmin = $this.find(".unminified-link").val()
-      min = $this.find(".minified-link").val()
-      fileUploadControl = $this.find(".file")[0]
-      if fileUploadControl.files.length > 0
-        file = fileUploadControl.files[0]
-        fileName = "plugin.js"
-        parseFile = new Parse.File(fileName, file)
-        parseFile.save()
+      #render
+      $modal.modal('show')
 
-      plug.set("developer", username)
-      plug.set("name", name )
-      plug.set("readme", readme)
+      #EVENTS
+      #submit
+      $modal.find('form').unbind().submit (e)->
+        e.preventDefault()
+        $modal.find('.save').click()
 
-      plug.set("file", parseFile)
-      plug.save {
-        success: ->
-          swal("Updated!", "", "success")
-        error: (user, error) ->
-          swal("Error!", error.message, "error")
-      }
+      $modal.find('.save').unbind().click (e)->
+        e.preventDefault()
+        $modal.modal('hide')
 
-    #delete function
-    $this.find(".delete").click (e) ->
-      e.preventDefault()
-      swal {
-        title: "Are you sure?",
-        text: "This action can not be undone!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-danger",
-        confirmButtonText: "Yes, delete it!"
-      }, () ->
-        plug.destroy()
-        $this.fadeOut ->
+        plugName = $modal.find(".name").val()
+        plugReadme = $modal.find(".readme").val()
+
+        $this.find('a').text(plugName)
+
+        fileUploadControl = $modal.find(".file")[0]
+        if fileUploadControl.files.length > 0
+          file = fileUploadControl.files[0]
+          fileName = "plugin.js"
+          parseFile = new Parse.File(fileName, file)
+          parseFile.save()
+
+        plug.set("name", plugName )
+        plug.set("readme", plugReadme)
+        plug.set("file", parseFile)
+        plug.save {
+          success: ->
+            swal("Updated!", "", "success")
+          error: (user, error) ->
+            swal("Error!", error.message, "error")
+        }
+      #delete
+      $modal.find('.delete').unbind().click (e)->
+        e.preventDefault()
+        $modal.modal('hide')
+        swal {
+          title: "Are you sure?",
+          text: "This action can not be undone!",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonClass: "btn-danger",
+          confirmButtonText: "Yes, delete it!"
+        }, () ->
+          plug.destroy()
           $this.remove()
 
 
@@ -128,19 +141,50 @@ define [
   newPlugin : (e) ->
     #vars
     self = this
+    $el = this.$el
     plugin = new PluginModle({})
 
-    #encrypt
-    pluginACL = new Parse.ACL(Parse.User.current());
-    pluginACL.setPublicReadAccess(true);
-    plugin.setACL(pluginACL);
+    $modal = $el.find(".new-plugin")
+    $modal.find('.name').val('')
+    $modal.find('.readme').val('')
 
-    plugin.save null, {
-      success: (plug) ->
-        self.renderPlugin(plug)
-      error: (user, error) ->
-        swal("Error!", error.message, "error")
-    }
+    #render
+    $modal.modal('show')
+
+    #EVENTS
+    $modal.find('form').unbind().submit (e)->
+      e.preventDefault()
+      $modal.find('.save').click()
+
+    $modal.find('.save').unbind().click (e)->
+      $modal.modal('hide')
+
+      #encrypt
+      pluginACL = new Parse.ACL(Parse.User.current());
+      pluginACL.setPublicReadAccess(true);
+      plugin.setACL(pluginACL);
+
+      plugin.set('name', $modal.find('.name').val())
+      plugin.set('readme', $modal.find('.readme').val())
+      plugin.save null, {
+        success: (plug) ->
+          self.renderPlugin(plug)
+        error: (user, error) ->
+          swal("Error!", error.message, "error")
+          swal({
+            title: "Error!"
+            text: error.message
+            type: "error"
+            showCancelButton: false,
+            confirmButtonClass: "btn-primary",
+            confirmButtonText: "Ok",
+            closeOnConfirm: true
+          }
+          , ->
+            $modal.modal('show')
+          )
+      }
+
 
 
   remove: () ->
