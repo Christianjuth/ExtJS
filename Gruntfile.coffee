@@ -20,7 +20,6 @@ module.exports = (grunt) ->
 
   #scripts
   coffee:               grunt.file.readJSON('grunt/coffee.json')
-  uglify:               grunt.file.readJSON('grunt/uglify.json')
   coffeelint:           grunt.file.readJSON('grunt/coffeelint.json')
 
   #manage files
@@ -29,13 +28,11 @@ module.exports = (grunt) ->
   rsync:                grunt.file.readJSON('grunt/rsync.json')
 
   #assets
-  imagemin :            grunt.file.readJSON('grunt/imagemin.json')
   multiresize:          grunt.file.readJSON('grunt/multiresize.json')
   browserDependencies:  grunt.file.readJSON('grunt/browserDependencies.json')
 
   #other
   extension_manifest :  grunt.file.readJSON('grunt/extension_manifest.json')
-  notify_hooks:         grunt.file.readJSON('grunt/notify_hooks.json')
   compress :            grunt.file.readJSON('grunt/compress.json')
 
   }
@@ -53,8 +50,6 @@ module.exports = (grunt) ->
     'multiresize'
     'less'
     'coffee'
-#    'uglify'
-    'imagemin'
     'compress'
   ]
 
@@ -62,5 +57,3 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', [
     'build'
   ]
-
-  grunt.task.run('notify_hooks')
