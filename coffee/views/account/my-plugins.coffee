@@ -12,8 +12,6 @@ define [
     defaults:
       name: ''
       readme: ''
-      unminified: ''
-      minified: ''
   }
   PluginCollection = Parse.Collection.extend {}
 
@@ -131,9 +129,12 @@ define [
           showCancelButton: true,
           confirmButtonClass: "btn-danger",
           confirmButtonText: "Yes, delete it!"
-        }, () ->
-          plug.destroy()
-          $this.remove()
+        }, (isConfirm) ->
+          if isConfirm
+            plug.destroy()
+            $this.remove()
+          else
+            $modal.modal('show')
 
 
 

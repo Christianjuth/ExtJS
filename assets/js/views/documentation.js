@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "mustache", "backbone", "parse", "marked", "highlight", "text!templates/404.html"], function($, _, Mustache, Backbone, Parse, marked, hljs, Err) {
+define(["jquery", "underscore", "mustache", "backbone", "parse", "marked", "highlight", "text!templates/documentation/page.html", "text!templates/404.html"], function($, _, Mustache, Backbone, Parse, marked, hljs, Template, Err) {
   var View;
   View = Backbone.View.extend({
     el: $('.content'),
@@ -10,26 +10,30 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "marked", "high
       return this.render();
     },
     render: function() {
-      var Template, compiledTemplate, data, options, self;
+      var compiledTemplate, data, options, self;
       self = this;
       options = self.options;
       data = {};
-      Template = "";
+      compiledTemplate = "";
       $.ajax({
         type: "GET",
-        url: "//ext-js.org/collections/documentation/" + options.file + ".md",
+        url: "//ext-js.org/collections/documentation/" + options.doc + ".md",
         async: false,
         success: function(data) {
-          return Template = marked(data);
+          var doc;
+          if (/^(<!doctype|<html>|<body>|<!doctype)/i.test(data)) {
+            return compiledTemplate = Err;
+          } else {
+            doc = marked(data);
+            return compiledTemplate = Mustache.render(Template, {
+              doc: doc
+            });
+          }
         },
         error: function() {
-          return Template = Err;
+          return compiledTemplate = Err;
         }
       });
-      if (/^(<html>|<body>|<!doctype)/i.test(Template)) {
-        Template = Err;
-      }
-      compiledTemplate = Mustache.render(Template, {});
       this.$el.html(compiledTemplate);
       $('pre > code').each(function(i, block) {
         return hljs.highlightBlock(block);

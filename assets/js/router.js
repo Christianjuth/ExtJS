@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/home', 'js/views/documentation', 'js/views/resources/search-plugins', 'js/views/resources/plugin', 'js/views/account/login', 'js/views/account/signup', 'js/views/account/password-reset', 'js/views/account/my-account', 'js/views/account/my-plugins'], function($, _, Backbone, Parse, NotFound, Home, Doc, SearchPlugins, Plugin, AccountLogin, AccountSignup, AccountPasswordReset, AccountSettings, AccountPlugins) {
+define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/home', 'js/views/documentation', 'js/views/resources/search-plugins', 'js/views/resources/plugin', 'js/views/account/login', 'js/views/account/signup', 'js/views/account/password-reset', 'js/views/account/my-account', 'js/views/account/my-plugins'], function($, _, Backbone, Parse, NotFound, Home, Doc, SearchPlugins, Plugin, AccountLogin, AccountSignup, AccountPasswordReset, AccountMyAccount, AccountMyPlugins) {
   var AppRouter, initialize;
   Backbone.View.prototype.close = function() {
     this.$el.empty().unbind();
@@ -10,14 +10,14 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/h
   AppRouter = Backbone.Router.extend({
     routes: {
       '': 'home',
-      'documentation/*path': 'doc',
+      'documentation/*path': 'documentation',
       'resources/plugin/*path': 'plugin',
       'resources/search-plugins(?search=:query)': 'searchPlugins',
       'account/login(?redirect=*path)': 'accountLogin',
       'account/signup(?redirect=*path)': 'accountSignup',
       'account/password-reset(?redirect=*path)': 'passwordReset',
-      'account/plugins': 'accountPlugins',
-      'account/settings': 'accountSettings',
+      'account/my-plugins': 'accountMyPlugins',
+      'account/my-account': 'accountMyAccount',
       '*splat': 'defaultAction'
     }
   });
@@ -43,11 +43,11 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/h
       home = new Home({});
       return this.openView(home);
     });
-    app_router.on('route:doc', function(path) {
+    app_router.on('route:documentation', function(path) {
       var doc;
       this.closeView();
       doc = new Doc({
-        file: path
+        doc: path
       });
       return this.openView(doc);
     });
@@ -67,20 +67,6 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/h
         query: query
       });
       return this.openView(searchPlugins);
-    });
-    app_router.on('route:accountPlugins', function() {
-      var accountPlugins, login;
-      if (Parse.User.current() === null) {
-        login = "account/login?redirect=" + Backbone.history.fragment;
-        return Backbone.history.navigate(login, {
-          trigger: true
-        });
-      } else {
-        this.closeView();
-        accountPlugins = new AccountPlugins();
-        accountPlugins.render();
-        return this.openView(accountPlugins);
-      }
     });
     app_router.on('route:accountLogin', function(path) {
       var accountLogin;
@@ -124,8 +110,8 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/h
         return this.openView(accountPasswordReset);
       }
     });
-    app_router.on('route:accountSettings', function(actions) {
-      var accountSettings, login;
+    app_router.on('route:accountMyPlugins', function() {
+      var accountMyPlugins, login;
       if (Parse.User.current() === null) {
         login = "account/login?redirect=" + Backbone.history.fragment;
         return Backbone.history.navigate(login, {
@@ -133,8 +119,22 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/h
         });
       } else {
         this.closeView();
-        accountSettings = new AccountSettings({});
-        return this.openView(accountSettings);
+        accountMyPlugins = new AccountMyPlugins();
+        accountMyPlugins.render();
+        return this.openView(accountMyPlugins);
+      }
+    });
+    app_router.on('route:accountMyAccount', function(actions) {
+      var accountMyAccount, login;
+      if (Parse.User.current() === null) {
+        login = "account/login?redirect=" + Backbone.history.fragment;
+        return Backbone.history.navigate(login, {
+          trigger: true
+        });
+      } else {
+        this.closeView();
+        accountMyAccount = new AccountMyAccount({});
+        return this.openView(accountMyAccount);
       }
     });
     app_router.on('route:defaultAction', function(actions) {
@@ -149,11 +149,12 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/h
       root: '/'
     });
     return $(document.body).on('click', 'a', function(event) {
-      var href, local, url;
+      var elm, href, local, url;
       local = /^((http:|https:|)(\/\/|)ext-js\.org)/;
       href = $(this).attr('href');
       url = local.test(href);
-      if (url) {
+      elm = href.indexOf('#') !== -1 && href.indexOf('/#') === -1;
+      if (url && !elm) {
         event.preventDefault();
         href = href.replace(local, '');
         return Backbone.history.navigate(href, {

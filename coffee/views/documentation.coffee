@@ -6,8 +6,9 @@ define [
   "parse",
   "marked",
   "highlight",
+  "text!templates/documentation/page.html"
   "text!templates/404.html"
-], ($, _, Mustache, Backbone, Parse, marked, hljs, Err) ->
+], ($, _, Mustache, Backbone, Parse, marked, hljs, Template, Err) ->
 
 
   View = Backbone.View.extend {
@@ -24,22 +25,25 @@ define [
       self = this
       options = self.options
       data = {}
-      Template = ""
+      compiledTemplate = ""
 
       $.ajax {
         type: "GET",
-        url: "//ext-js.org/collections/documentation/"+options.file+".md"
+        url: "//ext-js.org/collections/documentation/"+options.doc+".md"
         async: false,
         success : (data) ->
-          Template = marked(data)
+          #fix page inception error
+          if /^(<!doctype|<html>|<body>|<!doctype)/i.test(data)
+            compiledTemplate = Err
+          else
+            doc = marked(data)
+            compiledTemplate = Mustache.render( Template , {
+              doc: doc
+            })
         error : ->
-          Template = Err
+          compiledTemplate = Err
       }
 
-      if /^(<html>|<body>|<!doctype)/i.test(Template)
-        Template = Err
-
-      compiledTemplate = Mustache.render( Template , {})
       this.$el.html( compiledTemplate )
 
       $('pre > code').each (i, block) ->

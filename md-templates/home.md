@@ -1,5 +1,7 @@
 #Welcome to ExtJS
 This project allowes you to build extensions for Chrome, Safari, and Opera using the same code.
 
-### About this Project
-This project started as a way to save myself time.  I have built a few browser extensions, but there have always been two problems I have run into.  The first is the main focus of this framework.  Safari is a pain.  I started off with Chrome extensions which are so easy to write.  Google has done a perfect job of providing the right APIs without overloading the developers with features.  Safri is a diffrent story.  While this framework might limit some of the functionality of Safari extensions, I beleive it will make them less overwelming for new developers.  The second problem, I hope to solve, is the structure.  When creating new projects I never know where to start.  By providing a freamwork everything has a place.  This framwork is what I consider the best development workflow.  Clone a git project, change a few files, run the grunt command in the terminal, and you are done.
+### What is ExtJS?
+Meet ExtJS. A simple framework for building one extension that runs on Chrome, Safari, and Opera. Unlike other tools that provide a similar service, the ExtJS framework will compile down to one extension that runs on three browsers. This is done using a core library that detects the browser and runs native code at runtime. Because of this, rather than creating messy marching generated code, your extension will be clean, have structure, and be %100 open source friendly. [Read more...](http://ext-js.org/documentation/understanding-extjs)
+
+###Support US!

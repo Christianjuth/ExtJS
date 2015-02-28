@@ -12,7 +12,7 @@ module.exports = (grunt) ->
         files: [
           {
             expand: true,
-            cwd: 'mad-templates/'
+            cwd: 'md-templates/'
             src: '**/*.md',
             dest: 'templates/<%= srcDir %>/',
             ext: '.html'

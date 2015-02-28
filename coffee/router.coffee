@@ -32,8 +32,8 @@ define [
     AccountLogin,
     AccountSignup,
     AccountPasswordReset,
-    AccountSettings,
-    AccountPlugins
+    AccountMyAccount,
+    AccountMyPlugins
     ) ->
 
   Backbone.View.prototype.close = () ->
@@ -46,7 +46,7 @@ define [
     routes :
       #Define some URL routes
       '':                                        'home'
-      'documentation/*path':                     'doc'
+      'documentation/*path':                     'documentation'
       'resources/plugin/*path':                            'plugin'
 
       #resources
@@ -56,8 +56,8 @@ define [
       'account/login(?redirect=*path)':          'accountLogin'
       'account/signup(?redirect=*path)':         'accountSignup'
       'account/password-reset(?redirect=*path)': 'passwordReset'
-      'account/plugins' :                        'accountPlugins'
-      'account/settings' :                       'accountSettings'
+      'account/my-plugins' :                        'accountMyPlugins'
+      'account/my-account' :                        'accountMyAccount'
 
       #404
       '*splat': 'defaultAction'
@@ -83,11 +83,11 @@ define [
       home = new Home({})
       this.openView(home)
 
-    app_router.on 'route:doc', (path) ->
+    app_router.on 'route:documentation', (path) ->
       #We have no matching route, lets just log what the URL was
       this.closeView()
       doc = new Doc({
-        file: path
+        doc: path
       })
       this.openView(doc)
 
@@ -111,17 +111,6 @@ define [
 
 
     #account
-    app_router.on 'route:accountPlugins', () ->
-      #We have no matching route, lets just log what the URL was
-      if Parse.User.current() is null
-        login = "account/login?redirect="+Backbone.history.fragment
-        Backbone.history.navigate login, {trigger: true}
-      else
-        this.closeView()
-        accountPlugins = new AccountPlugins()
-        accountPlugins.render()
-        this.openView(accountPlugins)
-
     app_router.on 'route:accountLogin', (path) ->
       #We have no matching route, lets just log what the URL was
       if Parse.User.current() isnt null
@@ -155,15 +144,26 @@ define [
         })
         this.openView(accountPasswordReset)
 
-    app_router.on 'route:accountSettings', (actions) ->
+    app_router.on 'route:accountMyPlugins', () ->
       #We have no matching route, lets just log what the URL was
       if Parse.User.current() is null
         login = "account/login?redirect="+Backbone.history.fragment
         Backbone.history.navigate login, {trigger: true}
       else
         this.closeView()
-        accountSettings = new AccountSettings({})
-        this.openView(accountSettings)
+        accountMyPlugins = new AccountMyPlugins()
+        accountMyPlugins.render()
+        this.openView(accountMyPlugins)
+
+    app_router.on 'route:accountMyAccount', (actions) ->
+      #We have no matching route, lets just log what the URL was
+      if Parse.User.current() is null
+        login = "account/login?redirect="+Backbone.history.fragment
+        Backbone.history.navigate login, {trigger: true}
+      else
+        this.closeView()
+        accountMyAccount = new AccountMyAccount({})
+        this.openView(accountMyAccount)
 
 
 
@@ -185,8 +185,9 @@ define [
       local = /^((http:|https:|)(\/\/|)ext-js\.org)/
       href = $(this).attr('href')
       url = local.test(href)
+      elm = href.indexOf('#') isnt -1 and href.indexOf('/#') is -1
 
-      if url
+      if url and !elm
         event.preventDefault()
         href = href.replace(local,'')
         Backbone.history.navigate(href, {trigger: true});

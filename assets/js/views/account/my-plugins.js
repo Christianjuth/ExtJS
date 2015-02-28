@@ -3,9 +3,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
   PluginModle = Parse.Object.extend("Plugin", {
     defaults: {
       name: '',
-      readme: '',
-      unminified: '',
-      minified: ''
+      readme: ''
     }
   });
   PluginCollection = Parse.Collection.extend({});
@@ -100,9 +98,13 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
             showCancelButton: true,
             confirmButtonClass: "btn-danger",
             confirmButtonText: "Yes, delete it!"
-          }, function() {
-            plug.destroy();
-            return $this.remove();
+          }, function(isConfirm) {
+            if (isConfirm) {
+              plug.destroy();
+              return $this.remove();
+            } else {
+              return $modal.modal('show');
+            }
           });
         });
       });

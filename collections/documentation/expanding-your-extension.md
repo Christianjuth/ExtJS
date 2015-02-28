@@ -1,14 +1,12 @@
 #Building Your Extension
 
-The Breakdown
-=======
-* [Icons](https://github.com/Christianjuth/ExtJS_Framework/wiki/Building-Your-Extension#icons)
-* [Popup vs Action](https://github.com/Christianjuth/ExtJS_Framework/wiki/Building-Your-Extension#popup-vs-action)
-* [Pages](https://github.com/Christianjuth/ExtJS_Framework/wiki/Building-Your-Extension#pages)
+##The Breakdown
+* [Icons](http://ext-js.org/documentation/expanding-your-extension#icons)
+* [Popup vs Action](http://ext-js.org/documentation/expanding-your-extension#popup-vs-action)
+* [Pages](http://ext-js.org/documentation/expanding-your-extension#pages)
 
 
-Icons
-========
+##Icons
 _All icons must be in png format._
 
 The _app/icon.png_ is the icon that will be displayed on the install banner, the settings panel of both browsers, and other places.  The only place, it will not be displayed, is on the menu bar. These icons are located in the `app/menu-icons/` folder.
@@ -25,8 +23,7 @@ When adding custom icons you must upload a `16x16` and `19x19` version and add `
 * `app/menu-icons/your_icon_name-19.png`
 
 
-Popup vs Action
-========
+##Popup vs Action
 _The default is action_
 
 ### Popup
@@ -61,8 +58,7 @@ ext.menu.click(function(){
 ```
 
 
-Pages
-========
+##Pages
 Adding pages is simple.  You simply add a new folder in the `app/pages/` dir. Your file structure should look like this...
 ```
 pages
