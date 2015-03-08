@@ -50,14 +50,26 @@ define [
       self = this
       user = Parse.User.current()
       $this = self.$el.find('.account')
-      user.set('email', $this.find('.email').val())
 
-      user.save(null, {
-        success: (plug) ->
-          swal("Updated!", "", "success")
-        error: (user, error) ->
-          swal("Error!", error.message, "error")
-      })
+      swal({
+        title: "Are you sure?",
+        text: "Updating your account may require you to reverify your email.",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonClass: "btn-primary",
+        confirmButtonText: "Ok",
+        cancelButtonText: "Cancel"
+      }, ->
+        #update info
+        user.set('email', $this.find('.email').val())
+        #save user
+        user.save(null, {
+          success: (plug) ->
+            swal("Updated!", "", "success")
+          error: (user, error) ->
+            swal("Error!", error.message, "error")
+        })
+      )
 
 
     resetPassword: (e)->

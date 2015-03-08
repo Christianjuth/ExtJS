@@ -45,19 +45,19 @@ define [
   AppRouter = Backbone.Router.extend {
     routes :
       #Define some URL routes
-      '':                                        'home'
-      'documentation/*path':                     'documentation'
-      'resources/plugin/*path':                            'plugin'
+      '':                                           'home'
+      'documentation/*path(/)':                     'documentation'
+      'resources/plugin/*path(/)':                  'plugin'
 
       #resources
-      'resources/search-plugins(?search=:query)':          'searchPlugins'
+      'resources/search-plugins(?search=:query)(/)':'searchPlugins'
 
       #account
-      'account/login(?redirect=*path)':          'accountLogin'
-      'account/signup(?redirect=*path)':         'accountSignup'
-      'account/password-reset(?redirect=*path)': 'passwordReset'
-      'account/my-plugins' :                        'accountMyPlugins'
-      'account/my-account' :                        'accountMyAccount'
+      'account/login(?redirect=*path)(/)':          'accountLogin'
+      'account/signup(?redirect=*path)(/)':         'accountSignup'
+      'account/password-reset(?redirect=*path)(/)': 'passwordReset'
+      'account/my-plugins(/)(/*path)(/)':           'accountMyPlugins'
+      'account/my-account(/)' :                     'accountMyAccount'
 
       #404
       '*splat': 'defaultAction'
@@ -65,6 +65,7 @@ define [
 
   initialize = () ->
     app_router = new AppRouter
+    this.bind('route', this.trackPageview);
 
     app_router.closeView = () ->
       if this.currentView
@@ -144,15 +145,16 @@ define [
         })
         this.openView(accountPasswordReset)
 
-    app_router.on 'route:accountMyPlugins', () ->
+    app_router.on 'route:accountMyPlugins', (path) ->
       #We have no matching route, lets just log what the URL was
       if Parse.User.current() is null
         login = "account/login?redirect="+Backbone.history.fragment
         Backbone.history.navigate login, {trigger: true}
       else
         this.closeView()
-        accountMyPlugins = new AccountMyPlugins()
-        accountMyPlugins.render()
+        accountMyPlugins = new AccountMyPlugins({
+          plugin: path
+        })
         this.openView(accountMyPlugins)
 
     app_router.on 'route:accountMyAccount', (actions) ->

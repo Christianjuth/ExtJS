@@ -4,7 +4,7 @@ define [
   'bootstrap',
   'underscore',
   'backbone',
-  'parse'
+  'parse',
   'js/router', #Request router.js
 
 ], ($, bootstrap, _, Backbone, Parse, Router) ->

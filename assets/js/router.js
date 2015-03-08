@@ -10,14 +10,14 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/h
   AppRouter = Backbone.Router.extend({
     routes: {
       '': 'home',
-      'documentation/*path': 'documentation',
-      'resources/plugin/*path': 'plugin',
-      'resources/search-plugins(?search=:query)': 'searchPlugins',
-      'account/login(?redirect=*path)': 'accountLogin',
-      'account/signup(?redirect=*path)': 'accountSignup',
-      'account/password-reset(?redirect=*path)': 'passwordReset',
-      'account/my-plugins': 'accountMyPlugins',
-      'account/my-account': 'accountMyAccount',
+      'documentation/*path(/)': 'documentation',
+      'resources/plugin/*path(/)': 'plugin',
+      'resources/search-plugins(?search=:query)(/)': 'searchPlugins',
+      'account/login(?redirect=*path)(/)': 'accountLogin',
+      'account/signup(?redirect=*path)(/)': 'accountSignup',
+      'account/password-reset(?redirect=*path)(/)': 'passwordReset',
+      'account/my-plugins(/)(/*path)(/)': 'accountMyPlugins',
+      'account/my-account(/)': 'accountMyAccount',
       '*splat': 'defaultAction'
     }
   });
@@ -110,7 +110,7 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/h
         return this.openView(accountPasswordReset);
       }
     });
-    app_router.on('route:accountMyPlugins', function() {
+    app_router.on('route:accountMyPlugins', function(path) {
       var accountMyPlugins, login;
       if (Parse.User.current() === null) {
         login = "account/login?redirect=" + Backbone.history.fragment;
@@ -119,8 +119,9 @@ define(['jquery', 'underscore', 'backbone', 'parse', 'js/views/404', 'js/views/h
         });
       } else {
         this.closeView();
-        accountMyPlugins = new AccountMyPlugins();
-        accountMyPlugins.render();
+        accountMyPlugins = new AccountMyPlugins({
+          plugin: path
+        });
         return this.openView(accountMyPlugins);
       }
     });

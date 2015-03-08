@@ -1,0 +1,93 @@
+{
+  "name" : "extension_framework",
+  "author" : "Christian Juth",
+  "version" : "0.1.1",
+  "bundleID" : "com.christianjuth.extension",
+  "databaseQuota" : "1",
+  "menuIcon" : {
+    "19" : "menu-icons/icon-19.png",
+    "16" : "menu-icons/icon-16.png"
+  },
+
+
+  "description" : "something",
+  "website" : "http://christianjuth.com",
+
+
+  "permissions" : [
+    "secureWebsites",
+    "websites",
+    "notifications"
+  ],
+
+  "options_page": "pages/options/options.html",
+  "background" : "pages/background/background.html",
+  "popup" : "pages/popup/popup.html",
+
+
+  "storage" : [
+    {
+      "key" : "google",
+      "default":"0"
+    },
+    {
+      "key" : "microsoft",
+      "default":"0"
+    },
+    {
+      "key" : "xbox",
+      "default":"0"
+    }
+  ],
+
+
+  "options" : [
+    {
+      "title" : "Name",
+      "type" : "text",
+      "key" : "name",
+      "default":"John"
+    },
+    {
+      "title" : "Setting",
+      "type" : "text",
+      "key":"setting",
+      "default":"hey"
+    },
+    {
+      "title" : "Favorite Color",
+      "type" : "text",
+      "key":"color",
+      "default":"blue"
+    },
+    {
+      "title" : "Favorite Food",
+      "type" : "text",
+      "key" : "food",
+      "default":"Pizza"
+    },
+    {
+      "title" : "What you want",
+      "type" : "list",
+      "key" : "list",
+      "default": "Five",
+      "options": [
+        {"title":"Five", "val": 5},
+        {"title":"Six", "val": 6}
+      ]
+    },
+    {
+      "title" : "Respect Pinned",
+      "type" : "checkbox",
+      "key":"pinned",
+      "default": true
+    },
+    {
+      "title" : "A Message",
+      "type" : "textarea",
+      "key":"message",
+      "default": "Type Something..."
+    }
+  ]
+}
+

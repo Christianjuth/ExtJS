@@ -8,6 +8,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
   });
   PluginCollection = Parse.Collection.extend({});
   View = Backbone.View.extend({
+    unsaved: false,
     el: $('.content'),
     events: {
       'click .newPlugin': 'newPlugin'
@@ -23,12 +24,17 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       self.plugin.query = new Parse.Query(PluginModle);
       self.plugin.query.equalTo("user", user);
       self.plugin.query.ascending("search");
-      return self.plugin.fetch({
+      self.plugin.fetch({
         success: function() {
           self.render(name);
           return $('.loader').fadeOut(100);
         }
       });
+      return window.onbeforeunload = function() {
+        if (self.unsaved) {
+          return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
+        }
+      };
     },
     render: function() {
       var $el, compiledTemplate, self;
@@ -41,23 +47,36 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       });
     },
     renderPlugin: function(plug) {
-      var $el, $this, plugName, plugReadme, plugTemplage, self, user, username;
+      var $el, $this, plugName, plugReadme, plugTemplage, search, self, user, username;
       self = this;
       $el = this.$el;
       user = Parse.User.current();
       username = user.getUsername();
       plugName = plug.get("name");
       plugReadme = plug.get("readme");
+      search = plug.get("search");
       plugTemplage = Mustache.render($(Template).find('.item').html(), {
         name: plugName
       });
       $this = $(plugTemplage).appendTo($el.find('.plugins'));
-      return $this.click(function() {
+      $this.click(function(e) {
         var $modal;
+        e.preventDefault();
+        self.unsaved = true;
+        Backbone.history.navigate('account/my-plugins/' + search, {
+          replace: true
+        });
         $modal = $el.find(".edit-plugin");
         $modal.find('.name').val(plugName);
         $modal.find('.readme').val(plugReadme);
         $modal.modal('show');
+        $modal.find('.cancel').unbind().click(function(e) {
+          self.unsaved = false;
+          $modal.modal('hide');
+          return Backbone.history.navigate('account/my-plugins', {
+            replace: true
+          });
+        });
         $modal.find('form').unbind().submit(function(e) {
           e.preventDefault();
           return $modal.find('.save').click();
@@ -65,7 +84,11 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
         $modal.find('.save').unbind().click(function(e) {
           var file, fileName, fileUploadControl, parseFile;
           e.preventDefault();
+          self.unsaved = false;
           $modal.modal('hide');
+          Backbone.history.navigate('account/my-plugins', {
+            replace: true
+          });
           plugName = $modal.find(".name").val();
           plugReadme = $modal.find(".readme").val();
           $this.find('a').text(plugName);
@@ -99,15 +122,22 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
             confirmButtonClass: "btn-danger",
             confirmButtonText: "Yes, delete it!"
           }, function(isConfirm) {
+            self.unsaved = false;
             if (isConfirm) {
               plug.destroy();
-              return $this.remove();
+              $this.remove();
+              return Backbone.history.navigate('account/my-plugins', {
+                replace: true
+              });
             } else {
               return $modal.modal('show');
             }
           });
         });
       });
+      if (self.options.plugin !== null && search === self.options.plugin.toLowerCase()) {
+        return $this.click();
+      }
     },
     newPlugin: function(e) {
       var $el, $modal, plugin, self;
@@ -117,7 +147,12 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       $modal = $el.find(".new-plugin");
       $modal.find('.name').val('');
       $modal.find('.readme').val('');
+      self.unsaved = true;
       $modal.modal('show');
+      $modal.find('.cancel').unbind().click(function(e) {
+        self.unsaved = false;
+        return $modal.modal('hide');
+      });
       $modal.find('form').unbind().submit(function(e) {
         e.preventDefault();
         return $modal.find('.save').click();
@@ -132,6 +167,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
         plugin.set('readme', $modal.find('.readme').val());
         return plugin.save(null, {
           success: function(plug) {
+            self.unsaved = false;
             return self.renderPlugin(plug);
           },
           error: function(user, error) {

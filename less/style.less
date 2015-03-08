@@ -103,16 +103,14 @@ body{
   cursor: pointer;
 }
 
-.logged-in{
-  display: none;
-}
-
+//tablets
 @media only screen and (min-width:750px) and (max-width: 1100px) {
   .content{
     padding-right: 75px;
   }
 }
 
+//phones
 @media only screen and (min-width:0px) and (max-width: 850px) {
   .sidebar,
   .content{
@@ -123,15 +121,15 @@ body{
     padding: 30px;
   }
 
-  .ribbon{
-    display: none;
-  }
-
   .sidebar > .links{
     display: none;
   }
 
   .menu-icon-wrap {
     display: inline-block;
+  }
+
+  .content img{
+    width: 100%;
   }
 }

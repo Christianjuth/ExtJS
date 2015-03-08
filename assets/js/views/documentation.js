@@ -17,7 +17,7 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "marked", "high
       compiledTemplate = "";
       $.ajax({
         type: "GET",
-        url: "//ext-js.org/collections/documentation/" + options.doc + ".md",
+        url: '//' + window.location.host + '/collections/documentation/' + options.doc + '.md',
         async: false,
         success: function(data) {
           var doc;

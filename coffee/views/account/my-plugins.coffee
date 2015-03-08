@@ -17,6 +17,9 @@ define [
 
   View = Backbone.View.extend({
 
+  #vars
+  unsaved: false
+
   #page container element
   el: $('.content')
 
@@ -44,6 +47,10 @@ define [
         $('.loader').fadeOut(100)
     }
 
+    window.onbeforeunload = ->
+      if self.unsaved
+        return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
+
 
 
   #render page
@@ -70,6 +77,7 @@ define [
     username = user.getUsername()
     plugName = plug.get("name")
     plugReadme = plug.get("readme")
+    search = plug.get("search")
 
     #render table row
     plugTemplage = Mustache.render( $(Template).find('.item').html() , {
@@ -78,7 +86,11 @@ define [
     $this = $(plugTemplage).appendTo($el.find('.plugins'))
 
     #edit readme popup
-    $this.click  ->
+    $this.click  (e)->
+      e.preventDefault()
+      self.unsaved = true
+      Backbone.history.navigate 'account/my-plugins/'+search, {replace: true}
+
       #vars
       $modal = $el.find(".edit-plugin")
       $modal.find('.name').val(plugName)
@@ -89,13 +101,20 @@ define [
 
       #EVENTS
       #submit
+      $modal.find('.cancel').unbind().click (e)->
+        self.unsaved = false
+        $modal.modal('hide')
+        Backbone.history.navigate 'account/my-plugins', {replace: true}
+
       $modal.find('form').unbind().submit (e)->
         e.preventDefault()
         $modal.find('.save').click()
 
       $modal.find('.save').unbind().click (e)->
         e.preventDefault()
+        self.unsaved = false
         $modal.modal('hide')
+        Backbone.history.navigate 'account/my-plugins', {replace: true}
 
         plugName = $modal.find(".name").val()
         plugReadme = $modal.find(".readme").val()
@@ -130,11 +149,16 @@ define [
           confirmButtonClass: "btn-danger",
           confirmButtonText: "Yes, delete it!"
         }, (isConfirm) ->
+          self.unsaved = false
           if isConfirm
             plug.destroy()
             $this.remove()
+            Backbone.history.navigate 'account/my-plugins', {replace: true}
           else
             $modal.modal('show')
+
+    if self.options.plugin isnt null and search is self.options.plugin.toLowerCase()
+      $this.click()
 
 
 
@@ -150,9 +174,14 @@ define [
     $modal.find('.readme').val('')
 
     #render
+    self.unsaved = true
     $modal.modal('show')
 
     #EVENTS
+    $modal.find('.cancel').unbind().click (e)->
+        self.unsaved = false
+        $modal.modal('hide')
+
     $modal.find('form').unbind().submit (e)->
       e.preventDefault()
       $modal.find('.save').click()
@@ -169,6 +198,7 @@ define [
       plugin.set('readme', $modal.find('.readme').val())
       plugin.save null, {
         success: (plug) ->
+          self.unsaved = false
           self.renderPlugin(plug)
         error: (user, error) ->
           swal("Error!", error.message, "error")

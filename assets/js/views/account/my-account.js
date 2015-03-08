@@ -39,14 +39,24 @@ define(["jquery", "underscore", "mustache", "backbone", "parse", "sweetalert", "
       self = this;
       user = Parse.User.current();
       $this = self.$el.find('.account');
-      user.set('email', $this.find('.email').val());
-      return user.save(null, {
-        success: function(plug) {
-          return swal("Updated!", "", "success");
-        },
-        error: function(user, error) {
-          return swal("Error!", error.message, "error");
-        }
+      return swal({
+        title: "Are you sure?",
+        text: "Updating your account may require you to reverify your email.",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonClass: "btn-primary",
+        confirmButtonText: "Ok",
+        cancelButtonText: "Cancel"
+      }, function() {
+        user.set('email', $this.find('.email').val());
+        return user.save(null, {
+          success: function(plug) {
+            return swal("Updated!", "", "success");
+          },
+          error: function(user, error) {
+            return swal("Error!", error.message, "error");
+          }
+        });
       });
     },
     resetPassword: function(e) {
