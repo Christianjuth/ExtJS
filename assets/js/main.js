@@ -27,6 +27,7 @@ require.config({
     mustache: "./assets/libs/mustache.min",
     underscore: "./assets/libs/underscore-min",
     backbone: "./assets/libs/backbone-min",
+    analytics: "./assets/libs/backbone.analytics",
     templates: "./templates",
     bootstrap: "./assets/libs/bootstrap",
     highlight: "./assets/libs/highlight.pack",

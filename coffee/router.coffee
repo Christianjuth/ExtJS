@@ -65,7 +65,6 @@ define [
 
   initialize = () ->
     app_router = new AppRouter
-    this.bind('route', this.trackPageview);
 
     app_router.closeView = () ->
       if this.currentView
