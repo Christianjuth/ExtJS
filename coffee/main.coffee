@@ -37,6 +37,7 @@ require.config {
     underscore:   "./assets/libs/underscore-min",
     backbone:     "./assets/libs/backbone-min",
     analytics:    "./assets/libs/backbone.analytics",
+    queryString:  "./assets/libs/query-string",
     templates:    "./templates",
     bootstrap:    "./assets/libs/bootstrap",
     highlight:    "./assets/libs/highlight.pack"

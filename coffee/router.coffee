@@ -22,6 +22,8 @@ define [
 
   'js/views/extjs/contact-us'
 
+  'js/views/parse'
+
 ], ($, _, Backbone, Parse,
     NotFound,
     Home,
@@ -37,7 +39,9 @@ define [
     AccountMyAccount,
     AccountMyPlugins,
 
-    ContactUs
+    ContactUs,
+
+    ParseView
 
     ) ->
 
@@ -66,6 +70,9 @@ define [
 
       #extjs
       'extjs/contact-us(/)' :                       'contactUs'
+
+      #parse
+      'parse(/)(:query)(/)':                        'parse'
 
       #404
       '*splat': 'defaultAction'
@@ -182,6 +189,15 @@ define [
       this.closeView()
       contactUs = new ContactUs()
       this.openView(contactUs)
+
+
+
+    #parse
+    app_router.on 'route:parse', (query) ->
+      #We have no matching route, lets just log what the URL was
+      this.closeView()
+      parseView = new ParseView()
+      this.openView(parseView)
 
 
 
