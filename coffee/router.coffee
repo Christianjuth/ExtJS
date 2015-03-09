@@ -20,6 +20,8 @@ define [
   'js/views/account/my-account'
   'js/views/account/my-plugins'
 
+  'js/views/extjs/contact-us'
+
 ], ($, _, Backbone, Parse,
     NotFound,
     Home,
@@ -33,7 +35,10 @@ define [
     AccountSignup,
     AccountPasswordReset,
     AccountMyAccount,
-    AccountMyPlugins
+    AccountMyPlugins,
+
+    ContactUs
+
     ) ->
 
   Backbone.View.prototype.close = () ->
@@ -58,6 +63,9 @@ define [
       'account/password-reset(?redirect=*path)(/)': 'passwordReset'
       'account/my-plugins(/)(/*path)(/)':           'accountMyPlugins'
       'account/my-account(/)' :                     'accountMyAccount'
+
+      #extjs
+      'extjs/contact-us(/)' :                       'contactUs'
 
       #404
       '*splat': 'defaultAction'
@@ -168,6 +176,15 @@ define [
 
 
 
+    #extjs
+    app_router.on 'route:contactUs', (query) ->
+      #We have no matching route, lets just log what the URL was
+      this.closeView()
+      contactUs = new ContactUs()
+      this.openView(contactUs)
+
+
+
     #404
     app_router.on 'route:defaultAction', (actions) ->
       #We have no matching route, lets just log what the URL was
@@ -181,9 +198,9 @@ define [
       root: '/'
     })
 
-    #on every click, check if it's an href that can be handled by the router
+    #hack internal links
     $(document.body).on 'click', 'a', (event) ->
-      local = /^((http:|https:|)(\/\/|)ext-js\.org)/
+      local = /^((http:|https:|)(\/\/|)(www|)ext-js\.org)/
       href = $(this).attr('href')
       url = local.test(href)
       elm = href.indexOf('#') isnt -1 and href.indexOf('/#') is -1
