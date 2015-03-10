@@ -41,7 +41,8 @@ define [
 
       Parse.User.logIn(username, password, {
         success: (user) ->
-          Backbone.history.navigate self.options.redirect, {trigger: true}
+          Backbone.history.navigate self.options.redirect, {}
+          location.reload()
         error: (user, error) ->
           swal("Error!", error.message, "error")
       })

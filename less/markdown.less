@@ -37,7 +37,8 @@ hr {
   background-color: #CCCCCC;
 }
 
-p, blockquote, ul, ol, dl, li, table, pre {
+p, blockquote, ul, ol, dl, li,
+*:not(.panel) > table, pre {
   margin: 15px 0;
 }
 
@@ -104,12 +105,13 @@ tread{
   margin: 0;
 }
 
-td, th{
+*:not(.panel) > table td,
+*:not(.panel) > table th{
   border: 2px solid #F7F7F7;
   padding: 5px 10px;
 }
 
-table > thead:first-child{
+*:not(.panel) > table > thead:first-child{
   background-color: #F7F7F7;
 }
 
