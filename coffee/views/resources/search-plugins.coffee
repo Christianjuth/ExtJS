@@ -85,7 +85,6 @@ define [
       developerQuery.contains("developer", search)
       #main query
       this.plugins.query = Parse.Query.or(nameQuery,developerQuery)
-      this.plugins.query.notEqualTo("name","")
       this.plugins.query.notEqualTo("file", null)
       this.plugins.query.ascending("name")
       this.plugins.fetch {

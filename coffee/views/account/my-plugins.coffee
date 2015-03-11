@@ -23,10 +23,9 @@ define [
   #page container element
   el: $('.content')
 
-
   #backbone page events
   events :
-    'click .newPlugin' : 'newPlugin'
+    'click .newPlugin' : 'createPlugin'
 
 
   initialize: (options)->
@@ -47,10 +46,6 @@ define [
         $('.loader').fadeOut(100)
     }
 
-    window.onbeforeunload = ->
-      if self.unsaved
-        return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?";
-
 
 
   #render page
@@ -67,6 +62,19 @@ define [
     self.plugin.each (plug)->
       self.renderPlugin(plug)
 
+    window.onbeforeunload = ->
+      if self.unsaved
+        return "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?"
+
+    #unsaved
+    $el.find('.edit-plugin, .new-plugin').on('shown.bs.modal', ->
+      self.unsaved = true
+    ).on('hidden.bs.modal', ->
+      self.unsaved = false
+      Backbone.history.navigate 'account/my-plugins', {replace: true}
+    )
+
+
 
 
   renderPlugin : (plug) ->
@@ -76,7 +84,6 @@ define [
     user = Parse.User.current()
     username = user.getUsername()
     plugName = plug.get("name")
-    plugReadme = plug.get("readme")
     search = plug.get("search")
 
     #render table row
@@ -85,26 +92,33 @@ define [
     })
     $this = $(plugTemplage).appendTo($el.find('.plugins'))
 
+    self.editPlugin(plug, $this)
+
+    if typeof plug.get('file') is 'undefined'
+      $this.addClass('danger')
+
+    if self.options.plugin isnt null and search is self.options.plugin.toLowerCase()
+      $this.click()
+
+
+
+  editPlugin: (plug, $this)->
+    self = this
+    $el = this.$el
+    user = Parse.User.current()
+    username = user.getUsername()
+    search = plug.get("search")
+
     #edit readme popup
     $this.click  (e)->
       e.preventDefault()
-      self.unsaved = true
       Backbone.history.navigate 'account/my-plugins/'+search, {replace: true}
 
-      #vars
-      $modal = $el.find(".edit-plugin")
-      $modal.find('.name').val(plugName)
-      $modal.find('.readme').val(plugReadme)
-
-      #render
-      $modal.modal('show')
+      $modal = self.editPluginRender(plug)
 
       #EVENTS
-      #submit
       $modal.find('.cancel').unbind().click (e)->
-        self.unsaved = false
         $modal.modal('hide')
-        Backbone.history.navigate 'account/my-plugins', {replace: true}
 
       $modal.find('form').unbind().submit (e)->
         e.preventDefault()
@@ -112,9 +126,7 @@ define [
 
       $modal.find('.save').unbind().click (e)->
         e.preventDefault()
-        self.unsaved = false
         $modal.modal('hide')
-        Backbone.history.navigate 'account/my-plugins', {replace: true}
 
         plugName = $modal.find(".name").val()
         plugReadme = $modal.find(".readme").val()
@@ -132,7 +144,9 @@ define [
         plug.set("readme", plugReadme)
         plug.set("file", parseFile)
         plug.save {
-          success: ->
+          success: (plug)->
+            if typeof plug.get('file') isnt 'undefined'
+              $this.removeClass('danger')
             swal("Updated!", "", "success")
           error: (user, error) ->
             swal("Error!", error.message, "error")
@@ -153,34 +167,49 @@ define [
           if isConfirm
             plug.destroy()
             $this.remove()
-            Backbone.history.navigate 'account/my-plugins', {replace: true}
           else
             $modal.modal('show')
 
-    if self.options.plugin isnt null and search is self.options.plugin.toLowerCase()
-      $this.click()
 
 
-
-  #create new plugin
-  newPlugin : (e) ->
-    #vars
+  editPluginRender: (plug)->
     self = this
     $el = this.$el
-    plugin = new PluginModle({})
+    plugName = plug.get("name")
+    plugReadme = plug.get("readme")
+
+    $modal = $el.find(".edit-plugin")
+    $modal.find('.name').val(plugName)
+    $modal.find('.readme').val(plugReadme)
+
+    $modal.modal('show')
+    return $modal
+
+
+
+  createPluginRender: ->
+    self = this
+    $el = this.$el
 
     $modal = $el.find(".new-plugin")
     $modal.find('.name').val('')
     $modal.find('.readme').val('')
 
-    #render
-    self.unsaved = true
     $modal.modal('show')
+    return $modal
+
+  #create new plugin
+  createPlugin: (e) ->
+    #vars
+    self = this
+    $el = this.$el
+    plugin = new PluginModle({})
+
+    $modal = self.createPluginRender()
 
     #EVENTS
     $modal.find('.cancel').unbind().click (e)->
-        self.unsaved = false
-        $modal.modal('hide')
+      $modal.modal('hide')
 
     $modal.find('form').unbind().submit (e)->
       e.preventDefault()
@@ -198,7 +227,6 @@ define [
       plugin.set('readme', $modal.find('.readme').val())
       plugin.save null, {
         success: (plug) ->
-          self.unsaved = false
           self.renderPlugin(plug)
         error: (user, error) ->
           swal("Error!", error.message, "error")

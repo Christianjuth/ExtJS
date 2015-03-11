@@ -32,7 +32,7 @@ This is a set of functions for getting, setting, and resetting extension options
 
 
 ### Match
-This currently only contains one function, but it very well might be the most powerful function in this framework. This function is used for searching URLs using the frameworks "URL Search Syntax". While this is not directly useful other functions can tap into this making it very powerful.
+This currently only contains one function, but it very well might be the most powerful function in this framework. This function is used for searching URLs using the frameworks "URL Search Syntax". While this is not, directly useful other functions can tap into this making it very powerful.
 * **URL** - `ext.match.url(url, urlSearchSyntax)`
 
 

@@ -3,6 +3,7 @@
   <script type="text/html" class="view">
 
     <h1>My Plugins</h1>
+    <p class="help-block">plugins marked red are missing js files and will not be showed in search results</p>
 
     <div class="panel panel-default">
       <div class="panel-heading">Click to edit</div>
@@ -29,7 +30,9 @@
                 <input type="text" class="form-control name" placeholder="Plugin name">
               </div>
               <div class="form-group">
-                <input type="file" class="form-control file">
+                <span class="btn btn-block btn-primary btn-file">
+                  Upload JS File <input type="file" class="form-control file" accept="text/javascript">
+                </span>
               </div>
               <div class="form-group">
                 <textarea class="form-control readme" rows="15" placeholder="Readme markdown..."></textarea>

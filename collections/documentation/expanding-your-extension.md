@@ -16,7 +16,7 @@ The _app/icon.png_ is the icon that will be displayed on the install banner, the
 * `app/menu-icons/icon-16.png`
 * `app/menu-icons/icon-19.png`
 
-When adding custom icons you must upload a `16x16` and `19x19` version and add `-16` and `-19` to the end of the files.  This is because Chrome and Safari ask for two different sizes.  We know this is a little tedious and we are planning on changing this in the future.
+When adding custom icons, you must upload a `16x16` and `19x19` version and add `-16` and `-19` to the end of the files.  This is because Chrome and Safari ask for two different sizes.  We know this is a little tedious, and we are planning on changing this in the future.
 
 **Adding Icons**
 * `app/menu-icons/your_icon_name-16.png`
@@ -59,7 +59,7 @@ ext.menu.click(function(){
 
 
 ##Pages
-Adding pages is simple.  You simply add a new folder in the `app/pages/` dir. Your file structure should look like this...
+Adding pages is simple.  You simply add a new folder in the `app/pages/` dir. Your file structure should look like this
 ```
 pages
 |
