@@ -181,6 +181,7 @@ define [
     $modal = $el.find(".edit-plugin")
     $modal.find('.name').val(plugName)
     $modal.find('.readme').val(plugReadme)
+    $modal.find(".file")[0].value = ''
 
     $modal.modal('show')
     return $modal
@@ -194,6 +195,7 @@ define [
     $modal = $el.find(".new-plugin")
     $modal.find('.name').val('')
     $modal.find('.readme').val('')
+    $modal.find(".file")[0].value = ''
 
     $modal.modal('show')
     return $modal

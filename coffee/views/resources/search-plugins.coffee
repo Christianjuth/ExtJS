@@ -4,9 +4,10 @@ define [
   "mustache",
   "backbone",
   "parse",
+  "queryString",
   "highlight",
   "text!templates/resources/search-plugins.html"
-], ($, _, Mustache, Backbone, Parse, hljs, Template) ->
+], ($, _, Mustache, Backbone, Parse, queryString, hljs, Template) ->
 
 
   #define modle and collection
@@ -18,82 +19,33 @@ define [
   #define view
   View = Backbone.View.extend {
 
-    events :
-      'submit .search-form' : 'submit'
-
-
+    #vars
+    query: {
+      'search': ''
+    }
     el: $('.content')
+    searchTimeoutID: null
 
 
     initialize: (options)->
       self = this
       _.bindAll(this, 'render')
-      self.query = options.query
-      self.render(self.query)
+      self.query = jQuery.extend(self.query, queryString.parse(location.search))
+      self.render()
 
 
-
-    render: (search) ->
+    #RENDER FUNCTIONS
+    render: () ->
       self = this
       $el = this.$el
+      query = self.query
 
       compiledTemplate = Mustache.render( $(Template).find('.view').html(), {} )
       self.$el.html( compiledTemplate )
-      $el.find('.plugins tbody').empty()
 
-      $el.find('.search').val(search)
-      $el.find('.search').on('keydown', (e)->
-        if e.code is 13 || e. which  is 13
-          return
-        $el.find('.plugins tbody').html($(Template).find('.empty').html())
-      )
-      self.search(search)
-
+      self.search()
+      $el.find('.search').select()
       $('.loader').fadeOut(100)
-
-
-
-    submit: (e)->
-      e.preventDefault()
-      self = this
-      $el = this.$el
-      search = $el.find('.search').val()
-      self.search(search)
-
-
-
-    search: (search)->
-      self = this
-      $el = this.$el
-
-      if search is null
-        search = ''
-
-      #dissable duplicate searches
-      if search is self.currentSearch
-        return
-      self.currentSearch = search
-
-      $el.find('.search').val(search)
-
-      this.plugins = new PluginCollection
-      #name query
-      nameQuery = new Parse.Query(PluginModle)
-      nameQuery.contains("search", search)
-      #developer query
-      developerQuery = new Parse.Query(PluginModle)
-      developerQuery.contains("developer", search)
-      #main query
-      this.plugins.query = Parse.Query.or(nameQuery,developerQuery)
-      this.plugins.query.notEqualTo("file", null)
-      this.plugins.query.ascending("name")
-      this.plugins.fetch {
-        success: -> self.searchRender()
-      }
-      #vars
-      $el = this.$el
-      Backbone.history.navigate "resources/search-plugins?search=" + search, {replace: true}
-
 
 
     searchRender: ->
@@ -114,7 +66,72 @@ define [
 
         $this.find('.link').click (e)->
           e.preventDefault()
-          self.search(developer)
+          self.query.search = developer
+          self.search()
+          self.updateUrl()
+
+
+    #EVENTS
+    events:
+      'keyup  .search':      'type'
+      'submit .search-form': 'submit'
+
+    type: ()->
+      #vars
+      self = this
+      $el = this.$el
+      query = self.query
+      query.search = $el.find('.search').val()
+      #clear timer
+      clearTimeout(self.searchTimeoutID)
+      #logic
+      self.searchTimeoutID = setTimeout ->
+        self.search()
+      , 500
+      self.updateUrl()
+
+
+    submit: (e)->
+      e.preventDefault()
+      self = this
+      $el = this.$el
+      self.search()
+
+
+    #FUNCTIONS
+    updateUrl: ->
+      self = this
+      query = self.query
+      url = 'resources/search-plugins?'+queryString.stringify(query)
+      Backbone.history.navigate  url, {replace: true}
+
+
+    search: ->
+      self = this
+      $el = this.$el
+      query = self.query
+
+      #dissable duplicate searches
+      if query is self.currentQuery
+        return
+      self.currentQuery = jQuery.extend({}, query)
+
+      $el.find('.search').val(query.search)
+
+      this.plugins = new PluginCollection
+      #name query
+      nameQuery = new Parse.Query(PluginModle)
+      nameQuery.contains("search", query.search)
+      #developer query
+      developerQuery = new Parse.Query(PluginModle)
+      developerQuery.contains("developer", query.search)
+      #main query
+      this.plugins.query = Parse.Query.or(nameQuery,developerQuery)
+      this.plugins.query.notEqualTo("file", null)
+      this.plugins.query.ascending("name")
+      this.plugins.fetch {
+        success: -> self.searchRender()
+      }
 
 
 

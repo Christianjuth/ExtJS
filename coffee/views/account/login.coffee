@@ -24,10 +24,13 @@ define [
       this.render()
 
     render: ->
+      self = this
+      $el = self.$el
       #Using Underscore we can compile our template with data
       compiledTemplate = Mustache.render( Template , {})
       this.$el.html( compiledTemplate )
       #hide loader
+      $el.find('.username').select()
       $('.loader').fadeOut(100)
 
 

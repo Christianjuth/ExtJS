@@ -24,10 +24,13 @@ define [
       this.render()
 
     render: ->
+      self = this
+      $el = self.$el
       #Using Underscore we can compile our template with data
       compiledTemplate = Mustache.render( Template , {})
       this.$el.html( compiledTemplate )
       #hide loader
+      $el.find('.username').select()
       $('.loader').fadeOut(100)
 
 
@@ -47,7 +50,8 @@ define [
 
       user.signUp( null, {
         success: (user) ->
-          Backbone.history.navigate self.options.redirect, {trigger: true}
+          Backbone.history.navigate self.options.redirect, {}
+          location.reload()
         error: (user, error) ->
           swal("Error!", error.message, "error")
       })
