@@ -1,4 +1,4 @@
-#ExtJS Functions
+#Core Library Functions
 
 _This is a list of functions found in the ExtJS library._
 ### The breakdown
@@ -9,7 +9,7 @@ _This is a list of functions found in the ExtJS library._
 
 
 ### Initialize
-This is probably the most important function of all because it must be called in order to use the library.
+This is the initilize function that must be called in order to use the library.
 * **Function** - `ext.ini(options)`
 
 Initialize Options Defaults
@@ -32,7 +32,7 @@ This is a set of functions for getting, setting, and resetting extension options
 
 
 ### Match
-This currently only contains one function, but it very well might be the most powerful function in this framework. This function is used for searching URLs using the frameworks "URL Search Syntax". While this is not, directly useful other functions can tap into this making it very powerful.
+This currently only contains one function, but is one of the most powerful functions in this framework. This function is used for searching URLs using the frameworks "URL Search Syntax". While this is not, directly useful other functions can tap into this making it very powerful.
 * **URL** - `ext.match.url(url, urlSearchSyntax)`
 
 
