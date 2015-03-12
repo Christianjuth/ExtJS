@@ -5,6 +5,7 @@ module.exports = (grunt) ->
 
   #Project functions
   grunt.initConfig {
+
     markdown :
       options :
         template: 'markdown.jst'
@@ -38,10 +39,28 @@ module.exports = (grunt) ->
         src: ['**/*.less'],
         dest: 'assets/css/<%= srcDir %>/',
         ext: '.css'
+
+    uglify:
+      default:
+        files: [{
+            expand: true,
+            cwd: 'assets/js',
+            src: '**/*.js',
+            dest: 'assets/js/<%= srcDir %>'
+        }]
+
   }
 
   grunt.registerTask 'default', [
     'markdown',
     'coffee',
+    'less',
+    'uglify'
+  ]
+
+  grunt.registerTask 'debug', [
+    'markdown',
+    'coffee',
     'less'
   ]
+

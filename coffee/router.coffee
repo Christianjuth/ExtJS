@@ -1,9 +1,7 @@
 #Filename: router.js
 define [
   'jquery',
-  'underscore',
   'backbone',
-  'parse',
 
   #load views
   'js/views/404'
@@ -24,7 +22,7 @@ define [
 
   'js/views/parse'
 
-], ($, _, Backbone, Parse,
+], ($, Backbone,
     NotFound,
     Home,
 
@@ -206,7 +204,6 @@ define [
       #We have no matching route, lets just log what the URL was
       this.closeView()
       notFound = new NotFound()
-      notFound.render()
       this.openView(notFound)
 
     Backbone.history.start({

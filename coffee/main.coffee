@@ -32,18 +32,18 @@ require.config {
   #define path aliases
   #that can be used later
   paths :
-    jquery:       "./assets/libs/jquery-min",
-    mustache:     "./assets/libs/mustache.min",
-    underscore:   "./assets/libs/underscore-min",
-    backbone:     "./assets/libs/backbone-min",
+    jquery:       "//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min",
+    mustache:     "//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min",
+    underscore:   "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore-min",
+    backbone:     "//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min",
+    bootstrap:    "//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min",
     analytics:    "./assets/libs/backbone.analytics",
     queryString:  "./assets/libs/query-string",
     templates:    "./templates",
-    bootstrap:    "./assets/libs/bootstrap",
     highlight:    "./assets/libs/highlight.pack"
-    parse:        "./assets/libs/parse"
+    parse:        "./assets/libs/parse.min"
     sweetalert:   "./assets/libs/sweet-alert.min"
-    marked :      "./assets/libs/marked"
+    marked :      "//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min"
     js:           "./assets/js"
 
 }

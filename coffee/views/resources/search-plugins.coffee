@@ -45,7 +45,6 @@ define [
 
       self.search()
       $el.find('.search').select()
-      $('.loader').fadeOut(100)
 
 
     searchRender: ->
@@ -69,6 +68,8 @@ define [
           self.query.search = developer
           self.search()
           self.updateUrl()
+
+      $('.loader').fadeOut(100)
 
 
     #EVENTS

@@ -1,14 +1,13 @@
 #Filename: app.js
 define [
   'jquery',
-  'bootstrap',
   'underscore',
-  'backbone',
   'parse',
+  'bootstrap',
   'js/router', #Request router.js
   'analytics'
 
-], ($, bootstrap, _, Backbone, Parse, Router) ->
+], ($, _, Parse, bootstrap, Router) ->
   Parse.initialize "kZS90MpRoWUMtFEgdt8kdWSejhl3thUb9GPdekpb", "ND73SsKVmvrxJ04LmLNgN2lqulJqdjqfRkvI6n23"
 
   initialize = () ->

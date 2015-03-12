@@ -4,8 +4,9 @@ define [
   "mustache",
   "backbone",
   "parse",
-  "queryString"
-], ($, _, Mustache, Backbone, Parse, queryString) ->
+  "queryString",
+  "text!templates/404.html"
+], ($, _, Mustache, Backbone, Parse, queryString, Err) ->
 
   View = Backbone.View.extend({
 
@@ -55,16 +56,13 @@ define [
         $iframe = $('<iframe>')
         $iframe.attr('src', base + link + '?' + query)
         $iframe.attr('class', 'chromeless scrollable')
+        $iframe.css({height: 500})
         $iframe.appendTo($el)
 
       #Otherwise, this page is likely being viewed by the app owner. Explain how to use it.
       else
-        $el.html(
-          '<h1>This page lets you host Parse.com content from your own domain.</h1>' +
-          '<p>Right click <a href="' + window.location.pathname + '">here</a> to save this page. ' +
-          'Upload it to your own website and paste the URL in the "Parse Frame URL" ' +
-          'app settings at Parse.com.</p>'
-        )
+        compiledTemplate = Mustache.render( Err , {})
+        $el.html(compiledTemplate)
 
 
       $('.loader').fadeOut(100)

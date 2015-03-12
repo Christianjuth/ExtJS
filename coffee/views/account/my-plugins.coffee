@@ -174,7 +174,7 @@ define [
 
   editPluginRender: (plug)->
     self = this
-    $el = this.$el
+    $el = self.$el
     plugName = plug.get("name")
     plugReadme = plug.get("readme")
 
@@ -190,7 +190,7 @@ define [
 
   createPluginRender: ->
     self = this
-    $el = this.$el
+    $el = self.$el
 
     $modal = $el.find(".new-plugin")
     $modal.find('.name').val('')
@@ -200,11 +200,13 @@ define [
     $modal.modal('show')
     return $modal
 
+
+
   #create new plugin
   createPlugin: (e) ->
     #vars
     self = this
-    $el = this.$el
+    $el = self.$el
     plugin = new PluginModle({})
 
     $modal = self.createPluginRender()

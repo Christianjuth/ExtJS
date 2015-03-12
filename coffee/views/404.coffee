@@ -3,22 +3,29 @@ define [
   "underscore",
   "mustache"
   "backbone",
-  "parse",
   "text!templates/404.html"
-], ($, _, Mustache, Backbone, Parse, Template) ->
+], ($, _, Mustache, Backbone, Template) ->
 
   View = Backbone.View.extend({
 
-    el: $('.content'),
+    el: $('.content')
+
+    initialize: (options)->
+      self = this
+      self.options = options
+      _.bindAll(this, 'render')
+      this.render()
 
     render: ->
+      self = this
+      $el = self.$el
 
       #Using Underscore we can compile our template with data
       compiledTemplate = Mustache.render( Template , {})
-      this.$el.html( compiledTemplate )
+      $el.html( compiledTemplate )
 
       #hide loader
-      $('.loader').fadeOut(100)
+      $el.ready -> $('.loader').fadeOut(100)
 
   })
 
