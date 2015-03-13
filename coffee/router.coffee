@@ -44,7 +44,13 @@ define [
     ) ->
 
   Backbone.View.prototype.close = () ->
-    this.$el.empty().unbind()
+    this.unbind()
+    $parent = this.$el.parent().off()
+    $el = this.$el.off().empty()
+    this.remove()
+    $parent.append($el)
+    delete this.$el
+    delete this.el
     $('.loader').show()
     if this.onClose
       this.onClose()

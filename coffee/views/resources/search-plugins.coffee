@@ -51,6 +51,7 @@ define [
       self = this
       $el = this.$el
 
+      $el.find('.plugins tbody').off()
       $el.find('.plugins tbody').empty()
       self.plugins.each (plug)->
         name =        plug.get('name')
