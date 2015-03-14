@@ -6,25 +6,38 @@ define ['jquery'], ->
   $(document).ready ->
 
     #set vars
-    $(".sidebar").attr "toggle","false"
+    $('.sidebar').attr 'toggle','false'
+    $('.sidebar .links > li > span').click ->
+      $this = $(this).parent()
+      #reset
+      $('.sidebar .links > li').not($this).removeClass('active')
+      $('.sidebar .links > li > ul').not($this).slideUp(500)
+      #set current
+      if $this.hasClass('active')
+        $this.find('ul').slideUp 500, ->
+          $this.removeClass('active')
+      else
+        $this.addClass('active')
+        $this.find('ul').slideDown(500)
+
 
     #menu icon click
-    $(".menu-icon-wrap").click ->
-      menuToggle = "true" is $(".sidebar").attr "toggle"
+    $('.menu-icon-wrap').click ->
+      menuToggle = 'true' is $('.sidebar').attr 'toggle'
       if window.innerWidth >= 850
 
       else if menuToggle is false
-        $(".sidebar .links").slideDown()
-        $(".sidebar").attr "toggle","true"
+        $('.sidebar .links').slideDown()
+        $('.sidebar').attr 'toggle','true'
 
       else
-        $(".sidebar .links").slideUp()
-        $(".sidebar").attr "toggle","false"
+        $('.sidebar .links').slideUp()
+        $('.sidebar').attr 'toggle','false'
 
     #reset on resize
     $(window).resize ->
-      menuToggle = "true" is $(".sidebar").attr "toggle"
+      menuToggle = 'true' is $('.sidebar').attr 'toggle'
       if window.innerWidth > 850 and !menuToggle
-        $(".sidebar .links").show()
+        $('.sidebar .links').show()
       else if !menuToggle
-        $(".sidebar .links").hide()
+        $('.sidebar .links').hide()

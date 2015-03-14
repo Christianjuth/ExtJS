@@ -1,0 +1,139 @@
+body{
+  border-top: 2px solid #1687E2;
+}
+
+.sidebar {
+  display: inline-block;
+  position: relative;
+  width: 300px;
+  height: 100%;
+  float: left;
+  background-color: #1687E2;
+  overflow: auto;
+  position: fixed;
+  color: #fff;
+  z-index: 999;
+
+  -o-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
+  & li,
+  & a,
+  & a:hover,
+  & a:active,
+  & a:visited{
+    color: #fff;
+    margin: 0px;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  & > .header-wrap{
+    padding: 20px;
+  }
+
+  & > .header-wrap > .header {
+    border-bottom: 3px solid #fff;
+  }
+
+  & > .header-wrap > .header > * {
+    line-height: 25px;
+    font-weight: 700;
+    margin-top: 0;
+  }
+
+  & > ul > li {
+    margin: 0;
+    padding: 8px 0;
+    border-top: 1px solid #1379cb;
+  }
+
+  & ul > li > ul{
+    display: none;
+  }
+
+  & > ul > li > span{
+    font-weight: 400;
+    font-size: 17px;
+    padding: 10px 0;
+  }
+
+  & ul > li > ul li{
+    text-indent: 11px;
+    font-weight: 300;
+    padding: 6px 0;
+  }
+
+  & > ul > li > span:hover,
+  & ul > li > ul li:hover{
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  & ul > .active{
+    background-color: #2196f3;
+  }
+
+
+  & ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  & ul > li > span,
+  & ul > li > ul li{
+    cursor: pointer;
+    margin: 0;
+    padding: 10px 20px;
+  }
+
+  & ul > li > ul li{
+    padding-top: 10px;
+  }
+
+  & * {
+    display: inline-block;
+    width: 100%;
+    color: #fff;
+    background-color: transparent;
+  }
+
+}
+
+.menu-icon-wrap{
+  display: none;
+  position: absolute;
+  right: 21px;
+  margin-right: 0;
+  margin-top: 15px;
+  width: 33px;
+  cursor: pointer;
+}
+
+.menu-icon-wrap > img{
+  fill: #fff;
+}
+
+@media only screen and (min-width: 0) and (max-width: 850px) {
+
+  .sidebar {
+    position: relative;
+    clear: both;
+    width: 100%;
+    height: auto;
+
+    & > .links {
+      display: none;
+    }
+
+    & > ul > li{
+      padding: 0;
+    }
+  }
+
+  .menu-icon-wrap {
+    display: inline-block;
+  }
+}

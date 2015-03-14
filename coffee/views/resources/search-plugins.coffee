@@ -46,6 +46,9 @@ define [
       self.search()
       $el.find('.search').select()
 
+      if query.search isnt null
+        $el.find('.search').val(query.search)
+
 
     searchRender: ->
       self = this
@@ -78,7 +81,9 @@ define [
       'keyup  .search':      'type'
       'submit .search-form': 'submit'
 
-    type: ()->
+    type: (e)->
+      if (e.which <= 48 or e.which >= 90) and e.which isnt 8
+        return
       #vars
       self = this
       $el = this.$el
@@ -117,8 +122,6 @@ define [
       if query is self.currentQuery
         return
       self.currentQuery = jQuery.extend({}, query)
-
-      $el.find('.search').val(query.search)
 
       this.plugins = new PluginCollection
       #name query
