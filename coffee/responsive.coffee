@@ -14,8 +14,8 @@ define ['jquery'], ->
       $('.sidebar .links > li > ul').not($this).slideUp(500)
       #set current
       if $this.hasClass('active')
-        $this.find('ul').slideUp 500, ->
-          $this.removeClass('active')
+        $this.removeClass('active')
+        $this.find('ul').slideUp(500)
       else
         $this.addClass('active')
         $this.find('ul').slideDown(500)
@@ -33,6 +33,7 @@ define ['jquery'], ->
       else
         $('.sidebar .links').slideUp()
         $('.sidebar').attr 'toggle','false'
+
 
     #reset on resize
     $(window).resize ->

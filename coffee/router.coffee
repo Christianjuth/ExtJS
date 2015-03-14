@@ -219,12 +219,14 @@ define [
 
     #hack internal links
     $(document.body).on 'click', 'a', (event) ->
-      local = /^((http:|https:|)(\/\/|)(www|)ext-js\.org)/
       href = $(this).attr('href')
+      local = /^((http:|https:|)(\/\/|)(www|)ext-js\.org)/i
+      fullPath = /^([^\.]*)\//i
       url = local.test(href)
+      relative = fullPath.test(href)
       elm = href.indexOf('#') isnt -1 and href.indexOf('/#') is -1
 
-      if url and !elm
+      if (url or relative) and !elm
         event.preventDefault()
         href = href.replace(local,'')
         Backbone.history.navigate(href, {trigger: true});
