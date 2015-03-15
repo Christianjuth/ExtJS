@@ -220,8 +220,8 @@ define [
     #hack internal links
     $(document.body).on 'click', 'a', (event) ->
       href = $(this).attr('href')
-      local = /^((http:|https:|)(\/\/|)(www|)ext-js\.org)/i
-      fullPath = /^([^\.]*)\//i
+      local = /^((http:\/\/|https:\/\/|)(www|)ext-js\.org)/i
+      fullPath = /^((http:\/\/|https:\/\/|)(([^\.:]*)(\/.+|)))$/i
       url = local.test(href)
       relative = fullPath.test(href)
       elm = href.indexOf('#') isnt -1 and href.indexOf('/#') is -1
