@@ -1,6 +1,5 @@
 html,
 body{
-//  display: inline-block;
   width: 100%;
   height: 100%;
   margin: 0 !important;
@@ -10,6 +9,8 @@ body{
 
   background-color: #fff;
   font-family: 'Open Sans', sans-serif;
+
+  overflow: auto;
 }
 
 *,
@@ -79,33 +80,6 @@ body{
   display: block;
 }
 
-.videoWrapper {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
-  height: 0;
-}
-.videoWrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-@media print
-{
-  .non-printable {
-    display: none;
-  }
-
-  .printable {
-    display: block;
-    width: 100%;
-    padding: none;
-    margin: none;
-  }
-}
-
 //tablets
 @media only screen and (min-width:750px) and (max-width: 1100px) {
   .content{
@@ -121,6 +95,7 @@ body{
     width: 100%;
     height: auto;
     padding: 30px;
+    overflow: visible;
   }
 
   .sidebar > .links{
@@ -133,5 +108,32 @@ body{
 
   .content img{
     width: 100%;
+  }
+}
+
+//printer
+@media print
+{
+  body{
+    overflow: visible !important;
+    border: hidden !important;
+  }
+
+  .non-printable {
+    display: none !important;
+  }
+
+  .printable {
+    display: block !important;
+    width: 100% !important;
+    padding: none !important;
+    margin: none !important;
+  }
+
+  .content{
+    width: 100% !important;
+    padding: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
   }
 }
