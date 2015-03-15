@@ -47,7 +47,7 @@ define [
         'message' : $form.find('.message').val(),
       }
 
-      $.post('//ext-js.org/php/mail.php', post_data, (data,status)->
+      $.post('//'+location.host+'/php/mail.php', post_data, (data,status)->
           if data is 'true'
             self.sent()
           else

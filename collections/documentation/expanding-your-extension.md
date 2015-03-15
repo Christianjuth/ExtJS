@@ -1,9 +1,9 @@
 #Building Your Extension
 
 ##The Breakdown
-* [Icons](http://ext-js.org/documentation/expanding-your-extension#icons)
-* [Popup vs Action](http://ext-js.org/documentation/expanding-your-extension#popup-vs-action)
-* [Pages](http://ext-js.org/documentation/expanding-your-extension#pages)
+* [Icons](documentation/expanding-your-extension#icons)
+* [Popup vs Action](documentation/expanding-your-extension#popup-vs-action)
+* [Pages](documentation/expanding-your-extension#pages)
 
 
 ##Icons

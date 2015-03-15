@@ -219,8 +219,9 @@ define [
 
     #hack internal links
     $(document.body).on 'click', 'a', (event) ->
+      host = document.location.host
       href = $(this).attr('href')
-      local = /^((http:\/\/|https:\/\/|)(www|)ext-js\.org)/i
+      local = new RegExp('^((http:\/\/|https:\/\/|)(www|)'+host+')', 'i')
       fullPath = /^((http:\/\/|https:\/\/|)(([^\.:]*)(\/.+|)))$/i
       url = local.test(href)
       relative = fullPath.test(href)

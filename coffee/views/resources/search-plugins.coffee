@@ -78,10 +78,16 @@ define [
 
     #EVENTS
     events:
-      'keyup  .search':      'type'
-      'submit .search-form': 'submit'
+      'keyup  .search':      'onType'
+      'submit .search-form': 'onSubmit'
 
-    type: (e)->
+    onType: (e)->
+      #block spaces from search
+      console.log e.which
+      if e.which is 32
+        e.preventDefault()
+        return
+      #don't search on arrow keys
       if (e.which <= 48 or e.which >= 90) and e.which isnt 8
         return
       #vars
@@ -98,7 +104,7 @@ define [
       self.updateUrl()
 
 
-    submit: (e)->
+    onSubmit: (e)->
       e.preventDefault()
       self = this
       $el = this.$el
@@ -109,7 +115,7 @@ define [
     updateUrl: ->
       self = this
       query = self.query
-      url = 'resources/search-plugins?'+queryString.stringify(query)
+      url = location.pathname+'?'+queryString.stringify(query)
       Backbone.history.navigate  url, {replace: true}
 
 
@@ -126,10 +132,10 @@ define [
       this.plugins = new PluginCollection
       #name query
       nameQuery = new Parse.Query(PluginModle)
-      nameQuery.contains("search", query.search)
+      nameQuery.contains("search", query.search.toLowerCase())
       #developer query
       developerQuery = new Parse.Query(PluginModle)
-      developerQuery.contains("developer", query.search)
+      developerQuery.contains("developer", query.search.toLowerCase())
       #main query
       this.plugins.query = Parse.Query.or(nameQuery,developerQuery)
       this.plugins.query.notEqualTo("file", null)

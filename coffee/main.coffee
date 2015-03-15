@@ -59,10 +59,8 @@ require [
   'js/responsive'
 
 ], (App) ->
-
   #initialize the parse
   #library with keys
-#  Parse.initialize("kZS90MpRoWUMtFEgdt8kdWSejhl3thUb9GPdekpb", "ND73SsKVmvrxJ04LmLNgN2lqulJqdjqfRkvI6n23")
 
   #The "app" dependency is passed in as "App"
   App.initialize()
