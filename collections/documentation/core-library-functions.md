@@ -2,10 +2,10 @@
 
 _This is a list of functions found in the ExtJS library._
 ### The breakdown
-* [Initialize](https://github.com/Christianjuth/ExtJS_Framework/wiki/ExtJS-Functions#initialize)
-* [Options](https://github.com/Christianjuth/ExtJS_Framework/wiki/ExtJS-Functions#options)
-* [Match](https://github.com/Christianjuth/ExtJS_Framework/wiki/ExtJS-Functions#match)
-* [Menu](https://github.com/Christianjuth/ExtJS_Framework/wiki/ExtJS-Functions#menu)
+* [Initialize](documentation/core-library-functions#initialize)
+* [Options](documentation/core-library-functions#options)
+* [Match](documentation/core-library-functions#match)
+* [Menu](documentation/core-library-functions#menu)
 
 
 ### Initialize
@@ -15,12 +15,12 @@ This is the initilize function that must be called in order to use the library.
 Initialize Options Defaults
 ```json
 {
-  "silent" : false
+  "verbose" : false
 }
 ```
 Initialize Options Breakdown
 
-* **silent** - `boolean` (do not log warning and other debug info to the Javascript console)
+* **verbose** - `boolean` (do not log warning and other debug info to the Javascript console)
 
 
 ### Options

@@ -1,48 +1,44 @@
 #Getting Started
 
 ### Skills required
-* **HTML/CSS/Javascript**
-* **jQuery** - _although this is not a direct requirement it is strongly suggested_
-* **requireJS**
-* **Chrome Extensions** - this will be a lot less confusing if you have some past experience
+* HTML/CSS/Javascript
+* jQuery - _although this is not a direct requirement it is strongly suggested_
+* requireJS
+* Chrome Extensions - this will be a lot less confusing if you have some past experience
 
 
 ### Tools needed
-* **IDE** - I suggest brackats.io
-* **Terminal or CMD**
+* IDE - I suggest brackats.io
+* Terminal or CMD
 
 
 ### Get the framework
 Start by cloning the hello world extension in an empty folder.
-```
+```shell
 git clone https://github.com/Christianjuth/ExtJS_Framework.git
-```
 
-
-### First commit
-We recommend doing an "ini" commit before making any changes.
-```
-git add .
-git commit -m "ini"
-git push origin master
+#not required but will make your life easer
+brew install graphicsmagick
 ```
 
 ### Building your extension
-We are not going to go over this in this particular guide because we am trying to cover just the "getting started" stuff. Please refer to [this guide](http://ext.js/documentation/hello-world-extension)
+We are not going to go over this in this particular guide because we am trying to cover just the "getting started" stuff. Please refer to [this guide](documentation/hello-world-extension)
 
 
-### How do I compile my extension?
-In the terminal run `grunt`. Thats all you need to do.
+### Compiling
+In the terminal cd to the framework and run `grunt` and you are done. This will update your `builds` folder and the core library _ext.js_.
 
-This will update your `builds` folder and the libraries packaged with this framework (_ext.js_, _jquery.js_, _require.js_, and _underscore.js_).
+![Alt Text](http://code.ext-js.org/website/images/grunt-compile.png)
 
 
-###How do I test my extension?
+### Browser Testing
 **Chrome**
 
 1.  Go to `chrome://extensions/` in the address bar
 2.  Check the box in the top right-hand corner that says `Developer Mode`
 3.  Click `Load Unpacked Extension` and select the `builds/latest.safariextension` folder
+
+![Alt Text](http://code.ext-js.org/website/images/chrome-load-extension.png)
 
 _The reason it has .safariextension is so it can be loaded into Chrome or Safari for testing._
 
@@ -60,5 +56,7 @@ This is a little trickier than Chrome, but we will try and explain the best we c
 8.  Select the `builds/latest.safariextension` and, click `Select`
 9.  Hit the install  button - (Located in the top right)
 10. You are basically done. Click reload to update the extension as you code it.
+
+![Alt Text](http://code.ext-js.org/website/images/safari-load-extension.gif)
 
 _You may also need to restart Safari for some updates. This is probably a bug, but we find it has to be done sometimes_

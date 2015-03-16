@@ -1,4 +1,5 @@
 #Building Your Extension
+At this point we are going to assume you have read and know how to build a simple extension with ExtJS, but now it is time to bring your project to the next leval. This is a list of all the built in ExtJS functions. This may seem like a lot but it is still only a small peice of ExtJS.
 
 ##The Breakdown
 * [Icons](documentation/expanding-your-extension#icons)

@@ -43,7 +43,7 @@ define [
 
     ) ->
 
-  Backbone.View.prototype.close = () ->
+  Backbone.View.prototype.close = ->
     this.unbind()
     $parent = this.$el.parent().off()
     $el = this.$el.off().empty()
@@ -54,6 +54,7 @@ define [
     $('.loader').show()
     if this.onClose
       this.onClose()
+
 
   AppRouter = Backbone.Router.extend {
     routes :
@@ -95,6 +96,17 @@ define [
         $(".sidebar .links").slideUp()
         $(".sidebar").attr("toggle","false")
       $(window).scrollTop(0)
+
+      self = this
+      $el = view.$el
+      hash = location.hash
+      if hash?
+        $('.content').ready ->
+          scroll = $('.content').scrollTop() - $('.content').offset().top + $(hash).offset().top
+          $('.content').animate({
+            scrollTop: scroll
+          }, 1000)
+
 
     app_router.on 'route:home', () ->
       #We have no matching route, lets just log what the URL was
@@ -225,9 +237,8 @@ define [
       fullPath = /^((http:\/\/|https:\/\/|)(([^\.:]*)(\/.+|)))$/i
       url = local.test(href)
       relative = fullPath.test(href)
-      elm = href.indexOf('#') isnt -1 and href.indexOf('/#') is -1
 
-      if (url or relative) and !elm
+      if (url or relative)
         event.preventDefault()
         href = href.replace(local,'')
         Backbone.history.navigate(href, {trigger: true});
