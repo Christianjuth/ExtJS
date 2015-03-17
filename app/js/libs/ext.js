@@ -2,7 +2,7 @@
   var defultOptions, ext;
 
   defultOptions = {
-    silent: false
+    verbose: true
   };
 
   ext = {
@@ -80,7 +80,7 @@
       },
       onload: function() {
         ext._.log = {};
-        if (ext._.options.silent !== true) {
+        if (ext._.options.verbose === true) {
           ext._.log.info = (function() {
             return Function.prototype.bind.call(console.info, console);
           })();

@@ -11,6 +11,9 @@ require [
   "extPlugin/notification"
 ], ($,_,Mustache,bootstrap,ext) ->
 
+  #initilize extjs
+  ext.ini()
+
   change = ->
     console.log('Settings saved...')
 
