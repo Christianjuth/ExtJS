@@ -43,7 +43,9 @@ define [
       compiledTemplate = Mustache.render( $(Template).find('.view').html(), {} )
       self.$el.html( compiledTemplate )
 
-      self.search()
+      self.search ->
+        self.show()
+
       $el.find('.search').select()
 
       if query.search isnt null
@@ -72,8 +74,6 @@ define [
           self.query.search = developer
           self.search()
           self.updateUrl()
-
-      $('.loader').fadeOut(100)
 
 
     #EVENTS
@@ -119,7 +119,7 @@ define [
       Backbone.history.navigate  url, {replace: true}
 
 
-    search: ->
+    search: (callback)->
       self = this
       $el = this.$el
       query = self.query
@@ -141,7 +141,9 @@ define [
       this.plugins.query.notEqualTo("file", null)
       this.plugins.query.ascending("name")
       this.plugins.fetch {
-        success: -> self.searchRender()
+        success: ->
+          self.searchRender()
+          callback()
       }
 
 

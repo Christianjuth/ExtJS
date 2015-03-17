@@ -24,8 +24,8 @@ define [
       compiledTemplate = Mustache.render( Template , {})
       $el.html( compiledTemplate )
 
-      #hide loader
-      $el.ready -> $('.loader').fadeOut(100)
+      #hide loader after video loads
+      $el.ready -> self.show()
 
   })
 

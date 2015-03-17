@@ -65,7 +65,7 @@ define [
         $el.html(compiledTemplate)
 
 
-      $('.loader').fadeOut(100)
+      self.show()
 
   })
 

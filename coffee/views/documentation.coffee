@@ -23,6 +23,7 @@ define [
 
     render: ->
       self = this
+      $el = self.$el
       options = self.options
       data = {}
       compiledTemplate = ""
@@ -45,12 +46,19 @@ define [
           compiledTemplate = Err
       }
 
-      this.$el.html( compiledTemplate )
+      $el.html( compiledTemplate )
+      $el.find('h1,h2,h3,h4,h5').click ->
+        $this = $(this)
+        id = $this.attr('id')
+        if id?
+          hash = '#'+id
+          location.hash = hash
+
+
+      self.show()
 
       $('pre > code').each (i, block) ->
         hljs.highlightBlock(block)
-
-      $('.loader').fadeOut(100)
 
   }
 

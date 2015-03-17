@@ -43,7 +43,7 @@ define [
     self.plugin.fetch {
       success: ->
         self.render(name)
-        $('.loader').fadeOut(100)
+        self.show()
     }
 
 

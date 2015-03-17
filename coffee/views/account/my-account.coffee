@@ -24,6 +24,8 @@ define [
       this.render()
 
     render: ->
+      self = this
+      $el = self.$el
       user = Parse.User.current()
 
       username = user.getUsername()
@@ -34,9 +36,8 @@ define [
         user: username
         email: email
       })
-      this.$el.html( compiledTemplate )
-
-      $('.loader').fadeOut(100)
+      $el.html( compiledTemplate )
+      self.show()
 
 
     logout: (e) ->
