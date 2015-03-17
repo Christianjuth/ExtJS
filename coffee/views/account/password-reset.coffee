@@ -26,7 +26,7 @@ define [
       compiledTemplate = Mustache.render( Template , {})
       this.$el.html( compiledTemplate )
       #hide loader
-      $('.loader').fadeOut(100)
+      self.show()
 
 
     resetPasswd: (e)->

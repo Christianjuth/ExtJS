@@ -31,7 +31,7 @@ define [
       this.$el.html( compiledTemplate )
       #hide loader
       $el.find('.username').select()
-      $('.loader').fadeOut(100)
+      self.show()
 
 
     login : (e) ->

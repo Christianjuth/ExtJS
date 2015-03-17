@@ -41,7 +41,9 @@ define [
 
     ParseView
 
-    ) ->
+    )->
+
+
 
   Backbone.View.prototype.close = ->
     this.unbind()
@@ -54,6 +56,16 @@ define [
     $('.loader').show()
     if this.onClose
       this.onClose()
+
+  Backbone.View.prototype.show = ->
+    self = this
+    $el = self.$el
+    hash = location.hash
+    if hash isnt '' and $(hash).length > 0
+      scroll = $el.scrollTop() - $el.offset().top + $(hash).offset().top
+      $el.scrollTop(scroll)
+    $('.loader').stop().fadeOut(100)
+
 
 
   AppRouter = Backbone.Router.extend {
@@ -83,47 +95,39 @@ define [
       '*splat': 'defaultAction'
   }
 
-  initialize = () ->
+
+
+  initialize = ()->
+    #DEFINE APP ROUTER
     app_router = new AppRouter
 
-    app_router.closeView = () ->
+    #DEFINE FUNCTIONS
+    app_router.closeView = ()->
       if this.currentView
         this.currentView.close()
 
-    app_router.openView = (view) ->
+    app_router.openView = (view)->
       this.currentView = view
       if window.innerWidth < 850
         $(".sidebar .links").slideUp()
         $(".sidebar").attr("toggle","false")
       $(window).scrollTop(0)
 
-      self = this
-      $el = view.$el
-      hash = location.hash
-      if hash?
-        $('.content').ready ->
-          scroll = $('.content').scrollTop() - $('.content').offset().top + $(hash).offset().top
-          $('.content').animate({
-            scrollTop: scroll
-          }, 1000)
 
-
-    app_router.on 'route:home', () ->
-      #We have no matching route, lets just log what the URL was
+    #DEFINE ROUT FUNCTIONS
+    app_router.on 'route:home', ()->
       this.closeView()
       home = new Home({})
       this.openView(home)
 
-    app_router.on 'route:documentation', (path) ->
-      #We have no matching route, lets just log what the URL was
+    app_router.on 'route:documentation', (path)->
       this.closeView()
       doc = new Doc({
         doc: path
       })
       this.openView(doc)
 
-    app_router.on 'route:plugin', (path) ->
-      #We have no matching route, lets just log what the URL was
+    app_router.on 'route:plugin', (path)->
       this.closeView()
       plugin = new Plugin({
         plugin: path
@@ -131,8 +135,7 @@ define [
       $('.loader').hide()
       this.openView(plugin)
 
-    app_router.on 'route:searchPlugins', (query) ->
-      #We have no matching route, lets just log what the URL was
+    app_router.on 'route:searchPlugins', (query)->
       this.closeView()
       searchPlugins = new SearchPlugins({
         query: query
@@ -141,9 +144,8 @@ define [
 
 
 
-    #account
-    app_router.on 'route:accountLogin', (path) ->
-      #We have no matching route, lets just log what the URL was
+    #ACCOUNT
+    app_router.on 'route:accountLogin', (path)->
       if Parse.User.current() isnt null
         Backbone.history.navigate "", {trigger: true}
       else
@@ -153,8 +155,7 @@ define [
         })
         this.openView(accountLogin)
 
-    app_router.on 'route:accountSignup', (path) ->
-      #We have no matching route, lets just log what the URL was
+    app_router.on 'route:accountSignup', (path)->
       if Parse.User.current() isnt null
         Backbone.history.navigate "", {trigger: true}
       else
@@ -164,8 +165,7 @@ define [
         })
         this.openView(accountSignup)
 
-    app_router.on 'route:passwordReset', (path) ->
-      #We have no matching route, lets just log what the URL was
+    app_router.on 'route:passwordReset', (path)->
       if Parse.User.current() isnt null
         Backbone.history.navigate "account/settings", {trigger: true}
       else
@@ -175,8 +175,7 @@ define [
         })
         this.openView(accountPasswordReset)
 
-    app_router.on 'route:accountMyPlugins', (path) ->
-      #We have no matching route, lets just log what the URL was
+    app_router.on 'route:accountMyPlugins', (path)->
       if Parse.User.current() is null
         login = "account/login?redirect="+Backbone.history.fragment
         Backbone.history.navigate login, {trigger: true}
@@ -187,8 +186,7 @@ define [
         })
         this.openView(accountMyPlugins)
 
-    app_router.on 'route:accountMyAccount', (actions) ->
-      #We have no matching route, lets just log what the URL was
+    app_router.on 'route:accountMyAccount', (actions)->
       if Parse.User.current() is null
         login = "account/login?redirect="+Backbone.history.fragment
         Backbone.history.navigate login, {trigger: true}
@@ -199,8 +197,8 @@ define [
 
 
 
-    #extjs
-    app_router.on 'route:contactUs', (query) ->
+    #EXTJS
+    app_router.on 'route:contactUs', (query)->
       #We have no matching route, lets just log what the URL was
       this.closeView()
       contactUs = new ContactUs()
@@ -208,8 +206,8 @@ define [
 
 
 
-    #parse
-    app_router.on 'route:parse', (query) ->
+    #PARSE
+    app_router.on 'route:parse', (query)->
       #We have no matching route, lets just log what the URL was
       this.closeView()
       parseView = new ParseView()
@@ -217,31 +215,40 @@ define [
 
 
 
-    #404
-    app_router.on 'route:defaultAction', (actions) ->
+    #404 fallback
+    app_router.on 'route:defaultAction', (actions)->
       #We have no matching route, lets just log what the URL was
       this.closeView()
       notFound = new NotFound()
       this.openView(notFound)
 
+
+
+    #start history without "#"
     Backbone.history.start({
       pushState : true,
       root: '/'
     })
 
-    #hack internal links
-    $(document.body).on 'click', 'a', (event) ->
-      host = document.location.host
-      href = $(this).attr('href')
-      local = new RegExp('^((http:\/\/|https:\/\/|)(www|)'+host+')', 'i')
-      fullPath = /^((http:\/\/|https:\/\/|)(([^\.:]*)(\/.+|)))$/i
-      url = local.test(href)
-      relative = fullPath.test(href)
 
-      if (url or relative)
+
+    #hack internal links matching location.host
+    $(document.body).on 'click', 'a', (event)->
+      #define vars
+      host = document.location.host
+      href =       $(this).attr('href')
+      local =      new RegExp('^((http:\/\/|https:\/\/|)(www|)'+host+')', 'i')
+      fullPath =   /^((http:\/\/|https:\/\/|)(([^\.:]*)(\/.+|)))$/i
+      url =        local.test(href)
+      relative =   fullPath.test(href)
+      sameOrigin = host is href.replace(/(#.*)$/,'')
+      elm =        href.indexOf('#') isnt -1 and href.indexOf('/#') is -1
+      #logic
+      if (url or relative) and (!elm and !sameOrigin)
         event.preventDefault()
         href = href.replace(local,'')
-        Backbone.history.navigate(href, {trigger: true});
+        Backbone.history.navigate(href, {trigger: true})
+
 
   return {
     initialize : initialize

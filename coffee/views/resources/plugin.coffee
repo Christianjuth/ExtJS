@@ -40,7 +40,7 @@ define [
       $('pre > code').each (i, block) ->
         hljs.highlightBlock(block)
 
-      $('.loader').fadeOut(100)
+      self.show()
 
   }
 
