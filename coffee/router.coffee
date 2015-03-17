@@ -244,7 +244,7 @@ define [
       sameOrigin = host is href.replace(/(#.*)$/,'')
       elm =        href.indexOf('#') isnt -1 and href.indexOf('/#') is -1
       #logic
-      if (url or relative) and (!elm and !sameOrigin)
+      if (url or relative) and (!elm or !sameOrigin)
         event.preventDefault()
         href = href.replace(local,'')
         Backbone.history.navigate(href, {trigger: true})
