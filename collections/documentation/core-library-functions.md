@@ -9,7 +9,7 @@ _This is a list of functions found in the ExtJS library._
 
 
 ### Initialize
-This is the initilize function that must be called in order to use the library.
+This is the initialize function that must be called in order to use the library.
 * **Function** - `ext.ini(options)`
 
 Initialize Options Defaults

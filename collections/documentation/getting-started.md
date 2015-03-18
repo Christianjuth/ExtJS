@@ -12,14 +12,22 @@
 * Terminal or CMD
 
 
-### Get the framework
-Start by cloning the hello world extension in an empty folder.
+### Getting the framework
+Start by cloning ExtJS
 ```shell
 git clone https://github.com/Christianjuth/ExtJS_Framework.git
 
-#not required but will make your life easer
+#mac
 brew install graphicsmagick
+
+#linux
+sudo apt-get install graphicsmagick
 ```
+
+#### Windows
+For windows you will need to install the GraphicsMagic.exe file. IMPORTANT We have not done windows testing yet and will update this info soon!
+* [Windows 32bit](ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/windows/GraphicsMagick-1.3.20-Q16-win32-dll.exe)
+* [Windows 64bit](ftp://ftp.graphicsmagick.org/pub/GraphicsMagick/windows/GraphicsMagick-1.3.20-Q16-win64-dll.exe)
 
 ### Building your extension
 We are not going to go over this in this particular guide because we am trying to cover just the "getting started" stuff. Please refer to [this guide](documentation/hello-world-extension)
@@ -36,7 +44,7 @@ In the terminal cd to the framework and run `grunt` and you are done. This will 
 
 1.  Go to `chrome://extensions/` in the address bar
 2.  Check the box in the top right-hand corner that says `Developer Mode`
-3.  Click `Load Unpacked Extension` and select the `builds/latest.safariextension` folder
+3.  Click `Load Unpacked Extension` and select and open the `builds/latest.safariextension` folder
 
 ![Alt Text](http://code.ext-js.org/website/images/chrome-load-extension.png)
 
@@ -53,7 +61,7 @@ This is a little trickier than Chrome, but we will try and explain the best we c
 5.  Click the new dropdown, located in the menubar, that says `Develop`
 6.  Click `Show Extension Builder` - (About half way down the dropdown)
 7.  Click the plus in the bottom left, and click `Add Extension`
-8.  Select the `builds/latest.safariextension` and, click `Select`
+8.  Select and open the `builds/latest.safariextension`
 9.  Hit the install  button - (Located in the top right)
 10. You are basically done. Click reload to update the extension as you code it.
 

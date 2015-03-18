@@ -10,7 +10,7 @@ At this point we are going to assume you have read and know how to build a simpl
 ##Icons
 _All icons must be in png format._
 
-The _app/icon.png_ is the icon that will be displayed on the install banner, the settings panel of both browsers, and other places.  The only place it will not be displayed is on the menu bar. All manu icons are located in the `app/menu-icons/` folder.
+The _app/icon.png_ is the icon that will be displayed on the install banner, the settings panel of both browsers, and other places.  The only place it will not be displayed is on the menu bar. All menu icons are located in the `app/menu-icons/` folder.
 
 **Default Icons**
 * `app/icon.png`
@@ -74,3 +74,5 @@ Linking to a page is simple.  Just add this to the page's HTML file, but replace
 ```html
 <a href="../new_page/new_page.html">new page</a>
 ```
+
+

@@ -66,8 +66,10 @@ _All special characters must be escaped including the escape character._
 | URL          | Syntax                             |
 |--------------|------------------------------------|
 | Any URL      | `**`                               |
-| All HTTPS    | `!https**`                         |
+| All HTTPS    | `https**`                          |
 | Google+      | `*{//,}plus.google.*`              |
 | Google.com   | `*{//,//www.,www.,}google.*`       |
 | Chrome Store | `*{//,}chrome.google.*/webstore`   |
 | Google Fonts | `*{//,//www.,www.,}google.*/fonts` |
+
+

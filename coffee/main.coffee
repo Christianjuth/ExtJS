@@ -5,7 +5,8 @@
 require.config {
 
   #set base url to ext.js.com/
-  baseUrl : "/",
+  baseUrl : "/"
+  waitSeconds: 90
 
   #define dependencies
   shim :

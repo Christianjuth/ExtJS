@@ -5,7 +5,12 @@
     <form class="search-form form-horizontal">
       <div class="form-group">
         <div class="col-xs-12">
-          <input type="text" class="form-control search" placeholder="Search" value="{{search}}" autofocus="">
+          <div class="input-group add-on">
+            <input type="text" class="search form-control" placeholder="Search" value="{{search}}" autofocus="">
+            <div class="input-group-btn">
+              <button class="btn btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+          </div>
         </div>
       </div>
     </form>

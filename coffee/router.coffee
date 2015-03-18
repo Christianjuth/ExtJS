@@ -11,6 +11,7 @@ define [
 
   'js/views/resources/search-plugins'
   'js/views/resources/plugin'
+  'js/views/resources/extjs-downloads'
 
   'js/views/account/login'
   'js/views/account/signup'
@@ -30,6 +31,7 @@ define [
 
     SearchPlugins,
     Plugin,
+    ExtJSDownloads,
 
     AccountLogin,
     AccountSignup,
@@ -77,6 +79,7 @@ define [
 
       #resources
       'resources/search-plugins(?search=:query)(/)':'searchPlugins'
+      'resources/extjs-downloads(/)':               'extjsDownloads'
 
       #account
       'account/login(?redirect=*path)(/)':          'accountLogin'
@@ -141,6 +144,11 @@ define [
         query: query
       })
       this.openView(searchPlugins)
+
+    app_router.on 'route:extjsDownloads', (query)->
+      this.closeView()
+      extjsDownloads = new ExtJSDownloads()
+      this.openView(extjsDownloads)
 
 
 
