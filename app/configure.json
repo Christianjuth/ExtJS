@@ -44,7 +44,7 @@
       "title": "What you want",
       "type": "list",
       "key": "list",
-      "default": "Five",
+      "default": 5,
       "options": [
         {"title":"Five", "val": 5},
         {"title":"Six", "val": 6}
