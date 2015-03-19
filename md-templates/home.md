@@ -11,4 +11,4 @@ Meet TabSaver, a simple extension that closes old tabs as you open new ones. Eve
 * [Kickstarter Release - v0.0.1](https://github.com/Christianjuth/ExtJS/archive/v0.0.1.zip)
 
 ###Support US
-[![Alt text](http://www.soulcakecreative.com/wp-content/uploads/2013/10/kickstarter_button_02.png)](https://www.kickstarter.com/projects/1127338267/1669508057?token=e1ca9579)
+[![Alt text](http://www.soulcakecreative.com/wp-content/uploads/2013/10/kickstarter_button_02.png)](https://www.kickstarter.com/projects/christianjuth/extjs-the-browser-extension-javascript-framework)
