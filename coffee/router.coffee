@@ -21,6 +21,11 @@ define [
 
   'js/views/extjs/contact-us'
 
+  'js/views/mail/thank-you'
+  'js/views/mail/unsubscribe'
+  'js/views/mail/subscribe'
+  'js/views/mail/confirm'
+
   'js/views/parse'
 
 ], ($, Backbone,
@@ -40,6 +45,11 @@ define [
     AccountMyPlugins,
 
     ContactUs,
+
+    MailThankYou,
+    MailUnsubscribe,
+    MailSubscribe,
+    MailConfirm,
 
     ParseView
 
@@ -93,6 +103,12 @@ define [
 
       #parse
       'parse(/)(:query)(/)':                        'parse'
+
+      #mail
+      'mail/thank-you(/)':                          'mailThankYou'
+      'mail/unsubscribe(/)':                        'mailUnsubscribe'
+      'mail/subscribe(?search=:query)(/)(/)':       'mailSubscribe'
+      'mail/confirm(/)':                            'mailConfirm'
 
       #404
       '*splat': 'defaultAction'
@@ -220,6 +236,33 @@ define [
       this.closeView()
       parseView = new ParseView()
       this.openView(parseView)
+
+
+
+    #Mail
+    app_router.on 'route:mailThankYou', ->
+      #We have no matching route, lets just log what the URL was
+      this.closeView()
+      mailThankYou = new MailThankYou()
+      this.openView(mailThankYou)
+
+    app_router.on 'route:mailSubscribe', ->
+      #We have no matching route, lets just log what the URL was
+      this.closeView()
+      mailSubscribe = new MailSubscribe()
+      this.openView(mailSubscribe)
+
+    app_router.on 'route:mailUnsubscribe', ->
+      #We have no matching route, lets just log what the URL was
+      this.closeView()
+      mailUnsubscribe = new MailUnsubscribe()
+      this.openView(mailUnsubscribe)
+
+    app_router.on 'route:mailConfirm', ->
+      #We have no matching route, lets just log what the URL was
+      this.closeView()
+      mailConfirm = new MailConfirm()
+      this.openView(mailConfirm)
 
 
 
