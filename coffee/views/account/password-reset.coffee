@@ -22,6 +22,7 @@ define [
       this.render()
 
     render: ->
+      self = this
       #Using Underscore we can compile our template with data
       compiledTemplate = Mustache.render( Template , {})
       this.$el.html( compiledTemplate )

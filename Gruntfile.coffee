@@ -55,7 +55,7 @@ module.exports = (grunt) ->
     'markdown',
     'coffee',
     'less',
-    'uglify'
+#    'uglify'
   ]
 
   grunt.registerTask 'debug', [

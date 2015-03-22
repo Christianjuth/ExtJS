@@ -13,7 +13,8 @@ elseif  (empty($_POST["message"])) {
 
 else{
     $to = "support@ext-js.org"; // this is your Email address
-    $from = "form@ext-js.org"; // this is the sender's Email address
+    $from = "website@ext-js.org"; // this is the sender's Email address
+//    $from = $_POST["email"]; // this is the sender's Email address
     $name = $_POST['name'];
     $subject = "Form submission";
     $message = "Name: " . $name . "\nEmail: " . $_POST['email'] . "\nFavorite Song: " . $_POST['favorite_song'] . "\nMessage: " . $_POST['message'];
