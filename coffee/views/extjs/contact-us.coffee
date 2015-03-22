@@ -12,7 +12,7 @@ define [
 
   View = Backbone.View.extend {
 
-    el: $('.content')
+    el: $('.page')
 
     events :
       'submit .contact':       'contact'

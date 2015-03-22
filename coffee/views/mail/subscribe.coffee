@@ -14,7 +14,7 @@ define [
     query: {
       'email': ''
     }
-    el: $('.content')
+    el: $('.page')
 
     initialize: (options)->
       self = this

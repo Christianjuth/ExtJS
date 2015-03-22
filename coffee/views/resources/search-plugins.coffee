@@ -23,7 +23,7 @@ define [
     query: {
       'search': ''
     }
-    el: $('.content')
+    el: $('.page')
     searchTimeoutID: null
 
 

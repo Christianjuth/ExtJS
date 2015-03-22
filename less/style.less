@@ -19,13 +19,15 @@ body{
   box-sizing: border-box;
 }
 
-.content-wrap{
+.page-wrap{
   display: inline-block;
   height: 99%;
   width: 100%;
 }
 
-.content{
+.page{
+  margin: 0;
+  border: none;
   color: #333;
   display: inline-block;
   width: calc(~"100% - 300px");
@@ -36,7 +38,7 @@ body{
   -webkit-overflow-scrolling: touch;
 }
 
-.content *:first-child{
+.page *:first-child{
   margin-top: 0;
 }
 
@@ -82,14 +84,14 @@ body{
 
 //tablets
 @media only screen and (min-width:750px) and (max-width: 1100px) {
-  .content{
+  .page{
     padding-right: 75px;
   }
 }
 
 //phones
 @media only screen and (min-width:0px) and (max-width: 850px) {
-  .content{
+  .page{
     position: relative;
     clear: both;
     width: 100%;
@@ -106,7 +108,7 @@ body{
     display: inline-block;
   }
 
-  .content img{
+  .page img{
     width: 100%;
   }
 }
@@ -130,7 +132,7 @@ body{
     margin: none !important;
   }
 
-  .content{
+  .page{
     width: 100% !important;
     padding: 0 !important;
     padding: 0 !important;

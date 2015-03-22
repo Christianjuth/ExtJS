@@ -13,7 +13,7 @@ define [
     events:
       'submit .subscribe':    'subscribe'
 
-    el: $('.content')
+    el: $('.page')
 
     initialize: (options)->
       self = this

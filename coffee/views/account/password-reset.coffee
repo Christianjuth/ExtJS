@@ -10,7 +10,7 @@ define [
 
   View = Backbone.View.extend({
 
-    el: $('.content')
+    el: $('.page')
 
     events :
       'submit .reset-password':    'resetPasswd'

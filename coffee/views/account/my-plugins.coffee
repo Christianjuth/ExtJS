@@ -21,7 +21,7 @@ define [
   unsaved: false
 
   #page container element
-  el: $('.content')
+  el: $('.page')
 
   #backbone page events
   events :

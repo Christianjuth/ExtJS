@@ -11,7 +11,7 @@ define [
 
   View = Backbone.View.extend {
 
-    el: $('.content'),
+    el: $('.page'),
 
     initialize: (options)->
       self = this
