@@ -26,8 +26,12 @@ require.config {
     marked  :
       exports: "marked "
 
+    github  :
+      deps: ["underscore"]
+      exports: "Github"
+
     backbone :
-      deps: ["jquery", "underscore"],
+      deps: ["jquery", "underscore"]
       exports: "Backbone"
 
   #define path aliases
@@ -43,6 +47,7 @@ require.config {
     templates:    "./templates",
     highlight:    "./assets/libs/highlight.pack"
     parse:        "./assets/libs/parse.min"
+    github:        "./assets/libs/github"
     sweetalert:   "./assets/libs/sweet-alert.min"
     marked :      "//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min"
     js:           "./assets/js"

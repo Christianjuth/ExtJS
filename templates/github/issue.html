@@ -1,0 +1,21 @@
+<h1>Issues</h1>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Open</div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#issues}}
+      <tr class='link' href='github/issue/{{number}}'>
+        <td>{{title}}</td>
+        <td>{{number}}</td>
+      </tr>
+      {{/issues}}
+    </tbody>
+  </table>
+</div>

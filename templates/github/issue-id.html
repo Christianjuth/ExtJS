@@ -1,0 +1,25 @@
+<h1>Issue #{{number}}</h1>
+
+<div class="panel panel-default">
+  <div class="panel-heading">{{title}}</div>
+
+  {{#body}}
+  <div class="panel-body">
+    <p>
+      {{body}}
+    </p>
+  </div>
+  {{/body}}
+
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Comments</div>
+  <ul class="list-group">
+    {{#comments}}
+    <li class="list-group-item">
+      <p>{{body}}</p>
+    </li>
+    {{/comments}}
+  </ul>
+</div>

@@ -21,6 +21,9 @@ define [
 
   'js/views/extjs/contact-us'
 
+  'js/views/github/issue'
+  'js/views/github/issue-id'
+
   'js/views/mail/thank-you'
   'js/views/mail/unsubscribe'
   'js/views/mail/subscribe'
@@ -45,6 +48,9 @@ define [
     AccountMyPlugins,
 
     ContactUs,
+
+    GithubIssue,
+    GithubIssueId,
 
     MailThankYou,
     MailUnsubscribe,
@@ -100,6 +106,9 @@ define [
 
       #extjs
       'extjs/contact-us(/)' :                       'contactUs'
+
+      'github/issue/:id(/)' :                       'githubIssueId'
+      'github/issue(/)' :                           'githubIssue'
 
       #parse
       'parse(/)(:query)(/)':                        'parse'
@@ -230,6 +239,23 @@ define [
 
 
 
+    #GITHUB
+     app_router.on 'route:githubIssue', (id)->
+      #We have no matching route, lets just log what the URL was
+      this.closeView()
+      githubIssue = new GithubIssue({})
+      this.openView(githubIssue)
+
+    app_router.on 'route:githubIssueId', (id)->
+      #We have no matching route, lets just log what the URL was
+      this.closeView()
+      githubIssue = new GithubIssueId({
+        id: id
+      })
+      this.openView(githubIssue)
+
+
+
     #PARSE
     app_router.on 'route:parse', (query)->
       #We have no matching route, lets just log what the URL was
@@ -284,7 +310,7 @@ define [
 
 
     #hack internal links matching location.host
-    $(document.body).on 'click', 'a', (event)->
+    $(document.body).on 'click', 'a, .link', (event)->
       #define vars
       host = document.location.host
       href =       $(this).attr('href')
