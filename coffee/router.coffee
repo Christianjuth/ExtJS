@@ -8,6 +8,7 @@ define [
   'js/views/home'
 
   'js/views/documentation/documentation-id'
+  'js/views/documentation/documentation'
 
   'js/views/resources/search-plugins'
   'js/views/resources/plugin'
@@ -37,6 +38,7 @@ define [
     Home,
 
     DocumentationDocumentationId,
+    DocumentationDocumentation,
 
     SearchPlugins,
     Plugin,
@@ -92,7 +94,8 @@ define [
     routes :
       #Define some URL routes
       '':                                           'home'
-      'documentation/*path(/)':                     'documentation'
+      'documentation/*path(/)':                     'documentationDocumentationId'
+      'documentation(/)':                           'documentationDocumentation'
       'resources/plugin/*path(/)':                  'plugin'
 
       #resources
@@ -154,7 +157,12 @@ define [
       home = new Home({})
       this.openView(home)
 
-    app_router.on 'route:documentation', (path)->
+    app_router.on 'route:documentationDocumentation', ()->
+      this.closeView()
+      documentationDocumentation = new DocumentationDocumentation({})
+      this.openView(documentationDocumentation)
+
+    app_router.on 'route:documentationDocumentationId', (path)->
       this.closeView()
       documentationDocumentationId = new DocumentationDocumentationId({
         doc: path
