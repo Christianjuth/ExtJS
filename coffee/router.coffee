@@ -13,6 +13,7 @@ define [
   'js/views/resources/plugin'
   'js/views/resources/extjs-downloads'
 
+  'js/views/account/account'
   'js/views/account/login'
   'js/views/account/signup'
   'js/views/account/password-reset'
@@ -41,6 +42,7 @@ define [
     Plugin,
     ExtJSDownloads,
 
+    AccountAccount,
     AccountLogin,
     AccountSignup,
     AccountPasswordReset,
@@ -103,6 +105,7 @@ define [
       'account/password-reset(?redirect=*path)(/)': 'passwordReset'
       'account/my-plugins(/)(/*path)(/)':           'accountMyPlugins'
       'account/my-account(/)' :                     'accountMyAccount'
+      'account(/)':                                 'accountAccount'
 
       #extjs
       'extjs/contact-us(/)' :                       'contactUs'
@@ -178,6 +181,15 @@ define [
 
 
     #ACCOUNT
+    app_router.on 'route:accountAccount', ()->
+      if Parse.User.current() is null
+        login = "account/login?redirect="+Backbone.history.fragment
+        Backbone.history.navigate login, {trigger: true}
+      else
+        this.closeView()
+        accountAccount = new AccountAccount()
+        this.openView(accountAccount)
+
     app_router.on 'route:accountLogin', (path)->
       if Parse.User.current() isnt null
         Backbone.history.navigate "", {trigger: true}
