@@ -7,7 +7,7 @@ define [
   'js/views/404'
   'js/views/home'
 
-  'js/views/documentation/documentation'
+  'js/views/documentation/documentation-id'
 
   'js/views/resources/search-plugins'
   'js/views/resources/plugin'
@@ -36,7 +36,7 @@ define [
     NotFound,
     Home,
 
-    Doc,
+    DocumentationDocumentation,
 
     SearchPlugins,
     Plugin,
@@ -156,10 +156,10 @@ define [
 
     app_router.on 'route:documentation', (path)->
       this.closeView()
-      doc = new Doc({
+      documentationDocumentation = new DocumentationDocumentation({
         doc: path
       })
-      this.openView(doc)
+      this.openView(documentationDocumentation)
 
     app_router.on 'route:plugin', (path)->
       this.closeView()
