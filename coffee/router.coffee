@@ -94,8 +94,8 @@ define [
     routes :
       #Define some URL routes
       '':                                           'home'
-      'documentation/*path(/)':                     'documentationDocumentationId'
       'documentation(/)':                           'documentationDocumentation'
+      'documentation/*path(/)':                     'documentationDocumentationId'
       'resources/plugin/*path(/)':                  'plugin'
 
       #resources
