@@ -7,19 +7,6 @@ define ['jquery'], ->
 
     #set vars
     $('.menu-sidebar').attr 'toggle','false'
-    $('.menu-sidebar .links > li > span').click ->
-      $this = $(this).parent()
-      #reset
-      $('.menu-sidebar .links > li').not($this).removeClass('active')
-      $('.menu-sidebar .links > li > ul').not($this).slideUp(500)
-      #set current
-      if $this.hasClass('active')
-        $this.removeClass('active')
-        $this.find('ul').slideUp(500)
-      else
-        $this.addClass('active')
-        $this.find('ul').slideDown(500)
-
 
     #menu icon click
     $('.menu-icon-wrap').click ->

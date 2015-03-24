@@ -142,6 +142,9 @@ define [
       if window.innerWidth < 850
         $(".sidebar .links").slideUp()
         $(".sidebar").attr("toggle","false")
+      url = location.pathname.replace(/^(\/)/i,'').replace(/(\/.*)$/i,'')
+      $('.menu-sidebar li').removeClass('active')
+      $('.menu-sidebar li[href^="'+url+'"]').addClass('active')
       $(window).scrollTop(0)
 
 
