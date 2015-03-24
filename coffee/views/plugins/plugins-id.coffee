@@ -6,14 +6,16 @@ define [
   "parse",
   "highlight",
   "marked",
+  "text!templates/plugins/plugins-id.html"
   "text!templates/404.html"
-], ($, _, Mustache, Backbone, Parse, hljs, marked , Err) ->
+], ($, _, Mustache, Backbone, Parse, hljs, marked , Template, Err) ->
 
   PluginModle = Parse.Object.extend "Plugin", {}
   PluginCollection = Parse.Collection.extend {}
 
   View = Backbone.View.extend {
 
+    #vars
     el: $('.page'),
 
     initialize: (options)->
@@ -21,20 +23,24 @@ define [
       self.options = options
       _.bindAll(this, 'render')
 
-      this.plugin = new PluginCollection
-      this.plugin.query = new Parse.Query(PluginModle)
-      this.plugin.query.equalTo("search", options.plugin.toLowerCase())
-      this.plugin.fetch {
+      self.plugin = new PluginCollection
+      self.plugin.query = new Parse.Query(PluginModle)
+      self.plugin.query.equalTo("search", options.plugin.toLowerCase())
+      self.plugin.fetch {
         success: -> self.render()
       }
 
     render: () ->
-      $el = this.$el
-      plug = this.plugin.at 0
-      Template = plug.get('readme')
+      self = this
+      $el = self.$el
+      plug = self.plugin.at 0
+      readmeMd = plug.get('readme')
 
       #Append our compiled template to this Views "el"
-      compiledTemplate = marked(Template)
+      compiledReadmeMd = marked(readmeMd)
+      compiledTemplate = Mustache.render($(Template).html(),{
+        readme: compiledReadmeMd
+      })
       $el.html( compiledTemplate )
 
       $('pre > code').each (i, block) ->

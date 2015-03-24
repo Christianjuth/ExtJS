@@ -10,9 +10,8 @@ define [
   'js/views/documentation/documentation-id'
   'js/views/documentation/documentation'
 
-  'js/views/resources/search-plugins'
-  'js/views/resources/plugin'
-  'js/views/resources/extjs-downloads'
+  'js/views/plugins/plugins-id'
+  'js/views/plugins/plugins'
 
   'js/views/account/account'
   'js/views/account/login'
@@ -40,9 +39,8 @@ define [
     DocumentationDocumentationId,
     DocumentationDocumentation,
 
-    SearchPlugins,
-    Plugin,
-    ExtJSDownloads,
+    PluginsId,
+    Plugins,
 
     AccountAccount,
     AccountLogin,
@@ -96,11 +94,10 @@ define [
       '':                                           'home'
       'documentation(/)':                           'documentationDocumentation'
       'documentation/*path(/)':                     'documentationDocumentationId'
-      'resources/plugin/*path(/)':                  'plugin'
 
-      #resources
-      'resources/search-plugins(?search=:query)(/)':'searchPlugins'
-      'resources/extjs-downloads(/)':               'extjsDownloads'
+      #plugins
+      'plugins(?:query)(/)':                                 'plugins'
+      'plugins/*path(/)':                           'pluginsId'
 
       #account
       'account/login(?redirect=*path)(/)':          'accountLogin'
@@ -169,20 +166,19 @@ define [
       })
       this.openView(documentationDocumentationId)
 
-    app_router.on 'route:plugin', (path)->
+    app_router.on 'route:plugins', (query)->
       this.closeView()
-      plugin = new Plugin({
-        plugin: path
-      })
-      $('.loader').hide()
-      this.openView(plugin)
-
-    app_router.on 'route:searchPlugins', (query)->
-      this.closeView()
-      searchPlugins = new SearchPlugins({
+      plugins = new Plugins({
         query: query
       })
-      this.openView(searchPlugins)
+      this.openView(plugins)
+
+    app_router.on 'route:pluginsId', (path)->
+      this.closeView()
+      pluginsId = new PluginsId({
+        plugin: path
+      })
+      this.openView(pluginsId)
 
     app_router.on 'route:extjsDownloads', (query)->
       this.closeView()

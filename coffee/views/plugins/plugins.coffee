@@ -6,7 +6,7 @@ define [
   "parse",
   "queryString",
   "highlight",
-  "text!templates/resources/search-plugins.html"
+  "text!templates/plugins/plugins.html"
 ], ($, _, Mustache, Backbone, Parse, queryString, hljs, Template) ->
 
 
