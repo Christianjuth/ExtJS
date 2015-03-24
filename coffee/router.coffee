@@ -36,7 +36,7 @@ define [
     NotFound,
     Home,
 
-    DocumentationDocumentation,
+    DocumentationDocumentationId,
 
     SearchPlugins,
     Plugin,
@@ -156,10 +156,10 @@ define [
 
     app_router.on 'route:documentation', (path)->
       this.closeView()
-      documentationDocumentation = new DocumentationDocumentation({
+      documentationDocumentationId = new DocumentationDocumentationId({
         doc: path
       })
-      this.openView(documentationDocumentation)
+      this.openView(documentationDocumentationId)
 
     app_router.on 'route:plugin', (path)->
       this.closeView()
