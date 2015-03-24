@@ -7,7 +7,7 @@ define [
   'js/views/404'
   'js/views/home'
 
-  'js/views/documentation'
+  'js/views/documentation/documentation'
 
   'js/views/resources/search-plugins'
   'js/views/resources/plugin'
