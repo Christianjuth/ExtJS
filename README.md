@@ -1,4 +1,12 @@
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Christianjuth/ExtJS?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
+[![Build Status](http://img.shields.io/travis/Christianjuth/ExtJS_Library.svg?branch=master)](https://travis-ci.org/Christianjuth/ExtJS_Library)
+[![Gravipay](http://img.shields.io/gratipay/Christianjuth.svg)](https://gratipay.com/Christianjuth/)
+[![License](http://img.shields.io/npm/l/xmlbuilder.svg)](http://opensource.org/licenses/MIT)
+
+
 ### Quick Descrption
+
+[![Join the chat at https://gitter.im/Christianjuth/Extension-Framework](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Christianjuth/Extension-Framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ExtJS is a framwork for building Chrome and Safari extensions in one, as well as providing a file structure with grunt setup and ready to go. [Learn more...](http://ext-js.org/)
 
 ### Getting Started
@@ -9,7 +17,7 @@ _for more documentation please refer to [our site](http://ext-js.org)_
 
 
 ### Reporting Issues
-Please submit issues with this framwork on github.  Any issues with "ext.js" or any plugins from the ExtJS team should be reported [here](https://github.com/Christianjuth/ExtJS_Library/issues). Plugins by the ExtJS team include...
+Please submit issues with this framwork on github.
 
 * Clipboard
 * Notification
