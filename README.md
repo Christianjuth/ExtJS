@@ -5,6 +5,8 @@
 
 
 ### Quick Descrption
+
+[![Join the chat at https://gitter.im/Christianjuth/Extension-Framework](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Christianjuth/Extension-Framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ExtJS is a framwork for building Chrome and Safari extensions in one, as well as providing a file structure with grunt setup and ready to go. [Learn more...](http://ext-js.org/)
 
 ### Getting Started
