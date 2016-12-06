@@ -7,8 +7,8 @@
 ExtJS is a framework for building Chrome and Safari extensions in one, as well as providing a file structure with grunt setup and ready to go. This project started as a way to save me time. I have built a few browser extensions, but there have always been two problems I have run into. The first is the main focus of this framework. Safari is a pain. I started off with Chrome extensions which are so easy to write. Google has done a perfect job of providing the right APIs without overloading the developers with features. Safri is a different story. While this framework might limit some of the functionality of Safari extensions, I believe it will make them less overwhelming for new developers. The second problem, I hope to solve, is the structure. When creating new projects, I never know where to start. By providing a framework, everything has a place. This framework is what I consider the best development workflow. Clone a git project, change a few files, run the grunt command in the terminal, and you are done.
 
 ### Getting Started
-* [Getting Started](https://github.com/Christianjuth/ExtJS_Framework/wiki/Getting-Started)
-* [Building Your Extension](https://github.com/Christianjuth/ExtJS_Framework/wiki/Building-Your-Extension)
+* [Getting Started](https://github.com/Christianjuth/Extension_Framework/wiki/Home)
+* [Hello World Extension](https://github.com/Christianjuth/Extension_Framework/wiki/Hello-World-Extension)
 
 ### Reporting Issues
 Please submit issues with this framework on Github.
