@@ -13,9 +13,9 @@
 
 
 ### Getting the framework
-Start by cloning ExtJS
+Start by cloning Extension Framework
 ```shell
-git clone https://github.com/Christianjuth/ExtJS_Framework.git
+git clone https://github.com/Christianjuth/Extension Framework_Framework.git
 
 #mac
 brew install graphicsmagick

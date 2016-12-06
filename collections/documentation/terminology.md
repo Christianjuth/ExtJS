@@ -1,8 +1,8 @@
 #Terminology
-Since ExtJS is a framework for Chrome, Safari , and Opera the terminology is a mixture from all three browsers.
+Since Extension Framework is a framework for Chrome, Safari , and Opera the terminology is a mixture from all three browsers.
 
 ### Core Library
-You are going to hear this a lot because it is a key part of ExtJS. This is a javascript library contained in the ExtJS Framework.
+You are going to hear this a lot because it is a key part of Extension Framework. This is a javascript library contained in the Extension Framework Framework.
 
 ### Config or Configure
 When we say config or configure file we are referring to the `app/configure.json` file found in our framework. Every-so-often we say Chrome, Safari, or Opera config in which case we am referring to the native configure files for each extension.
