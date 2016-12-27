@@ -15,25 +15,92 @@ module.exports = (grunt) ->
 
   pkg: grunt.file.readJSON('package.json'),
 
-  #styles
-  less:                 grunt.file.readJSON('grunt/less.json')
-
   #scripts
-  coffee:               grunt.file.readJSON('grunt/coffee.json')
-  coffeelint:           grunt.file.readJSON('grunt/coffeelint.json')
+  coffee:
+    options:
+      sourceMap: true
+    app:
+      files: [
+        expand: true
+        cwd: "builds/latest.safariextension"
+        src: ["**/*.coffee"]
+        dest: "builds/latest.safariextension/<%= srcDir %>"
+        ext: ".js"
+      ]
+
+  coffeelint: 
+    app: ["app/**/*.coffee", "!app/js/libs/**/*.coffee"]
+    
+  sass:
+    options:
+      sourceMap: true
+    app:
+      default:
+        files: [
+          expand: true
+          cwd: "builds/latest.safariextension"
+          src: ["**/*.sass"]
+          dest: "builds/latest.safariextension/<%= srcDir %>"
+          ext: ".css"
+        ]
 
   #manage files
-  clean:                grunt.file.readJSON('grunt/clean.json')
+  clean: 
+    libs: []
 
-  rsync:                grunt.file.readJSON('grunt/rsync.json')
+  rsync:
+    options: 
+      recursive: true
+    package:
+      options:
+        exclude: [
+          "*.png",
+          "Info.plist",
+          "Settings.plist"]
+        src: "app/"
+        dest: "builds/latest.safariextension"
+        delete: true
+    icons:
+      options:
+        src: "app/menu-icons/"
+        dest: "builds/latest.safariextension/menu-icons"
+        delete: true
+      
 
   #assets
-  multiresize:          grunt.file.readJSON('grunt/multiresize.json')
-  browserDependencies:  grunt.file.readJSON('grunt/browserDependencies.json')
+  multiresize:
+    default:
+      src: "app/icon.png"
+      dest: [
+        "builds/latest.safariextension/icon-128.png",
+        "builds/latest.safariextension/icon-96.png",
+        "builds/latest.safariextension/icon-64.png",
+        "builds/latest.safariextension/icon-48.png",
+        "builds/latest.safariextension/icon-38.png",
+        "builds/latest.safariextension/icon-32.png",
+        "builds/latest.safariextension/icon-16.png"]
+      destSizes: [
+        "128x128",
+        "96x96",
+        "64x64",
+        "48x48",
+        "38x38",
+        "32x32",
+        "16x16"]
 
   #other
-  extension_manifest :  grunt.file.readJSON('grunt/extension_manifest.json')
-  compress :            grunt.file.readJSON('grunt/compress.json')
+  extension_manifest:
+    default:
+      file: "app/configure.json"
+      dest: "builds/latest.safariextension/"
+  
+  compress:
+    chrome:
+      options:
+        archive: "builds/chrome.zip"
+      src: ["**/*", "!Settings.plist", "!Info.plist", "!assets/icons/**/*-16.png", "!icon-96.png", "!icon-64.png", "!icon-32.png"]
+      expand: true
+      cwd: "builds/latest.safariextension/"
 
   }
 
@@ -44,16 +111,15 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'build', [
     'clean'
-    'browserDependencies'
-    'extension_manifest'
     'rsync'
-    'multiresize'
-    'less'
     'coffee'
+    'sass'
+    'extension_manifest'
+    'multiresize'
     'compress'
   ]
 
-  #default task
+  # default task
   grunt.registerTask 'default', [
     'build'
   ]
