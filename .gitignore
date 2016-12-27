@@ -1,1 +1,7 @@
-/views/background/background.js
+node_modules
+npm-debug.log
+.bundle
+.sass-cache
+.DS_Store
+
+coverage
