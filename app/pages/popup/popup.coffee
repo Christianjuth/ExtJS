@@ -11,15 +11,15 @@ require [
   "extPlugin/notification"
 ], ($, Mustache, ext) ->
 
-  #initilize extjs
+  # Initilize Extension Framework
   ext.ini()
 
-  #this wrapper allows Safari to run
-  #popup scripts like Chrome and Opera
+  # this wrapper allows Safari to run
+  # popup scripts like Chrome and Opera
   ext.popup.codeWrap ->
 
-    #set popup dimentions
+    # Set Popup Dimentions
     ext.popup.setHeight(300)
-    ext.popup.setWidth(500)
+    ext.popup.setWidth(501)
 
-    #your code here
+    # your code here

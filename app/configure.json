@@ -1,8 +1,8 @@
 {
-  "name": "ExtJS",
+  "name": "Extension Framework",
   "author": "YOUR NAME",
   "version": "0.1.0",
-  "bundleID": "org.ext-js.extension",
+  "bundleID": "com.yourdomain.extension",
   "databaseQuota": "1",
   "menuIcon": {
     "19": "menu-icons/icon-19.png",
