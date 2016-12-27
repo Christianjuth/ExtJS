@@ -9,6 +9,7 @@
     "grunt-contrib-compass": "^1.1.1",
     "grunt-contrib-compress": "^0.13.0",
     "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
     "grunt-extension-manifest": "^0.2.3",
     "grunt-multiresize": "^0.3.1",
     "grunt-rsync": "^0.6.2",

@@ -14,6 +14,13 @@ module.exports = (grunt) ->
   grunt.initConfig {
 
     pkg: grunt.file.readJSON('package.json'),
+    
+    watch:
+      default:
+        files: ["app/**/*"]
+        tasks: ["build"]
+        options:
+          event: ["added", "changed"]
 
     #scripts
     coffee:
@@ -108,10 +115,10 @@ module.exports = (grunt) ->
     'coffee'
     'extension_manifest'
     'multiresize'
-    'compress'
   ]
 
   # default task
   grunt.registerTask 'default', [
     'build'
+    'watch'
   ]
