@@ -2,7 +2,7 @@
 
 -------
 
-### ExtJS Library
+### Extension Framework Library
 This is the core of [Extension-Framework](https://github.com/Christianjuth/Extension-Framework). Please reference [that repo's wiki](https://github.com/Christianjuth/Extension-Framework/wiki) for more info and a full list of functions.
 
 ###About this Project
