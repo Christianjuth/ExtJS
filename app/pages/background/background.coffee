@@ -3,18 +3,17 @@ window.message = "hey"
 
 #onload
 require [
-  "jquery",
-  "underscore",
-  "ext",
+  "jquery"
+  "ext"
 
   #Load framework plugins
-  "extPlugin/uuid",
-  "extPlugin/storage",
-  "extPlugin/clipboard",
-  "extPlugin/utilities",
-  "extPlugin/tabs",
+  "extPlugin/uuid"
+  "extPlugin/storage"
+  "extPlugin/clipboard"
+  "extPlugin/utilities"
+  "extPlugin/tabs"
   "extPlugin/popup"
-], ($, _, ext) ->
+], ($, ext) ->
 
   #initilize extjs
   ext.ini()

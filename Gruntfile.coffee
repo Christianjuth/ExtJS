@@ -47,8 +47,13 @@ module.exports = (grunt) ->
         }]
 
     #manage files
-    clean: 
-      libs: []
+    clean:
+      compile: [
+        'builds/latest.safariextension/pages/**/*.coffee',
+        'builds/latest.safariextension/pages/**/*.scss',
+        'builds/latest.safariextension/pages/**/*.map'
+      ]
+    
     rsync:
       options: 
         recursive: true
@@ -115,6 +120,12 @@ module.exports = (grunt) ->
     'coffee'
     'extension_manifest'
     'multiresize'
+  ]
+
+  grunt.registerTask 'compile', [
+    'build'
+    'clean:compile'
+    'compress'
   ]
 
   # default task

@@ -2,20 +2,17 @@
 
 #onload
 require [
-  "jquery",
-  "underscore",
-  "mustache",
-  "bootstrap",
+  "jquery"
+  "underscore"
+  "mustache"
+  "bootstrap"
 
-  "ext",
+  "ext"
   "extPlugin/notification"
-], ($,_,Mustache,bootstrap,ext) ->
+], ($, _, Mustache, bootstrap, ext) ->
 
   #initilize extjs
   ext.ini()
-
-  change = ->
-    console.log('Settings saved...')
 
   option =
     create:(json) ->
@@ -23,28 +20,29 @@ require [
       try
         item = this.types[type](json)
       catch
-        throw 'Setting type "'+json.type+'" does not exsist'
+        throw new Error("Setting type #{json.type} does not exsist")
       elm = Mustache.render $("#option").html(), {
-        title:json.title,
+        title: json.title,
         option: item
       }
-      elm = $(elm).appendTo("#settings");
+      elm = $(elm).appendTo("#settings")
       elm.find("input[type=text], textarea").keyup ->
         ext.options.set(json.key,$(this).val())
-        change()
       elm.find("select").change () ->
         ext.options.set(json.key,$(this).val())
-        change()
       elm.find("input[type=checkbox]").change () ->
         ext.options.set(json.key,$(this).is(':checked'))
-        change()
 
     types:
       text : (json) ->
-        elm = Mustache.render($("#text").html(), {value:ext.options.get(json.key)})
+        elm = Mustache.render($("#text").html(), {
+          value: ext.options.get(json.key)
+        })
 
       textarea : (json) ->
-        elm = Mustache.render($("#textarea").html(), {text:ext.options.get(json.key)})
+        elm = Mustache.render($("#textarea").html(), {
+          text: ext.options.get(json.key)
+        })
 
       checkbox : (json) ->
         checked =  String(ext.options.get(json.key)) is "true"

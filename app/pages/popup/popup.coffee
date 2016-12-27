@@ -2,22 +2,20 @@
 
 #onload
 require [
-  "jquery",
-  "underscore",
-  "mustache",
-  "ext",
+  "jquery"
+  "mustache"
+  "ext"
 
-  "extPlugin/popup",
-  "extPlugin/tabs",
+  "extPlugin/popup"
+  "extPlugin/tabs"
   "extPlugin/notification"
-], ($,_,Mustache,ext) ->
+], ($, Mustache, ext) ->
 
   #initilize extjs
   ext.ini()
 
   #this wrapper allows Safari to run
   #popup scripts like Chrome and Opera
-  console.log ext.popup
   ext.popup.codeWrap ->
 
     #set popup dimentions

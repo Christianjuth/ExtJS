@@ -1,17 +1,18 @@
 #define library alialses
 window.require  = {
 
-  baseUrl : '.'
+  baseUrl : '../../'
 
   paths :
-    jquery :        '../../libs/jquery-min'
-    ext :           '../../libs/ext'
-    underscore :    '../../libs/underscore-min'
-    mustache :      '../../libs/mustache.min'
-    bootstrap :     '../../libs/bootstrap.min'
-    extPlugin :     '../../ext-plugins'
+    jquery:         'bower/jquery/dist/jquery.min'
+    bootstrap:      'bower/bootstrap/dist/js/bootstrap.min'
+    underscore:     'bower/underscore/underscore-min'
+    mustache:       'bower/mustache.js/mustache.min'
+    ext:            'libs/ext'
+    extPlugin:      'ext-plugins'
 
   shim :
-    "bootstrap" : { "deps" :['jquery'] }
+    bootstrap: { "deps" :['jquery'] }
+    extPlugin: { "deps" :['ext'] }
 
 }
