@@ -1,0 +1,17 @@
+@import '../variables';
+@import '../reset';
+
+html,
+body{
+  height: 100%;
+  margin: 0;
+  padding: 0;  
+  background-color: #f5f2f2;
+  overflow: visible;
+}
+
+@media screen and #{$break-tablet-min} {
+  .page{
+    padding-top: 30px;
+  }
+}

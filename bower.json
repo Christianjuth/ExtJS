@@ -1,0 +1,25 @@
+{
+  "name": "extension-framework-library",
+  "description": "Extension Framework is a platform that allows people to build one browser extension that runs on Google Chrome, Safari, and Opera.",
+  "main": "index.js",
+  "authors": [
+    "Christian Juth"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "chrome",
+    "safari",
+    "extension",
+    "ext",
+    "extjs"
+  ],
+  "homepage": "http://www.christianjuth.com/portfolio/14",
+  "private": false,
+  "ignore": [],
+  "devDependencies": {
+    "underscore": "^1.8.3",
+    "mustache.js": "mustache#^2.3.0",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1"
+  }
+}

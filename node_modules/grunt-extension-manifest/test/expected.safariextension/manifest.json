@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "bye",
+  "name": "grunt-extension-compiler",
   "author": "John Smith",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "something",
   "homepage_url": "http://christianjuth.com",
   "browser_action": {

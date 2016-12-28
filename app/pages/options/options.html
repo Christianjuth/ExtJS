@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Options</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../libs/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/lumen/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="options.css">
+
+    <script type="text/javascript" src="../require-config.js"></script>
+    <script data-main="pages/options/options.js" src="../../libs/require-min.js"></script>
+  </head>
+  <body>
+
+    <!-- Templates -->
+
+    <!-- options -->
+    <script type="text/html" id="textarea">
+      <textarea class="form-control" rows="4">{{text}}</textarea>
+    </script>
+
+    <script type="text/html" id="text">
+      <input type="text" class="form-control" value="{{value}}">
+    </script>
+
+    <script type="text/html" id="checkbox">
+      <div class="form-control">
+        <input type="checkbox" {{#sel}}checked{{/sel}}>
+      </div>
+    </script>
+
+    <script type="text/html" id="select">
+      <select class="form-control" value="{{current}}">
+        {{#options}}
+        <option value="{{val}}" {{#sel}}selected{{/sel}}>{{title}}</option>
+        {{/options}}
+      </select>
+    </script>
+
+    <!-- option wrap -->
+    <script type="text/html" id="option">
+      <div class="form-group">
+        <label class="col-sm-4 control-label right 400">{{title}}</label>
+        <div class="col-sm-8">{{{option}}}</div>
+      </div>
+    </script>
+
+    
+    <!-- visible content -->
+    <div class="page">
+
+      <div class="col-md-6 col-md-offset-3">
+
+        <h2 class="text-center">Options</h2>
+
+        <!--main settings pannel-->
+        <div class="panel panel-default">
+          <!--settings options-->
+          <div class="panel-body">
+            <form id="settings" class="form-horizontal"></form>
+          </div>
+        </div>
+
+        <!-- you are free to remove this tag -->
+        <p class="text-center text-muted">Built using Extension Framework</p>
+
+      </div>
+
+    </div>
+
+
+  </body>
+</html>

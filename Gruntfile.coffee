@@ -1,48 +1,147 @@
 module.exports = (grunt) ->
 
-  #start time and load tasks
+
+  #require it at the top and pass in the grunt instance
   require('time-grunt')(grunt)
   require('load-grunt-tasks')(grunt)
 
+
+  #Load extension config file
+  config = grunt.file.readJSON("app/configure.json")
+
   #Project functions
   grunt.initConfig {
-
     pkg: grunt.file.readJSON('package.json')
-
-    #resources
-    browserDependencies:  grunt.file.readJSON('grunt/browserDependencies.json')
+    
+    watch:
+      default:
+        files: ["app/**/*"]
+        tasks: ["build"]
+        options:
+          event: ["added", "changed"]
 
     #scripts
-    coffeelint:           grunt.file.readJSON('grunt/coffeelint.json')
-    coffee:               grunt.file.readJSON('grunt/coffee.json')
-    uglify:               grunt.file.readJSON('grunt/uglify.json')
+    coffee:
+      options:
+        sourceMap: true
+      app:
+        files: [
+          expand: true
+          cwd: "builds/latest.safariextension/pages"
+          src: ["**/*.coffee"]
+          dest: "builds/latest.safariextension/pages/"
+          ext: ".js"
+        ]
+      framework:
+        files:
+          "dist/framework/ext.js": [
+            "coffee/framework/defaultOptions.coffee",
+            "coffee/framework/header.coffee",
+            "coffee/framework/vars.coffee",
+            "coffee/framework/functions/*.coffee",
+            "coffee/framework/footer.coffee",
+            "coffee/framework/internal.coffee",
+            "coffee/framework/global.coffee",
+            "coffee/framework/define.coffee"
+          ]
+      
+    
+    coffeelint: 
+      app: ["app/**/*.coffee", "!app/js/libs/**/*.coffee"]
+    sass:
+      app:
+        files: [{
+          expand: true,
+          cwd: 'builds/latest.safariextension/pages',
+          src: '**/*.scss',
+          dest: 'builds/latest.safariextension/pages',
+          ext: '.css'
+        }]
+
+    #manage files
+    clean:
+      compile: [
+        'builds/latest.safariextension/pages/**/*.coffee',
+        'builds/latest.safariextension/pages/**/*.scss',
+        'builds/latest.safariextension/pages/**/*.map'
+      ]
+    
+    rsync:
+      options: 
+        recursive: true
+      package:
+        options:
+          exclude: [
+            "*.png",
+            "Info.plist",
+            "Settings.plist"]
+          src: "app/"
+          dest: "builds/latest.safariextension"
+          delete: true
+      icons:
+        options:
+          src: "app/menu-icons/"
+          dest: "builds/latest.safariextension/menu-icons"
+          delete: true
+
+    #assets
+    multiresize:
+      default:
+        src: "app/icon.png"
+        dest: [
+          "builds/latest.safariextension/icon-128.png",
+          "builds/latest.safariextension/icon-96.png",
+          "builds/latest.safariextension/icon-64.png",
+          "builds/latest.safariextension/icon-48.png",
+          "builds/latest.safariextension/icon-38.png",
+          "builds/latest.safariextension/icon-32.png",
+          "builds/latest.safariextension/icon-16.png"]
+        destSizes: [
+          "128x128",
+          "96x96",
+          "64x64",
+          "48x48",
+          "38x38",
+          "32x32",
+          "16x16"]
 
     #other
-    copy:                 grunt.file.readJSON('grunt/copy.json')
-    clean:                grunt.file.readJSON('grunt/clean.json')
-    extension_manifest:   grunt.file.readJSON('grunt/extension_manifest.json')
+    extension_manifest:
+      default:
+        file: "app/configure.json"
+        dest: "builds/latest.safariextension/"
+    compress:
+      chrome:
+        options:
+          archive: "builds/chrome.zip"
+        src: ["**/*", "!Settings.plist", "!Info.plist", "!assets/icons/**/*-16.png", "!icon-96.png", "!icon-64.png", "!icon-32.png"]
+        expand: true
+        cwd: "builds/latest.safariextension/"
 
   }
 
-  #define tasks
+  #register tasks
   grunt.registerTask 'test', [
     'coffeelint'
   ]
 
   grunt.registerTask 'build', [
-    #    'browserDependencies'
-    'extension_manifest'
-    'coffee'
     'clean'
-    'uglify'
-    'copy'
+    'rsync'
+    'sass'
+    'coffee'
+    'extension_manifest'
+    'multiresize'
   ]
 
-  #default grunt task
-  grunt.registerTask 'default', [
-    'test',
+  grunt.registerTask 'compile', [
     'build'
+    'clean:compile'
+    'compress'
   ]
 
-  #notify when task is done
-  grunt.task.run('notify_hooks')
+  # default task
+  grunt.registerTask 'default', [
+    'build'
+    'watch'
+  ]
