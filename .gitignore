@@ -4,5 +4,3 @@ npm-debug.log
 .bundle
 .sass-cache
 .DS_Store
-
-coverage

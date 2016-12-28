@@ -15,11 +15,24 @@
   ],
   "homepage": "http://www.christianjuth.com/portfolio/14",
   "private": false,
-  "ignore": [],
+  "ignore": [
+    "node_modules",
+    "app/bower",
+    "npm-debug.log",
+    ".bundle",
+    ".sass-cache",
+    ".DS_Store",
+    "**/.*",
+    "app",
+    "builds",
+    "coffee",
+    "Gruntfile.coffee"
+  ],
   "devDependencies": {
     "underscore": "^1.8.3",
     "mustache.js": "mustache#^2.3.0",
     "bootstrap": "^3.3.7",
-    "jquery": "^3.1.1"
+    "jquery": "^3.1.1",
+    "requirejs": "^2.3.2"
   }
 }

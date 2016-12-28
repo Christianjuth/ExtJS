@@ -1,6 +1,0 @@
-{
-  "default": {
-    "file": "test.safariextension/configure.json",
-    "dest": "test.safariextension/"
-  }
-}

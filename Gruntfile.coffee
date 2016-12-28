@@ -34,7 +34,7 @@ module.exports = (grunt) ->
         ]
       framework:
         files:
-          "dist/framework/ext.js": [
+          "dist/ext.js": [
             "coffee/framework/defaultOptions.coffee",
             "coffee/framework/header.coffee",
             "coffee/framework/vars.coffee",
@@ -43,6 +43,48 @@ module.exports = (grunt) ->
             "coffee/framework/internal.coffee",
             "coffee/framework/global.coffee",
             "coffee/framework/define.coffee"
+          ]
+      plugins:
+        files:
+          "dist/plugins/clipboard.js": [
+            "coffee/plugins/LICENSE.coffee",
+            "coffee/plugins/clipboard/clipboard.coffee",
+            "coffee/plugins/define.coffee"
+          ],
+          "dist/plugins/notification.js": [
+            "coffee/plugins/LICENSE.coffee",
+            "coffee/plugins/notification/notification.coffee",
+            "coffee/plugins/define.coffee"
+          ],
+          "dist/plugins/storage.js": [
+            "coffee/plugins/LICENSE.coffee",
+            "coffee/plugins/storage/storage.coffee",
+            "coffee/plugins/define.coffee"
+          ],
+          "dist/plugins/tabs.js": [
+            "coffee/plugins/LICENSE.coffee",
+            "coffee/plugins/tabs/tabs.coffee",
+            "coffee/plugins/define.coffee"
+          ],
+          "dist/plugins/utilities.js": [
+            "coffee/plugins/LICENSE.coffee",
+            "coffee/plugins/utilities/utilities.coffee",
+            "coffee/plugins/define.coffee"
+          ],
+          "dist/plugins/uuid.js": [
+            "coffee/plugins/LICENSE.coffee",
+            "coffee/plugins/uuid/uuid.coffee",
+            "coffee/plugins/define.coffee"
+          ],
+          "dist/plugins/popup.js": [
+            "coffee/plugins/LICENSE.coffee",
+            "coffee/plugins/popup/popup.coffee",
+            "coffee/plugins/define.coffee"
+          ],
+          "dist/plugins/encrypted_storage.js": [
+            "coffee/plugins/LICENSE.coffee",
+            "coffee/plugins/encrypted_storage/encrypted_storage.coffee",
+            "coffee/plugins/define.coffee"
           ]
       
     
@@ -82,6 +124,11 @@ module.exports = (grunt) ->
         options:
           src: "app/menu-icons/"
           dest: "builds/latest.safariextension/menu-icons"
+          delete: true
+      ext:
+        options:
+          src: "dist/"
+          dest: "builds/latest.safariextension/ext"
           delete: true
 
     #assets
@@ -127,9 +174,11 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'build', [
     'clean'
-    'rsync'
-    'sass'
+    'rsync:package'
+    'rsync:icons'
     'coffee'
+    'sass'
+    'rsync:ext'
     'extension_manifest'
     'multiresize'
   ]

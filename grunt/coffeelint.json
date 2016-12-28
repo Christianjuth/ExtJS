@@ -1,3 +1,0 @@
-{
-  "default": ["coffee/**/*.coffee", "!coffee/framework/header.coffee", "!coffee/framework/footer.coffee"]
-}
