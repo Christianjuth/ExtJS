@@ -10,10 +10,10 @@
     "chrome",
     "safari",
     "extension",
-    "ext",
-    "extjs"
+    "framework",
+    "browser"
   ],
-  "homepage": "https://github.com/Christianjuth/Extension-Framework",
+  "homepage": "http://www.christianjuth.com/portfolio/14",
   "private": true,
   "ignore": [],
   "devDependencies": {
