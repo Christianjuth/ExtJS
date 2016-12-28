@@ -20,6 +20,7 @@
     "underscore": "^1.8.3",
     "mustache.js": "mustache#^2.3.0",
     "bootstrap": "^3.3.7",
-    "jquery": "^3.1.1"
+    "jquery": "^3.1.1",
+    "extension-framework-library": "^0.0.2"
   }
 }

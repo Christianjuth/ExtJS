@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "devDependencies": {
     "coffeelint": "^1.16.0",
-    "grunt": "~0.4.5",
+    "grunt": "^0.4.5",
     "grunt-coffeelint": "0.0.13",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-coffee": "^0.12.0",
@@ -22,6 +22,7 @@
   "description": "Extension Framework is a platform that allows people to build one browser extension that runs on Google Chrome, Safari, and Opera.",
   "main": "index.js",
   "scripts": {
+    "postinstall": "gem install sass && bower install",
     "test": "grunt test"
   },
   "repository": {
