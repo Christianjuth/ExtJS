@@ -3,6 +3,8 @@
 [![License](http://img.shields.io/npm/l/xmlbuilder.svg)](http://opensource.org/licenses/MIT)
 
 ### Important
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/Christianjuth/extension-framework.svg)](https://greenkeeper.io/)
 This project is currently not being maintained, but I plan on revamping it shortly. Probably sometime in 2017. The project itself should still be fully functional, but plugins can not be installed.
 
 ### What is Extension Framework
